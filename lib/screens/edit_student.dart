@@ -145,7 +145,7 @@ class _EditStudentPageState extends State<EditStudentPage> {
                         place: _place,
                         age: _age,
                         gender: _gender,
-                        isActive: _isActive,
+                        isActive: _isActive, address: '',
                       ),
                     );
                     Navigator.of(context).pop(); // Go back after editing
