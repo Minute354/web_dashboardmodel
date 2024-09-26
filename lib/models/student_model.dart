@@ -19,6 +19,6 @@ class Student {
     required this.place,
     required this.age,
     required this.gender,
-    this.isActive = true,
+    this.isActive = true, required String address,
   });
 }
