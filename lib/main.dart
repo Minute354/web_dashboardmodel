@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:school_web_app/screens/student_list_screen.dart';
 import 'controllers/student_controller.dart';
-import 'screens/Login_screen.dart';
+import 'screens/screenlogin.dart';
 import 'screens/dashboard_screen.dart';
 
 void main() {
@@ -19,13 +20,15 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         initialRoute:'/login' ,
         routes: {
-          '/dashboard': (context) => StudentListPage(),
+          '/dashboard': (context) => DashboardPage(),
           '/login': (context) => const LoginScreen(),
+          
         },
       ),
     );

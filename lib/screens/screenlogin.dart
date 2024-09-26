@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
+class LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -200,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   // Mobile View
   Widget _buildMobileView(BoxConstraints constraints) {
-    final double textSize = 40.0;
+    const double textSize = 40.0;
     final double imageSize = MediaQuery.of(context).size.width * 0.5;
     final double cardSize = MediaQuery.of(context).size.width * 0.8;
 
@@ -226,9 +226,9 @@ class _LoginScreenState extends State<LoginScreen>
 
   // Tablet View
   Widget _buildTabletView(BoxConstraints constraints) {
-    final double textSize = 50.0;
+    const double textSize = 50.0;
     final double imageSize = MediaQuery.of(context).size.width * 0.5;
-    final double cardSize = 500;
+    const double cardSize = 500;
 
     return Stack(
       children: [
@@ -252,9 +252,9 @@ class _LoginScreenState extends State<LoginScreen>
 
   // Desktop View
   Widget _buildDesktopView(BoxConstraints constraints) {
-    final double textSize = 60.0;
+    const double textSize = 60.0;
     final double imageSize = MediaQuery.of(context).size.width * 0.5;
-    final double cardSize = 500;
+    const double cardSize = 500;
 
     return Stack(
       children: [
@@ -318,7 +318,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   // Image Widget
   Widget _buildImage(double imageSize) {
-    return Container(
+    return SizedBox(
       width: imageSize.clamp(200.0, 600.0),
       height: imageSize.clamp(200.0, 600.0),
       child: Image.asset(

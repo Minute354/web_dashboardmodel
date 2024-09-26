@@ -1,23 +1,24 @@
+// models/student_model.dart
 class Student {
-  String id;
-  String name;
-  String division;
-  String studentClass;
-  String parentName;
-  int age;
-  String gender;
-  String place;
+  final int id;
+  final String name;
+  final String studentClass;
+  final String division;
+  final String parentName;
+  final String place;
+  final int age;
+  final String gender;
   bool isActive;
 
   Student({
     required this.id,
     required this.name,
-    required this.division,
     required this.studentClass,
+    required this.division,
     required this.parentName,
+    required this.place,
     required this.age,
     required this.gender,
-    required this.place,
     this.isActive = true,
   });
 }
