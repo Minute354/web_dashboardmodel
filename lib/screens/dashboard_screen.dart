@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_web_app/screens/dashboardcard.dart';
+import 'package:school_web_app/screens/profile_popup.dart';
 import 'package:school_web_app/screens/screenlogin.dart';
 import 'package:school_web_app/screens/sidebars.dart';
 import 'package:school_web_app/screens/sidedrawer.dart';
@@ -32,7 +33,6 @@ class _DashboardPageState extends State<DashboardPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-           
             const SizedBox(width: 10),
             Expanded(
               flex: 4,
@@ -49,11 +49,9 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout, color: Colors.white),
+            icon: const Icon(Icons.person_2_rounded, color: Colors.white),
             onPressed: () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
+              _showProfilePopup(context);
             },
           ),
           if (isSmallScreen)
@@ -65,9 +63,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
         ],
       ),
-      drawer: isSmallScreen
-          ? SidebarDrawer()
-          : null, // Use SidebarDrawer for small screens
+      drawer: isSmallScreen ? SidebarDrawer() : null, // Use SidebarDrawer for small screens
       body: Column(
         children: [
           Expanded(
@@ -78,42 +74,47 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: GridView.count(
-                      crossAxisCount:
-                          MediaQuery.of(context).size.width > 1200 ? 6 : 3,
+                      crossAxisCount: MediaQuery.of(context).size.width > 1200 ? 6 : 3,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
                       childAspectRatio: isSmallScreen ? 1.0 : 1.1,
                       children: [
                         DashboardCard(
-                            icon: Icons.person_add,
-                            label: 'Add Student',
-                            color: Colors.blueAccent,
-                            onTap: () {}),
+                          icon: Icons.person_add,
+                          label: 'Add Student',
+                          color: Colors.blueAccent,
+                          onTap: () {},
+                        ),
                         DashboardCard(
-                            icon: Icons.group,
-                            label: 'Manage Students',
-                            color: Colors.green,
-                            onTap: () {}),
+                          icon: Icons.group,
+                          label: 'Manage Students',
+                          color: Colors.green,
+                          onTap: () {},
+                        ),
                         DashboardCard(
-                            icon: Icons.payment,
-                            label: 'Payments',
-                            color: Colors.orangeAccent,
-                            onTap: () {}),
+                          icon: Icons.payment,
+                          label: 'Payments',
+                          color: Colors.orangeAccent,
+                          onTap: () {},
+                        ),
                         DashboardCard(
-                            icon: Icons.bar_chart,
-                            label: 'Analytics',
-                            color: Colors.purpleAccent,
-                            onTap: () {}),
+                          icon: Icons.bar_chart,
+                          label: 'Analytics',
+                          color: Colors.purpleAccent,
+                          onTap: () {},
+                        ),
                         DashboardCard(
-                            icon: Icons.schedule,
-                            label: 'Attendance',
-                            color: Colors.redAccent,
-                            onTap: () {}),
+                          icon: Icons.schedule,
+                          label: 'Attendance',
+                          color: Colors.redAccent,
+                          onTap: () {},
+                        ),
                         DashboardCard(
-                            icon: Icons.help,
-                            label: 'Help',
-                            color: Colors.teal,
-                            onTap: () {}),
+                          icon: Icons.help,
+                          label: 'Help',
+                          color: Colors.teal,
+                          onTap: () {},
+                        ),
                       ],
                     ),
                   ),
@@ -126,7 +127,6 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
-  
 
   Widget _buildFooter() {
     return Container(
@@ -137,6 +137,58 @@ class _DashboardPageState extends State<DashboardPage> {
         style: TextStyle(color: Colors.white, fontSize: 14),
         textAlign: TextAlign.center,
       ),
+    );
+  }
+
+  void _showProfilePopup(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // First Row with Profile Icon and Admin Button
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 24,
+                    backgroundImage: NetworkImage('https://via.placeholder.com/150'), // Replace with actual image URL or asset
+                  ),
+                  const SizedBox(width: 16),
+                  TextButton(
+                    onPressed: () {
+                      // Handle admin button action
+                    },
+                    child: const Text(
+                      'Admin',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              // Logout Button
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
+                },
+                child: const Text('Logout'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent, // Background color
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

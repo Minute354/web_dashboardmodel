@@ -6,6 +6,7 @@ class Student {
   final String division;
   final String parentName;
   final String place;
+  final String address;
   final int age;
   final String gender;
   bool isActive;
@@ -17,8 +18,10 @@ class Student {
     required this.division,
     required this.parentName,
     required this.place,
+    required this.address,
     required this.age,
     required this.gender,
-    this.isActive = true, required String address,
+    this.isActive = true, 
+    
   });
 }
