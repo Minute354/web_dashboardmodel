@@ -36,4 +36,6 @@ class StudentController with ChangeNotifier {
     student.isActive = false;
     notifyListeners();
   }
+
+  void filterStudents(String value) {}
 }

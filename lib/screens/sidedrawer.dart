@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:school_web_app/screens/class_list_screen.dart';
+import 'package:school_web_app/screens/division_list_screen.dart';
 import 'package:school_web_app/screens/student_list_screen.dart';
 
 class SidebarDrawer extends StatelessWidget {
@@ -10,14 +12,19 @@ class SidebarDrawer extends StatelessWidget {
           UserAccountsDrawerHeader(
             decoration: const BoxDecoration(color: Colors.blueAccent),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: AssetImage('assets/logo.png'),
+              backgroundImage: AssetImage('assets/student logo.png'),
             ),
             accountName: const Text('Admin'),
             accountEmail: const Text('admin@school.com'),
           ),
           _buildSidebarItem(icon: Icons.dashboard, label: 'Dashboard', context: context, onTap: () {}),
-          _buildSidebarItem(icon: Icons.class_, label: 'Class', context: context, onTap: () {}),
-          _buildSidebarItem(icon: Icons.group, label: 'Division', context: context, onTap: () {}),
+          _buildSidebarItem(icon: Icons.class_, label: 'Class', context: context, onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassListPage()));
+          }),
+          _buildSidebarItem(icon: Icons.group, label: 'Division', context: context, onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => DivisionListPage()));
+
+          }),
           _buildSidebarItem(icon: Icons.school, label: 'Teacher', context: context, onTap: () {}),
           _buildSidebarItem(icon: Icons.person, label: 'Student', context: context, onTap: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => StudentListPage()));

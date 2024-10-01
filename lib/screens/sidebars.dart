@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:school_web_app/screens/class_list_screen.dart';
+import 'package:school_web_app/screens/course_list_screen.dart';
+import 'package:school_web_app/screens/dashboard_screen.dart';
+import 'package:school_web_app/screens/division_list_screen.dart';
+import 'package:school_web_app/screens/setting_screen.dart';
 import 'package:school_web_app/screens/student_list_screen.dart';
+import 'package:school_web_app/screens/subject_list_screen.dart';
 
 class Sidebar extends StatefulWidget {
   @override
@@ -21,7 +27,8 @@ class _SidebarState extends State<Sidebar> {
             child: Column(
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage('assets/logo.png'),
+                  backgroundImage: NetworkImage(
+                      "https://png.pngitem.com/pimgs/s/111-1114675_user-login-person-man-enter-person-login-icon.png"),
                   radius: 40,
                 ),
                 const SizedBox(height: 10),
@@ -45,10 +52,12 @@ class _SidebarState extends State<Sidebar> {
               setState(() {
                 selectedItem = 'Dashboard';
               });
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => DashboardPage()));
             },
             isSelected: selectedItem == 'Dashboard',
           ),
-          
+
           // Lookups dropdown with selected items
           _buildLookupsDropdown(context),
 
@@ -60,7 +69,8 @@ class _SidebarState extends State<Sidebar> {
               setState(() {
                 selectedItem = 'Student';
               });
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => StudentListPage()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentListPage()));
             },
             isSelected: selectedItem == 'Student',
           ),
@@ -72,6 +82,8 @@ class _SidebarState extends State<Sidebar> {
               setState(() {
                 selectedItem = 'Settings';
               });
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SettingsPage()));
             },
             isSelected: selectedItem == 'Settings',
           ),
@@ -114,6 +126,8 @@ class _SidebarState extends State<Sidebar> {
             setState(() {
               selectedItem = 'Class';
             });
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => ClassListPage()));
           },
           isSelected: selectedItem == 'Class',
         ),
@@ -125,6 +139,8 @@ class _SidebarState extends State<Sidebar> {
             setState(() {
               selectedItem = 'Division';
             });
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => DivisionListPage()));
           },
           isSelected: selectedItem == 'Division',
         ),
@@ -136,6 +152,8 @@ class _SidebarState extends State<Sidebar> {
             setState(() {
               selectedItem = 'Course';
             });
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => CourseListPage()));
           },
           isSelected: selectedItem == 'Course',
         ),
@@ -147,6 +165,8 @@ class _SidebarState extends State<Sidebar> {
             setState(() {
               selectedItem = 'Subject';
             });
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => SubjectListPage()));
           },
           isSelected: selectedItem == 'Subject',
         ),
