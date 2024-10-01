@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_web_app/screens/dashboardcard.dart';
-import 'package:school_web_app/screens/profile_popup.dart';
 import 'package:school_web_app/screens/screenlogin.dart';
+import 'package:school_web_app/screens/setting_screen.dart';
 import 'package:school_web_app/screens/sidebars.dart';
 import 'package:school_web_app/screens/sidedrawer.dart';
 
@@ -13,112 +13,22 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  
+
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 800;
 
     return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blueGrey.shade900, Colors.black54],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        elevation: 0,
-        centerTitle: true,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(width: 10),
-            Expanded(
-              flex: 4,
-              child: const Text(
-                'Admin Panel',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person_2_rounded, color: Colors.white),
-            onPressed: () {
-              _showProfilePopup(context);
-            },
-          ),
-          if (isSmallScreen)
-            IconButton(
-              icon: const Icon(Icons.menu, color: Colors.white),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            ),
-        ],
-      ),
-      drawer: isSmallScreen ? SidebarDrawer() : null, // Use SidebarDrawer for small screens
+      appBar: _buildAppBar(isSmallScreen),
+      drawer: isSmallScreen ? SidebarDrawer() : null,
       body: Column(
         children: [
           Expanded(
             child: Row(
               children: [
-                if (!isSmallScreen) Sidebar(), // Use Sidebar for larger screens
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: GridView.count(
-                      crossAxisCount: MediaQuery.of(context).size.width > 1200 ? 6 : 3,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: isSmallScreen ? 1.0 : 1.1,
-                      children: [
-                        DashboardCard(
-                          icon: Icons.person_add,
-                          label: 'Add Student',
-                          color: Colors.blueAccent,
-                          onTap: () {},
-                        ),
-                        DashboardCard(
-                          icon: Icons.group,
-                          label: 'Manage Students',
-                          color: Colors.green,
-                          onTap: () {},
-                        ),
-                        DashboardCard(
-                          icon: Icons.payment,
-                          label: 'Payments',
-                          color: Colors.orangeAccent,
-                          onTap: () {},
-                        ),
-                        DashboardCard(
-                          icon: Icons.bar_chart,
-                          label: 'Analytics',
-                          color: Colors.purpleAccent,
-                          onTap: () {},
-                        ),
-                        DashboardCard(
-                          icon: Icons.schedule,
-                          label: 'Attendance',
-                          color: Colors.redAccent,
-                          onTap: () {},
-                        ),
-                        DashboardCard(
-                          icon: Icons.help,
-                          label: 'Help',
-                          color: Colors.teal,
-                          onTap: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                if (!isSmallScreen) Sidebar(),
+                Expanded(child: _buildDashboardGrid(isSmallScreen)),
               ],
             ),
           ),
@@ -126,6 +36,152 @@ class _DashboardPageState extends State<DashboardPage> {
         ],
       ),
     );
+  }
+
+  AppBar _buildAppBar(bool isSmallScreen) {
+    return AppBar(
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blueGrey.shade900, Colors.black54],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      ),
+      elevation: 0,
+      centerTitle: true,
+      title: const Text(
+        'Admin Panel',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 24,
+          color: Colors.white,
+        ),
+      ),
+      actions: [
+        _buildProfileDropdown(),
+        if (isSmallScreen)
+          IconButton(
+            icon: const Icon(Icons.menu, color: Colors.white),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+      ],
+    );
+  }
+
+ Widget _buildProfileDropdown() {
+  return Container(
+    margin: const EdgeInsets.only(right: 50.0,), // Adjust the right margin as needed
+    child: DropdownButtonHideUnderline(
+      child: DropdownButton<String>(
+        icon: const Icon(Icons.person_2_rounded, color: Colors.white, size: 28),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+        dropdownColor: const Color.fromARGB(255, 87, 86, 86), // Dropdown background color
+       
+        items: <String>['Profile', 'Logout']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.white, // Dropdown item text color
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          
+          if (newValue == 'Logout') {
+            _handleLogout();
+          }
+          if(newValue =='Profile' ){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage(),));
+          }
+          // Add other profile-related actions here as needed
+        },
+      ),
+    ),
+  );
+}
+
+
+
+  Widget _buildDashboardGrid(bool isSmallScreen) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: GridView.count(
+        crossAxisCount: MediaQuery.of(context).size.width > 1200 ? 6 : 3,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: isSmallScreen ? 1.0 : 1.1,
+        children: _buildDashboardCards(),
+      ),
+    );
+  }
+
+  List<Widget> _buildDashboardCards() {
+    return [
+      DashboardCard(
+        icon: Icons.person_add,
+        label: 'Add Student',
+        color: Colors.blueAccent,
+        onTap: () {
+          // Navigate to Add Student page
+        },
+      ),
+      DashboardCard(
+        icon: Icons.group,
+        label: 'Manage Students',
+        color: Colors.green,
+        onTap: () {
+          // Navigate to Manage Students page
+        },
+      ),
+      DashboardCard(
+        icon: Icons.payment,
+        label: 'Payments',
+        color: Colors.orangeAccent,
+        onTap: () {
+          // Navigate to Payments page
+        },
+      ),
+      DashboardCard(
+        icon: Icons.bar_chart,
+        label: 'Analytics',
+        color: Colors.purpleAccent,
+        onTap: () {
+          // Navigate to Analytics page
+        },
+      ),
+      DashboardCard(
+        icon: Icons.schedule,
+        label: 'Attendance',
+        color: Colors.redAccent,
+        onTap: () {
+          // Navigate to Attendance page
+        },
+      ),
+      DashboardCard(
+        icon: Icons.help,
+        label: 'Help',
+        color: Colors.teal,
+        onTap: () {
+          // Navigate to Help page
+        },
+      ),
+    ];
   }
 
   Widget _buildFooter() {
@@ -140,55 +196,9 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  void _showProfilePopup(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // First Row with Profile Icon and Admin Button
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundImage: NetworkImage('https://via.placeholder.com/150'), // Replace with actual image URL or asset
-                  ),
-                  const SizedBox(width: 16),
-                  TextButton(
-                    onPressed: () {
-                      // Handle admin button action
-                    },
-                    child: const Text(
-                      'Admin',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              // Logout Button
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                },
-                child: const Text('Logout'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent, // Background color
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+  void _handleLogout() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
   }
 }
