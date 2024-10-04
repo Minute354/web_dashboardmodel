@@ -1,67 +1,68 @@
-// lib/screens/division_list_page.dart
+// lib/screens/subject_list_page.dart
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:school_web_app/screens/sidebars.dart';
-import '../controllers/division_controller.dart';
-import '../models/division_model.dart';
+import 'package:school_web_app/controllers/subject_controller.dart';
+import 'package:school_web_app/models/subject_model.dart';
+import 'package:school_web_app/views/sidebars.dart';
 
-class DivisionListPage extends StatefulWidget {
-  const DivisionListPage({super.key});
+class SubjectListPage extends StatefulWidget {
+  const SubjectListPage({super.key});
 
   @override
-  _DivisionListPageState createState() => _DivisionListPageState();
+  _SubjectListPageState createState() => _SubjectListPageState();
 }
 
-class _DivisionListPageState extends State<DivisionListPage> {
+class _SubjectListPageState extends State<SubjectListPage> {
   final _addFormKey = GlobalKey<FormState>();
   final _editFormKey = GlobalKey<FormState>();
 
-  // Method to show the Add Division popup
-  void _showAddDivisionPopup(BuildContext context) {
-    final TextEditingController divisionNameController =
-        TextEditingController();
-    final divisionController =
-        Provider.of<DivisionController>(context, listen: false);
+  // Method to show the Add Subject popup
+  void _showAddSubjectPopup(BuildContext context) {
+    final TextEditingController subjectNameController = TextEditingController();
+    final subjectController =
+        Provider.of<SubjectController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Add New Division',
+            'Add New Subject',
             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
           ),
           content: Form(
             key: _addFormKey,
-            child: TextFormField(
-              controller: divisionNameController,
-              decoration: InputDecoration(
-                labelText: 'Division Name',
-                border: OutlineInputBorder(),
-              ),
-              style: GoogleFonts.poppins(),
-              inputFormatters: [
-                // Force input to uppercase letters only
-                FilteringTextInputFormatter.allow(RegExp(r'[A-Z]')),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: subjectNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Subject Name',
+                    border: OutlineInputBorder(),
+                  ),
+                  style: GoogleFonts.poppins(),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter the subject name!';
+                    }
+                    // Check if the input contains only alphabets
+                    final RegExp regex = RegExp(r'^[a-zA-Z\s]+$');
+                    if (!regex.hasMatch(value)) {
+                      return 'Please enter only alphabetic characters!';
+                    }
+                    bool exists = subjectController.subjects.any((s) =>
+                        s.subjectName.toLowerCase() ==
+                        value.trim().toLowerCase());
+                    if (exists) {
+                      return 'Subject name already exists!';
+                    }
+                    return null; // Validation passed
+                  },
+                ),
               ],
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter the division name!';
-                }
-                // Check if it contains only uppercase alphabets
-                if (!RegExp(r'^[A-Z]+$').hasMatch(value.trim())) {
-                  return 'Division name must contain only uppercase alphabets!';
-                }
-                bool exists = divisionController.divisions.any((d) =>
-                    d.divisionName.toUpperCase() == value.trim().toUpperCase());
-                if (exists) {
-                  return 'Division name already exists!';
-                }
-                return null;
-              },
             ),
           ),
           actions: [
@@ -91,10 +92,10 @@ class _DivisionListPageState extends State<DivisionListPage> {
                   child: ElevatedButton.icon(
                     onPressed: () {
                       if (_addFormKey.currentState!.validate()) {
-                        divisionController.addDivision(
-                          divisionNameController.text.trim(),
+                        subjectController.addSubject(
+                          subjectNameController.text.trim(),
                         );
-                        divisionNameController.clear(); // Clear the text field
+                        subjectNameController.clear(); // Clear the text field
                         Navigator.of(context).pop(); // Close the dialog
                       }
                     },
@@ -103,7 +104,7 @@ class _DivisionListPageState extends State<DivisionListPage> {
                       color: Colors.blue,
                     ),
                     label: Text(
-                      'Add Division',
+                      'Add Subject',
                       style: GoogleFonts.poppins(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
@@ -125,93 +126,112 @@ class _DivisionListPageState extends State<DivisionListPage> {
     );
   }
 
-  // Method to show the Edit Division popup
-  void _showEditDivisionPopup(
-      BuildContext context, int index, DivisionModel divisionItem) {
-    final TextEditingController divisionNameController =
-        TextEditingController(text: divisionItem.divisionName);
-    final divisionController =
-        Provider.of<DivisionController>(context, listen: false);
+  // Method to show the Edit Subject popup
+  void _showEditSubjectPopup(
+      BuildContext context, int index, SubjectModel subjectItem) {
+    final TextEditingController subjectNameController =
+        TextEditingController(text: subjectItem.subjectName);
+    final subjectController =
+        Provider.of<SubjectController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Edit Division',
+            'Edit Subject',
             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
           ),
           content: Form(
             key: _editFormKey,
-            child: TextFormField(
-              controller: divisionNameController,
-              decoration: InputDecoration(
-                labelText: 'Division Name',
-                border: OutlineInputBorder(),
-              ),
-              style: GoogleFonts.poppins(),
-              inputFormatters: [
-                // Force input to uppercase letters only
-                FilteringTextInputFormatter.allow(RegExp(r'[A-Z]')),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: subjectNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Subject Name',
+                    border: OutlineInputBorder(),
+                  ),
+                  style: GoogleFonts.poppins(),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter the subject name!';
+                    }
+                    // Check if the input contains only alphabets
+                    final RegExp regex = RegExp(r'^[a-zA-Z\s]+$');
+                    if (!regex.hasMatch(value)) {
+                      return 'Please enter only alphabetic characters!';
+                    }
+                    // Check for duplicate subject names excluding the current subject
+                    bool exists = subjectController.subjects.any((s) =>
+                        s.subjectName.toLowerCase() ==
+                            value.trim().toLowerCase() &&
+                        s != subjectItem);
+                    if (exists) {
+                      return 'Subject name already exists!';
+                    }
+                    return null; // Validation passed
+                  },
+                ),
               ],
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter the division name!';
-                }
-                if (!RegExp(r'^[A-Z]+$').hasMatch(value.trim())) {
-                  return 'Division name must contain only uppercase alphabets!';
-                }
-                bool exists = divisionController.divisions.any((d) =>
-                    d.divisionName.toUpperCase() ==
-                        value.trim().toUpperCase() &&
-                    d != divisionItem);
-                if (exists) {
-                  return 'Division name already exists!';
-                }
-                return null;
-              },
             ),
           ),
           actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    Colors.white, // Set the button background color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // Add rounded corners
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    'Cancel',
+                    style: GoogleFonts.poppins(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
-              child: Text(
-                'Cancel',
-                style: GoogleFonts.poppins(color: Colors.redAccent),
-              ),
-            ),
-            ElevatedButton.icon(
-              onPressed: () {
-                if (_editFormKey.currentState!.validate()) {
-                  divisionController.updateDivision(
-                      index, divisionNameController.text.trim().toUpperCase());
-                  Navigator.of(context).pop(); // Close the dialog
-                }
-              },
-              icon: Icon(
-                Icons.save, // Add the save icon
-                color: Colors.green,
-              ),
-              label: Text(
-                'Save Changes',
-                style: GoogleFonts.poppins(color: Colors.green),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    Colors.white, // Set the button background color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // Add rounded corners
+                ElevatedButton.icon(
+                  onPressed: () {
+                    if (_editFormKey.currentState!.validate()) {
+                      subjectController.updateSubject(
+                        index,
+                        subjectNameController.text.trim(),
+                      );
+                      Navigator.of(context).pop(); // Close the dialog
+                    }
+                  },
+                  icon: Icon(
+                    Icons.save,
+                    color: Colors.green,
+                  ),
+                  label: Text(
+                    'Save Changes',
+                    style: GoogleFonts.poppins(
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         );
@@ -221,21 +241,21 @@ class _DivisionListPageState extends State<DivisionListPage> {
 
   // New method to show the Delete Confirmation dialog
   void _showDeleteConfirmationDialog(
-      BuildContext context, int index, DivisionModel divisionItem) {
-    final divisionController =
-        Provider.of<DivisionController>(context, listen: false);
+      BuildContext context, int index, SubjectModel subjectItem) {
+    final subjectController =
+        Provider.of<SubjectController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Delete Division',
+            'Delete Subject',
             style: GoogleFonts.poppins(
                 fontWeight: FontWeight.bold, color: Colors.red),
           ),
           content: Text(
-            'Are you sure you want to delete the division "${divisionItem.divisionName}"?',
+            'Are you sure you want to delete the subject "${subjectItem.subjectName}"?',
             style: GoogleFonts.poppins(),
           ),
           actions: [
@@ -262,7 +282,7 @@ class _DivisionListPageState extends State<DivisionListPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    divisionController.removeDivision(index);
+                    subjectController.deleteSubject(index);
                     Navigator.of(context).pop(); // Close the dialog
                   },
                   style: ElevatedButton.styleFrom(
@@ -292,36 +312,38 @@ class _DivisionListPageState extends State<DivisionListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Division List',
+          'Subject List',
           style: GoogleFonts.poppins(),
         ),
         backgroundColor: Colors.blueGrey.shade900,
       ),
       body: Row(
         children: [
-          Sidebar(), // Your sidebar widget here
+          Sidebar(), // Sidebar remains intact
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Divisions title
+                  // Header "Subject"
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'Divisions',
+                      'Subject',
                       style: GoogleFonts.poppins(
-                          fontSize: 24, fontWeight: FontWeight.bold),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  // Add Division button aligned to the right
+                  // Add Subject button aligned to the right
                   ElevatedButton.icon(
                     onPressed: () {
-                      _showAddDivisionPopup(context);
+                      _showAddSubjectPopup(context);
                     },
                     icon: Icon(Icons.add),
-                    label: Text('Add Division'),
+                    label: Text('Add Subject'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueGrey.shade900,
                       foregroundColor: Colors.white,
@@ -330,9 +352,10 @@ class _DivisionListPageState extends State<DivisionListPage> {
                     ),
                   ),
                   SizedBox(height: 16),
+                  // Expanded DataTable wrapped in a Container
                   Expanded(
-                    child: Consumer<DivisionController>(
-                      builder: (context, divisionController, child) {
+                    child: Consumer<SubjectController>(
+                      builder: (context, SubjectController, child) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SingleChildScrollView(
@@ -358,7 +381,7 @@ class _DivisionListPageState extends State<DivisionListPage> {
                                     ),
                                     DataColumn(
                                       label: Text(
-                                        'Division Name',
+                                        'Subject Name',
                                         style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -375,7 +398,7 @@ class _DivisionListPageState extends State<DivisionListPage> {
                                       ),
                                     ),
                                   ],
-                                  rows: divisionController.divisions.isEmpty
+                                  rows: SubjectController.subjects.isEmpty
                                       ? [
                                           DataRow(cells: [
                                             DataCell(Container()),
@@ -392,11 +415,11 @@ class _DivisionListPageState extends State<DivisionListPage> {
                                           ])
                                         ]
                                       : List<DataRow>.generate(
-                                          divisionController.divisions.length,
+                                          SubjectController.subjects.length,
                                           (index) {
-                                            final divisionItem =
-                                                divisionController
-                                                    .divisions[index];
+                                            final subjectItem =
+                                                 SubjectController
+                                                    .subjects[index];
                                             return DataRow(
                                               cells: [
                                                 DataCell(
@@ -415,8 +438,8 @@ class _DivisionListPageState extends State<DivisionListPage> {
                                                         .symmetric(
                                                         horizontal: 8.0,
                                                         vertical: 12.0),
-                                                    child: Text(divisionItem
-                                                        .divisionName),
+                                                    child: Text(subjectItem
+                                                        .subjectName),
                                                   ),
                                                 ),
                                                 DataCell(
@@ -434,10 +457,10 @@ class _DivisionListPageState extends State<DivisionListPage> {
                                                                 .blueAccent,
                                                           ),
                                                           onPressed: () {
-                                                            _showEditDivisionPopup(
+                                                            _showEditSubjectPopup(
                                                                 context,
                                                                 index,
-                                                                divisionItem);
+                                                                subjectItem);
                                                           },
                                                         ),
                                                         IconButton(
@@ -450,7 +473,7 @@ class _DivisionListPageState extends State<DivisionListPage> {
                                                             _showDeleteConfirmationDialog(
                                                                 context,
                                                                 index,
-                                                                divisionItem);
+                                                                subjectItem);
                                                           },
                                                         ),
                                                       ],

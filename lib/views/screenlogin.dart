@@ -299,7 +299,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
         child: Text(
           letters.join(),
           textAlign: TextAlign.left,
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.alata(
             fontSize: textSize,
             color: Colors.white,
             fontWeight: FontWeight.bold,

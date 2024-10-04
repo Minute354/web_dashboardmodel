@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:school_web_app/screens/class_list_screen.dart';
-import 'package:school_web_app/screens/course_list_screen.dart';
-import 'package:school_web_app/screens/dashboard_screen.dart';
-import 'package:school_web_app/screens/division_list_screen.dart';
-import 'package:school_web_app/screens/setting_screen.dart';
-import 'package:school_web_app/screens/student_list_screen.dart';
-import 'package:school_web_app/screens/subject_list_screen.dart';
+import 'package:school_web_app/views/class_list_screen.dart';
+import 'package:school_web_app/views/course_list_screen.dart';
+import 'package:school_web_app/views/dashboard_screen.dart';
+import 'package:school_web_app/views/division_list_screen.dart';
+import 'package:school_web_app/views/setting_screen.dart';
+import 'package:school_web_app/views/student_list_screen.dart';
+import 'package:school_web_app/views/subject_list_screen.dart';
 
 class Sidebar extends StatefulWidget {
   @override
@@ -58,7 +58,7 @@ class _SidebarState extends State<Sidebar> {
             isSelected: selectedItem == 'Dashboard',
           ),
 
-          // Lookups dropdown with selected items
+          // Lookups dropdown with Teacher and Student sections
           _buildLookupsDropdown(context),
 
           _buildSidebarItem(
@@ -118,57 +118,84 @@ class _SidebarState extends State<Sidebar> {
       leading: Icon(Icons.search, color: Colors.white),
       title: Text('Lookups', style: TextStyle(color: Colors.white)),
       children: [
-        _buildSidebarItem(
-          icon: Icons.class_,
-          label: 'Class',
-          context: context,
-          onTap: () {
-            setState(() {
-              selectedItem = 'Class';
-            });
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => ClassListPage()));
-          },
-          isSelected: selectedItem == 'Class',
+        // Student section
+        ExpansionTile(
+          leading: Icon(Icons.person, color: Colors.white),
+          title: Text('Student', style: TextStyle(color: Colors.white)),
+          children: [
+            _buildSidebarItem(
+              icon: Icons.class_,
+              label: 'Class',
+              context: context,
+              onTap: () {
+                setState(() {
+                  selectedItem = 'Class';
+                });
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ClassListPage()));
+              },
+              isSelected: selectedItem == 'Class',
+            ),
+            _buildSidebarItem(
+              icon: Icons.group,
+              label: 'Division',
+              context: context,
+              onTap: () {
+                setState(() {
+                  selectedItem = 'Division';
+                });
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => DivisionListPage()));
+              },
+              isSelected: selectedItem == 'Division',
+            ),
+            _buildSidebarItem(
+              icon: Icons.book,
+              label: 'Course',
+              context: context,
+              onTap: () {
+                setState(() {
+                  selectedItem = 'Course';
+                });
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => CourseListPage()));
+              },
+              isSelected: selectedItem == 'Course',
+            ),
+            _buildSidebarItem(
+              icon: Icons.subject,
+              label: 'Subject',
+              context: context,
+              onTap: () {
+                setState(() {
+                  selectedItem = 'Subject';
+                });
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SubjectListPage()));
+              },
+              isSelected: selectedItem == 'Subject',
+            ),
+          ],
         ),
-        _buildSidebarItem(
-          icon: Icons.group,
-          label: 'Division',
-          context: context,
-          onTap: () {
-            setState(() {
-              selectedItem = 'Division';
-            });
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => DivisionListPage()));
-          },
-          isSelected: selectedItem == 'Division',
-        ),
-        _buildSidebarItem(
-          icon: Icons.book,
-          label: 'Course',
-          context: context,
-          onTap: () {
-            setState(() {
-              selectedItem = 'Course';
-            });
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => CourseListPage()));
-          },
-          isSelected: selectedItem == 'Course',
-        ),
-        _buildSidebarItem(
-          icon: Icons.subject,
-          label: 'Subject',
-          context: context,
-          onTap: () {
-            setState(() {
-              selectedItem = 'Subject';
-            });
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => SubjectListPage()));
-          },
-          isSelected: selectedItem == 'Subject',
+        // Teacher section
+        ExpansionTile(
+          leading: Icon(Icons.person_outline, color: Colors.white),
+          title: Text('Teacher', style: TextStyle(color: Colors.white)),
+          children: [
+            _buildSidebarItem(
+              icon: Icons.subject,
+              label: 'Subject',
+              context: context,
+              onTap: () {
+                setState(() {
+                  selectedItem = 'Teacher Subject';
+                });
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SubjectListPage()));
+              },
+              isSelected: selectedItem == 'Teacher Subject',
+            ),
+          ],
         ),
       ],
     );

@@ -1,60 +1,64 @@
-// lib/screens/class_list_page.dart
+// lib/screens/course_list_page.dart
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:school_web_app/controllers/class_controller.dart';
-import 'package:school_web_app/models/class_model.dart';
-import 'package:school_web_app/screens/sidebars.dart';
+import 'package:school_web_app/controllers/course_controller.dart';
+import 'package:school_web_app/models/course_model.dart';
+import 'package:school_web_app/views/sidebars.dart';
 import 'dashboard_screen.dart';
 
-class ClassListPage extends StatefulWidget {
-  const ClassListPage({super.key});
+class CourseListPage extends StatefulWidget {
+  const CourseListPage({super.key});
 
   @override
-  _ClassListPageState createState() => _ClassListPageState();
+  _CourseListPageState createState() => _CourseListPageState();
 }
 
-class _ClassListPageState extends State<ClassListPage> {
+class _CourseListPageState extends State<CourseListPage> {
   // Separate GlobalKeys for Add and Edit forms to avoid validation conflicts
   final _addFormKey = GlobalKey<FormState>();
   final _editFormKey = GlobalKey<FormState>();
 
-  // Method to show the Add Class popup
-  void _showAddClassPopup(BuildContext context) {
-    final TextEditingController classNameController = TextEditingController();
-    final classController = Provider.of<ClassController>(context, listen: false);
+  // Method to show the Add Course popup
+  void _showAddCoursePopup(BuildContext context) {
+    final TextEditingController courseNameController = TextEditingController();
+    final courseController = Provider.of<CourseController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Add New Class',
+            'Add New Course',
             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
           ),
           content: Form(
             key: _addFormKey, // Assign the GlobalKey to the Form
-            child: TextFormField(
-              controller: classNameController,
-              decoration: InputDecoration(
-                labelText: 'Class Name',
-                border: OutlineInputBorder(),
-              ),
-              style: GoogleFonts.poppins(),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter the class name!';
-                }
-                // Check for duplicate class names
-                bool exists = classController.classes.any((c) =>
-                    c.className.toLowerCase() ==
-                    value.trim().toLowerCase());
-                if (exists) {
-                  return 'Class name already exists!';
-                }
-                return null; // Validation passed
-              },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: courseNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Course Name',
+                    border: OutlineInputBorder(),
+                  ),
+                  style: GoogleFonts.poppins(),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter the course name!';
+                    }
+                    // Check for duplicate course names
+                    bool exists = courseController.courses.any((c) =>
+                        c.courseName.toLowerCase() == value.trim().toLowerCase());
+                    if (exists) {
+                      return 'Course name already exists!';
+                    }
+                    return null; // Validation passed
+                  },
+                ),
+              ],
             ),
           ),
           actions: [
@@ -84,13 +88,13 @@ class _ClassListPageState extends State<ClassListPage> {
                   child: ElevatedButton.icon(
                     onPressed: () {
                       if (_addFormKey.currentState!.validate()) {
-                        // If the form is valid, add the class
-                        classController.addClass(
-                          classNameController.text.trim(),
-                        );
-                        classNameController.clear(); // Clear the text field
+                        // If the form is valid, add the course
+                        String newCourseName = courseNameController.text.trim();
+                        courseController.addCourse(newCourseName);
+                        courseNameController.clear(); // Clear the text field
                         Navigator.of(context).pop(); // Close the dialog
                         // Show SnackBar feedback
+                       
                       }
                       // If the form is invalid, the validator will display error messages
                     },
@@ -99,7 +103,7 @@ class _ClassListPageState extends State<ClassListPage> {
                       color: Colors.blue,
                     ),
                     label: Text(
-                      'Add Class',
+                      'Add Course',
                       style: GoogleFonts.poppins(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
@@ -121,20 +125,18 @@ class _ClassListPageState extends State<ClassListPage> {
     );
   }
 
-  // Method to show the Edit Class popup
-  void _showEditClassPopup(
-      BuildContext context, int index, ClassModel classItem) {
-    final TextEditingController classNameController =
-        TextEditingController(text: classItem.className);
-    final classController =
-        Provider.of<ClassController>(context, listen: false);
+  // Method to show the Edit Course popup
+  void _showEditCoursePopup(BuildContext context, int index, CourseModel courseItem) {
+    final TextEditingController courseNameController =
+        TextEditingController(text: courseItem.courseName);
+    final courseController = Provider.of<CourseController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Edit Class',
+            'Edit Course',
             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
           ),
           content: Form(
@@ -143,23 +145,21 @@ class _ClassListPageState extends State<ClassListPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
-                  controller: classNameController,
+                  controller: courseNameController,
                   decoration: InputDecoration(
-                    labelText: 'Class Name',
+                    labelText: 'Course Name',
                     border: OutlineInputBorder(),
                   ),
                   style: GoogleFonts.poppins(),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the class name!';
+                      return 'Please enter the course name!';
                     }
-                    // Check for duplicate class names excluding the current class
-                    bool exists = classController.classes.any((c) =>
-                        c.className.toLowerCase() ==
-                            value.trim().toLowerCase() &&
-                        c != classItem);
+                    // Check for duplicate course names excluding the current course
+                    bool exists = courseController.courses.any((c) =>
+                        c.courseName.toLowerCase() == value.trim().toLowerCase() && c != courseItem);
                     if (exists) {
-                      return 'Class name already exists!';
+                      return 'Course name already exists!';
                     }
                     return null; // Validation passed
                   },
@@ -177,8 +177,7 @@ class _ClassListPageState extends State<ClassListPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -194,13 +193,12 @@ class _ClassListPageState extends State<ClassListPage> {
                 ElevatedButton.icon(
                   onPressed: () {
                     if (_editFormKey.currentState!.validate()) {
-                      // If the form is valid, update the class
-                      classController.updateClass(
-                        index,
-                        classNameController.text.trim(),
-                      );
+                      // If the form is valid, update the course
+                      String updatedCourseName = courseNameController.text.trim();
+                      courseController.updateCourse(index, updatedCourseName);
                       Navigator.of(context).pop(); // Close the dialog
                       // Show SnackBar feedback
+                      
                     }
                     // If the form is invalid, the validator will display error messages
                   },
@@ -217,8 +215,7 @@ class _ClassListPageState extends State<ClassListPage> {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -233,22 +230,19 @@ class _ClassListPageState extends State<ClassListPage> {
   }
 
   // New method to show the Delete Confirmation dialog
-  void _showDeleteConfirmationDialog(
-      BuildContext context, int index, ClassModel classItem) {
-    final classController =
-        Provider.of<ClassController>(context, listen: false);
+  void _showDeleteConfirmationDialog(BuildContext context, int index, CourseModel courseItem) {
+    final courseController = Provider.of<CourseController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Delete Class',
-            style:
-                GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.red),
+            'Delete Course',
+            style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.red),
           ),
           content: Text(
-            'Are you sure you want to delete the class "${classItem.className}"?',
+            'Are you sure you want to delete the course "${courseItem.courseName}"?',
             style: GoogleFonts.poppins(),
           ),
           actions: [
@@ -275,9 +269,11 @@ class _ClassListPageState extends State<ClassListPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    classController.removeClass(index);
+                    String deletedCourseName = courseItem.courseName;
+                    courseController.deleteCourse(index);
                     Navigator.of(context).pop(); // Close the dialog
                     // Show SnackBar feedback
+                    
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,
@@ -306,7 +302,7 @@ class _ClassListPageState extends State<ClassListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Class List', // Updated title for clarity
+          'Course List', // Updated title for clarity
           style: GoogleFonts.poppins(),
         ),
         backgroundColor: Colors.blueGrey.shade900,
@@ -322,23 +318,24 @@ class _ClassListPageState extends State<ClassListPage> {
                 crossAxisAlignment:
                     CrossAxisAlignment.start, // Align children to the left
                 children: [
-                  // Header "Class"
+                  // Header "Course"
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'Classes',
+                      'Course',
                       style: GoogleFonts.poppins(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
+                  // Add Course button aligned to the right
                   ElevatedButton.icon(
                     onPressed: () {
-                      _showAddClassPopup(context);
+                      _showAddCoursePopup(context);
                     },
                     icon: Icon(Icons.add),
-                    label: Text('Add Class'),
+                    label: Text('Add Course'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueGrey.shade900,
                       foregroundColor: Colors.white,
@@ -347,9 +344,10 @@ class _ClassListPageState extends State<ClassListPage> {
                     ),
                   ),
                   SizedBox(height: 16),
+                  // Expanded DataTable wrapped in a Container
                   Expanded(
-                    child: Consumer<ClassController>(
-                      builder: (context, classController, child) {
+                    child: Consumer<CourseController>(
+                      builder: (context, courseController, child) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SingleChildScrollView(
@@ -365,7 +363,7 @@ class _ClassListPageState extends State<ClassListPage> {
                                   columns: [
                                     DataColumn(
                                       label: Text(
-                                        'Serial No',
+                                        'Sl. No.',
                                         style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -374,7 +372,7 @@ class _ClassListPageState extends State<ClassListPage> {
                                     ),
                                     DataColumn(
                                       label: Text(
-                                        'Class Name',
+                                        'Course Name',
                                         style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -391,7 +389,7 @@ class _ClassListPageState extends State<ClassListPage> {
                                       ),
                                     ),
                                   ],
-                                  rows: classController.classes.isEmpty
+                                  rows: courseController.courses.isEmpty
                                       ? [
                                           DataRow(cells: [
                                             DataCell(Container()),
@@ -407,9 +405,9 @@ class _ClassListPageState extends State<ClassListPage> {
                                           ])
                                         ]
                                       : List<DataRow>.generate(
-                                          classController.classes.length,
+                                          courseController.courses.length,
                                           (index) {
-                                            final classItem = classController.classes[index];
+                                            final courseItem = courseController.courses[index];
                                             return DataRow(
                                               cells: [
                                                 DataCell(
@@ -421,7 +419,7 @@ class _ClassListPageState extends State<ClassListPage> {
                                                 DataCell(
                                                   Container(
                                                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                                                    child: Text(classItem.className),
+                                                    child: Text(courseItem.courseName),
                                                   ),
                                                 ),
                                                 DataCell(
@@ -435,7 +433,7 @@ class _ClassListPageState extends State<ClassListPage> {
                                                             color: Colors.blueAccent,
                                                           ),
                                                           onPressed: () {
-                                                            _showEditClassPopup(context, index, classItem);
+                                                            _showEditCoursePopup(context, index, courseController.courses[index]);
                                                           },
                                                         ),
                                                         IconButton(
@@ -444,7 +442,7 @@ class _ClassListPageState extends State<ClassListPage> {
                                                             color: Colors.redAccent,
                                                           ),
                                                           onPressed: () {
-                                                            _showDeleteConfirmationDialog(context, index, classItem);
+                                                            _showDeleteConfirmationDialog(context, index, courseController.courses[index]);
                                                           },
                                                         ),
                                                       ],

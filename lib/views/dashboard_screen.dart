@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:school_web_app/screens/dashboardcard.dart';
-import 'package:school_web_app/screens/screenlogin.dart';
-import 'package:school_web_app/screens/setting_screen.dart';
-import 'package:school_web_app/screens/sidebars.dart';
-import 'package:school_web_app/screens/sidedrawer.dart';
+import 'package:school_web_app/views/dashboardcard.dart';
+import 'package:school_web_app/views/screenlogin.dart';
+import 'package:school_web_app/views/setting_screen.dart';
+import 'package:school_web_app/views/sidebars.dart';
+import 'package:school_web_app/views/sidedrawer.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
