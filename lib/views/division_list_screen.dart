@@ -1,64 +1,67 @@
-// lib/screens/course_list_page.dart
+// lib/screens/division_list_page.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:school_web_app/controllers/course_controller.dart';
-import 'package:school_web_app/models/course_model.dart';
-import 'package:school_web_app/screens/sidebars.dart';
-import 'dashboard_screen.dart';
+import 'package:school_web_app/views/sidebars.dart';
+import '../controllers/division_controller.dart';
+import '../models/division_model.dart';
 
-class CourseListPage extends StatefulWidget {
-  const CourseListPage({super.key});
+class DivisionListPage extends StatefulWidget {
+  const DivisionListPage({super.key});
 
   @override
-  _CourseListPageState createState() => _CourseListPageState();
+  _DivisionListPageState createState() => _DivisionListPageState();
 }
 
-class _CourseListPageState extends State<CourseListPage> {
-  // Separate GlobalKeys for Add and Edit forms to avoid validation conflicts
+class _DivisionListPageState extends State<DivisionListPage> {
   final _addFormKey = GlobalKey<FormState>();
   final _editFormKey = GlobalKey<FormState>();
 
-  // Method to show the Add Course popup
-  void _showAddCoursePopup(BuildContext context) {
-    final TextEditingController courseNameController = TextEditingController();
-    final courseController = Provider.of<CourseController>(context, listen: false);
+  // Method to show the Add Division popup
+  void _showAddDivisionPopup(BuildContext context) {
+    final TextEditingController divisionNameController =
+        TextEditingController();
+    final divisionController =
+        Provider.of<DivisionController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Add New Course',
+            'Add New Division',
             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
           ),
           content: Form(
-            key: _addFormKey, // Assign the GlobalKey to the Form
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: courseNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Course Name',
-                    border: OutlineInputBorder(),
-                  ),
-                  style: GoogleFonts.poppins(),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the course name!';
-                    }
-                    // Check for duplicate course names
-                    bool exists = courseController.courses.any((c) =>
-                        c.courseName.toLowerCase() == value.trim().toLowerCase());
-                    if (exists) {
-                      return 'Course name already exists!';
-                    }
-                    return null; // Validation passed
-                  },
-                ),
+            key: _addFormKey,
+            child: TextFormField(
+              controller: divisionNameController,
+              decoration: InputDecoration(
+                labelText: 'Division Name',
+                border: OutlineInputBorder(),
+              ),
+              style: GoogleFonts.poppins(),
+              inputFormatters: [
+                // Force input to uppercase letters only
+                FilteringTextInputFormatter.allow(RegExp(r'[A-Z]')),
               ],
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Please enter the division name!';
+                }
+                // Check if it contains only uppercase alphabets
+                if (!RegExp(r'^[A-Z]+$').hasMatch(value.trim())) {
+                  return 'Division name must contain only uppercase alphabets!';
+                }
+                bool exists = divisionController.divisions.any((d) =>
+                    d.divisionName.toUpperCase() == value.trim().toUpperCase());
+                if (exists) {
+                  return 'Division name already exists!';
+                }
+                return null;
+              },
             ),
           ),
           actions: [
@@ -88,22 +91,19 @@ class _CourseListPageState extends State<CourseListPage> {
                   child: ElevatedButton.icon(
                     onPressed: () {
                       if (_addFormKey.currentState!.validate()) {
-                        // If the form is valid, add the course
-                        String newCourseName = courseNameController.text.trim();
-                        courseController.addCourse(newCourseName);
-                        courseNameController.clear(); // Clear the text field
+                        divisionController.addDivision(
+                          divisionNameController.text.trim(),
+                        );
+                        divisionNameController.clear(); // Clear the text field
                         Navigator.of(context).pop(); // Close the dialog
-                        // Show SnackBar feedback
-                       
                       }
-                      // If the form is invalid, the validator will display error messages
                     },
                     icon: Icon(
                       Icons.add,
                       color: Colors.blue,
                     ),
                     label: Text(
-                      'Add Course',
+                      'Add Division',
                       style: GoogleFonts.poppins(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
@@ -125,103 +125,93 @@ class _CourseListPageState extends State<CourseListPage> {
     );
   }
 
-  // Method to show the Edit Course popup
-  void _showEditCoursePopup(BuildContext context, int index, CourseModel courseItem) {
-    final TextEditingController courseNameController =
-        TextEditingController(text: courseItem.courseName);
-    final courseController = Provider.of<CourseController>(context, listen: false);
+  // Method to show the Edit Division popup
+  void _showEditDivisionPopup(
+      BuildContext context, int index, DivisionModel divisionItem) {
+    final TextEditingController divisionNameController =
+        TextEditingController(text: divisionItem.divisionName);
+    final divisionController =
+        Provider.of<DivisionController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Edit Course',
+            'Edit Division',
             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
           ),
           content: Form(
-            key: _editFormKey, // Assign the GlobalKey to the Form
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: courseNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Course Name',
-                    border: OutlineInputBorder(),
-                  ),
-                  style: GoogleFonts.poppins(),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the course name!';
-                    }
-                    // Check for duplicate course names excluding the current course
-                    bool exists = courseController.courses.any((c) =>
-                        c.courseName.toLowerCase() == value.trim().toLowerCase() && c != courseItem);
-                    if (exists) {
-                      return 'Course name already exists!';
-                    }
-                    return null; // Validation passed
-                  },
-                ),
+            key: _editFormKey,
+            child: TextFormField(
+              controller: divisionNameController,
+              decoration: InputDecoration(
+                labelText: 'Division Name',
+                border: OutlineInputBorder(),
+              ),
+              style: GoogleFonts.poppins(),
+              inputFormatters: [
+                // Force input to uppercase letters only
+                FilteringTextInputFormatter.allow(RegExp(r'[A-Z]')),
               ],
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Please enter the division name!';
+                }
+                if (!RegExp(r'^[A-Z]+$').hasMatch(value.trim())) {
+                  return 'Division name must contain only uppercase alphabets!';
+                }
+                bool exists = divisionController.divisions.any((d) =>
+                    d.divisionName.toUpperCase() ==
+                        value.trim().toUpperCase() &&
+                    d != divisionItem);
+                if (exists) {
+                  return 'Division name already exists!';
+                }
+                return null;
+              },
             ),
           ),
           actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Close the dialog
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    'Cancel',
-                    style: GoogleFonts.poppins(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    Colors.white, // Set the button background color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8), // Add rounded corners
                 ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    if (_editFormKey.currentState!.validate()) {
-                      // If the form is valid, update the course
-                      String updatedCourseName = courseNameController.text.trim();
-                      courseController.updateCourse(index, updatedCourseName);
-                      Navigator.of(context).pop(); // Close the dialog
-                      // Show SnackBar feedback
-                      
-                    }
-                    // If the form is invalid, the validator will display error messages
-                  },
-                  icon: Icon(
-                    Icons.save,
-                    color: Colors.green,
-                  ),
-                  label: Text(
-                    'Save Changes',
-                    style: GoogleFonts.poppins(
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
+              ),
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.poppins(color: Colors.redAccent),
+              ),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                if (_editFormKey.currentState!.validate()) {
+                  divisionController.updateDivision(
+                      index, divisionNameController.text.trim().toUpperCase());
+                  Navigator.of(context).pop(); // Close the dialog
+                }
+              },
+              icon: Icon(
+                Icons.save, // Add the save icon
+                color: Colors.green,
+              ),
+              label: Text(
+                'Save Changes',
+                style: GoogleFonts.poppins(color: Colors.green),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    Colors.white, // Set the button background color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8), // Add rounded corners
                 ),
-              ],
+              ),
             ),
           ],
         );
@@ -230,19 +220,22 @@ class _CourseListPageState extends State<CourseListPage> {
   }
 
   // New method to show the Delete Confirmation dialog
-  void _showDeleteConfirmationDialog(BuildContext context, int index, CourseModel courseItem) {
-    final courseController = Provider.of<CourseController>(context, listen: false);
+  void _showDeleteConfirmationDialog(
+      BuildContext context, int index, DivisionModel divisionItem) {
+    final divisionController =
+        Provider.of<DivisionController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Delete Course',
-            style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.red),
+            'Delete Division',
+            style: GoogleFonts.poppins(
+                fontWeight: FontWeight.bold, color: Colors.red),
           ),
           content: Text(
-            'Are you sure you want to delete the course "${courseItem.courseName}"?',
+            'Are you sure you want to delete the division "${divisionItem.divisionName}"?',
             style: GoogleFonts.poppins(),
           ),
           actions: [
@@ -269,11 +262,8 @@ class _CourseListPageState extends State<CourseListPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    String deletedCourseName = courseItem.courseName;
-                    courseController.deleteCourse(index);
+                    divisionController.removeDivision(index);
                     Navigator.of(context).pop(); // Close the dialog
-                    // Show SnackBar feedback
-                    
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,
@@ -302,40 +292,36 @@ class _CourseListPageState extends State<CourseListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Course List', // Updated title for clarity
+          'Division List',
           style: GoogleFonts.poppins(),
         ),
         backgroundColor: Colors.blueGrey.shade900,
       ),
       body: Row(
         children: [
-          Sidebar(), // Sidebar remains intact
+          Sidebar(), // Your sidebar widget here
           Expanded(
             child: Padding(
-              // Added padding for the entire content area
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Align children to the left
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header "Course"
+                  // Divisions title
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'Course',
+                      'Divisions',
                       style: GoogleFonts.poppins(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                          fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  // Add Course button aligned to the right
+                  // Add Division button aligned to the right
                   ElevatedButton.icon(
                     onPressed: () {
-                      _showAddCoursePopup(context);
+                      _showAddDivisionPopup(context);
                     },
                     icon: Icon(Icons.add),
-                    label: Text('Add Course'),
+                    label: Text('Add Division'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueGrey.shade900,
                       foregroundColor: Colors.white,
@@ -344,10 +330,9 @@ class _CourseListPageState extends State<CourseListPage> {
                     ),
                   ),
                   SizedBox(height: 16),
-                  // Expanded DataTable wrapped in a Container
                   Expanded(
-                    child: Consumer<CourseController>(
-                      builder: (context, courseController, child) {
+                    child: Consumer<DivisionController>(
+                      builder: (context, divisionController, child) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SingleChildScrollView(
@@ -355,11 +340,12 @@ class _CourseListPageState extends State<CourseListPage> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Container(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.75,
+                                width: MediaQuery.of(context).size.width * 0.75,
                                 child: DataTable(
-                                  columnSpacing: 20.0, // Adjust spacing as needed
-                                  headingRowColor: MaterialStateProperty.all(Colors.blueGrey.shade900),
+                                  columnSpacing:
+                                      20.0, // Adjust spacing as needed
+                                  headingRowColor: MaterialStateProperty.all(
+                                      Colors.blueGrey.shade900),
                                   columns: [
                                     DataColumn(
                                       label: Text(
@@ -372,7 +358,7 @@ class _CourseListPageState extends State<CourseListPage> {
                                     ),
                                     DataColumn(
                                       label: Text(
-                                        'Course Name',
+                                        'Division Name',
                                         style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -389,7 +375,7 @@ class _CourseListPageState extends State<CourseListPage> {
                                       ),
                                     ),
                                   ],
-                                  rows: courseController.courses.isEmpty
+                                  rows: divisionController.divisions.isEmpty
                                       ? [
                                           DataRow(cells: [
                                             DataCell(Container()),
@@ -397,7 +383,8 @@ class _CourseListPageState extends State<CourseListPage> {
                                               Center(
                                                 child: Text(
                                                   'No Records Yet.',
-                                                  style: GoogleFonts.poppins(fontSize: 18),
+                                                  style: GoogleFonts.poppins(
+                                                      fontSize: 18),
                                                 ),
                                               ),
                                             ),
@@ -405,44 +392,65 @@ class _CourseListPageState extends State<CourseListPage> {
                                           ])
                                         ]
                                       : List<DataRow>.generate(
-                                          courseController.courses.length,
+                                          divisionController.divisions.length,
                                           (index) {
-                                            final courseItem = courseController.courses[index];
+                                            final divisionItem =
+                                                divisionController
+                                                    .divisions[index];
                                             return DataRow(
                                               cells: [
                                                 DataCell(
                                                   Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                                                    child: Text((index + 1).toString()),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 12.0),
+                                                    child: Text(
+                                                        (index + 1).toString()),
                                                   ),
                                                 ),
                                                 DataCell(
                                                   Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                                                    child: Text(courseItem.courseName),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 12.0),
+                                                    child: Text(divisionItem
+                                                        .divisionName),
                                                   ),
                                                 ),
                                                 DataCell(
                                                   Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 12.0),
                                                     child: Row(
                                                       children: [
                                                         IconButton(
                                                           icon: Icon(
                                                             Icons.edit,
-                                                            color: Colors.blueAccent,
+                                                            color: Colors
+                                                                .blueAccent,
                                                           ),
                                                           onPressed: () {
-                                                            _showEditCoursePopup(context, index, courseController.courses[index]);
+                                                            _showEditDivisionPopup(
+                                                                context,
+                                                                index,
+                                                                divisionItem);
                                                           },
                                                         ),
                                                         IconButton(
                                                           icon: Icon(
                                                             Icons.delete,
-                                                            color: Colors.redAccent,
+                                                            color: Colors
+                                                                .redAccent,
                                                           ),
                                                           onPressed: () {
-                                                            _showDeleteConfirmationDialog(context, index, courseController.courses[index]);
+                                                            _showDeleteConfirmationDialog(
+                                                                context,
+                                                                index,
+                                                                divisionItem);
                                                           },
                                                         ),
                                                       ],

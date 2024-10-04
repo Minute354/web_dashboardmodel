@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:school_web_app/screens/class_list_screen.dart';
-import 'package:school_web_app/screens/division_list_screen.dart';
-import 'package:school_web_app/screens/student_list_screen.dart';
+import 'package:school_web_app/views/class_list_screen.dart';
+import 'package:school_web_app/views/division_list_screen.dart';
+import 'package:school_web_app/views/student_list_screen.dart';
 
 class SidebarDrawer extends StatelessWidget {
   @override
