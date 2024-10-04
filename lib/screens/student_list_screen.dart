@@ -111,28 +111,13 @@ class StudentListPage extends StatelessWidget {
                             ),
                             onChanged: (value) {
                               // Call the filter method as the user types
-                              context
-                                  .read<StudentController>()
-                                  .filterStudents(value);
+                               
                             },
                           ),
                         ),
                         SizedBox(width: 10),
                         // Search button
-                        ElevatedButton(
-                          onPressed: () {
-                            // Call the filter method on button press
-                            String searchValue = _searchController.text.trim();
-                            context
-                                .read<StudentController>()
-                                .filterStudents(searchValue);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(
-                                16), // Make the button the same height as the TextField
-                          ),
-                          child: Icon(Icons.search), // Search icon
-                        ),
+                       
                       ],
                     ),
                   ),
@@ -142,14 +127,14 @@ class StudentListPage extends StatelessWidget {
                     child: Consumer<StudentController>(
                       builder: (context, studentController, child) {
                         return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
+                          scrollDirection: Axis.vertical,
                           child: Container(
                             width: MediaQuery.of(context).size.width *
                                 0.75, // 75% width
                             child: DataTable(
                               columnSpacing: 20.0, // Adjust spacing as needed
                               headingRowColor:
-                                  MaterialStateProperty.all(Colors.black),
+                                  MaterialStateProperty.all(Colors.blueGrey.shade900),
                               columns: const <DataColumn>[
                                 DataColumn(
                                   label: Text(
@@ -267,17 +252,19 @@ class StudentListPage extends StatelessWidget {
                                         ),
                                         // Status Cell
                                         DataCell(
-                                          Chip(
-                                            label: Text(
-                                              student.isActive
-                                                  ? 'Active'
-                                                  : 'Inactive',
-                                              style: const TextStyle(
-                                                  color: Colors.white),
+                                          SizedBox(width: 100,
+                                            child: Chip(
+                                              label: Text(
+                                                student.isActive
+                                                    ? 'Active'
+                                                    : 'Inactive',
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              backgroundColor: student.isActive
+                                                  ? Colors.green
+                                                  : Colors.red,
                                             ),
-                                            backgroundColor: student.isActive
-                                                ? Colors.green
-                                                : Colors.red,
                                           ),
                                         ),
                                         // Actions Cell
@@ -333,19 +320,21 @@ class StudentListPage extends StatelessWidget {
             );
           },
         ),
-        IconButton(
-          icon: Icon(
-            student.isActive ? Icons.cancel : Icons.check_circle,
-            color: student.isActive ? Colors.redAccent : Colors.green,
+        SizedBox(
+          child: IconButton(
+            icon: Icon(
+              student.isActive ? Icons.cancel : Icons.check_circle,
+              color: student.isActive ? Colors.redAccent : Colors.green,
+            ),
+            tooltip: student.isActive ? 'Deactivate Student' : 'Activate Student',
+            onPressed: () {
+              if (student.isActive) {
+                controller.deactivateStudent(student.id);
+              } else {
+                controller.activateStudent(student.id);
+              }
+            },
           ),
-          tooltip: student.isActive ? 'Deactivate Student' : 'Activate Student',
-          onPressed: () {
-            if (student.isActive) {
-              controller.deactivateStudent(student.id);
-            } else {
-              controller.activateStudent(student.id);
-            }
-          },
         ),
         IconButton(
           icon: Icon(Icons.delete, color: Colors.red),

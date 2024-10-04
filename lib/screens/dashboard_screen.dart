@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:school_web_app/screens/add_student_screen.dart';
 import 'package:school_web_app/screens/dashboardcard.dart';
-import 'package:school_web_app/screens/profile_popup.dart';
+import 'package:school_web_app/screens/explore.dart';
 import 'package:school_web_app/screens/screenlogin.dart';
 import 'package:school_web_app/screens/sidebars.dart';
 import 'package:school_web_app/screens/sidedrawer.dart';
@@ -30,6 +31,7 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
         elevation: 0,
         centerTitle: true,
+        // ignore: prefer_const_constructors
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -63,7 +65,9 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
         ],
       ),
-      drawer: isSmallScreen ? SidebarDrawer() : null, // Use SidebarDrawer for small screens
+      drawer: isSmallScreen
+          ? SidebarDrawer()
+          : null, // Use SidebarDrawer for small screens
       body: Column(
         children: [
           Expanded(
@@ -74,7 +78,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: GridView.count(
-                      crossAxisCount: MediaQuery.of(context).size.width > 1200 ? 6 : 3,
+                      crossAxisCount:
+                          MediaQuery.of(context).size.width > 1200 ? 6 : 3,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
                       childAspectRatio: isSmallScreen ? 1.0 : 1.1,
@@ -83,7 +88,10 @@ class _DashboardPageState extends State<DashboardPage> {
                           icon: Icons.person_add,
                           label: 'Add Student',
                           color: Colors.blueAccent,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => AddStudentPage()));
+                          },
                         ),
                         DashboardCard(
                           icon: Icons.group,
@@ -114,6 +122,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           label: 'Help',
                           color: Colors.teal,
                           onTap: () {},
+                        ),
+                        DashboardCard(
+                          icon: Icons.play_circle_filled_sharp,
+                          label: 'Explore',
+                          color: Colors.yellow,
+                          onTap: () {
+                             Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ExplorePage()));
+                          },
                         ),
                       ],
                     ),
@@ -152,9 +169,10 @@ class _DashboardPageState extends State<DashboardPage> {
               // First Row with Profile Icon and Admin Button
               Row(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 24,
-                    backgroundImage: NetworkImage('https://via.placeholder.com/150'), // Replace with actual image URL or asset
+                    backgroundImage: NetworkImage(
+                        'https://via.placeholder.com/150'), // Replace with actual image URL or asset
                   ),
                   const SizedBox(width: 16),
                   TextButton(
@@ -182,7 +200,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: const Text('Logout'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent, // Background color
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
               ),
             ],

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:school_web_app/screens/class_list_screen.dart';
 import 'package:school_web_app/screens/course_list_screen.dart';
 import 'package:school_web_app/screens/dashboard_screen.dart';
-import 'package:school_web_app/screens/division_list_screen.dart';
 import 'package:school_web_app/screens/setting_screen.dart';
 import 'package:school_web_app/screens/student_list_screen.dart';
 import 'package:school_web_app/screens/subject_list_screen.dart';
+import 'package:school_web_app/screens/teacher_list_screen.dart';
 
 class Sidebar extends StatefulWidget {
   @override
@@ -75,6 +75,19 @@ class _SidebarState extends State<Sidebar> {
             isSelected: selectedItem == 'Student',
           ),
           _buildSidebarItem(
+            label: 'Teacher',
+            icon: Icons.book,
+            context: context,
+            onTap: () {
+              setState(() {
+                selectedItem = 'Teacher';
+              });
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => TeacherListPage()));
+            },
+            isSelected: selectedItem == 'Teacher',
+          ),
+          _buildSidebarItem(
             icon: Icons.settings,
             label: 'Settings',
             context: context,
@@ -120,30 +133,18 @@ class _SidebarState extends State<Sidebar> {
       children: [
         _buildSidebarItem(
           icon: Icons.class_,
-          label: 'Class',
+          label: 'Class && Division',
           context: context,
           onTap: () {
             setState(() {
-              selectedItem = 'Class';
+              selectedItem = 'Class && Division';
             });
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => ClassListPage()));
           },
-          isSelected: selectedItem == 'Class',
+          isSelected: selectedItem == 'Class && Division',
         ),
-        _buildSidebarItem(
-          icon: Icons.group,
-          label: 'Division',
-          context: context,
-          onTap: () {
-            setState(() {
-              selectedItem = 'Division';
-            });
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => DivisionListPage()));
-          },
-          isSelected: selectedItem == 'Division',
-        ),
+        
         _buildSidebarItem(
           icon: Icons.book,
           label: 'Course',

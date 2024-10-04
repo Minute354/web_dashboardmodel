@@ -1,11 +1,12 @@
-// controllers/student_controller.dart
 import 'package:flutter/material.dart';
 import '../models/student_model.dart';
 
 class StudentController with ChangeNotifier {
   List<Student> _students = [];
+  List<Student> _filteredStudents = []; // New list for filtered students
 
   List<Student> get students => _students;
+  List<Student> get filteredStudents => _filteredStudents.isNotEmpty ? _filteredStudents : _students; // Show filtered list or all students
 
   void addStudent(Student student) {
     _students.add(student);
@@ -37,5 +38,17 @@ class StudentController with ChangeNotifier {
     notifyListeners();
   }
 
-  void filterStudents(String value) {}
+  // Method to filter students based on search query
+  void filterStudents(String query) {
+    if (query.isEmpty) {
+      _filteredStudents = _students; // Reset to show all students
+    } else {
+      _filteredStudents = _students.where((student) {
+        // Check if first name, last name, or any other property contains the search query
+        final fullName = '${student.firstName} ${student.lastName}'.toLowerCase();
+        return fullName.contains(query.toLowerCase());
+      }).toList();
+    }
+    notifyListeners(); // Notify listeners about the state change
+    }
 }
