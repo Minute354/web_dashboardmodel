@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_web_app/controllers/class_controller.dart';
 import 'package:school_web_app/controllers/course_controller.dart';
-import 'package:school_web_app/controllers/division_controller.dart';
 import 'package:school_web_app/controllers/subject_controller.dart';
+import 'package:school_web_app/controllers/teacher_controller.dart';
 import 'controllers/student_controller.dart';
 import 'views/screenlogin.dart';
 import 'views/dashboard_screen.dart';
@@ -21,9 +21,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => StudentController()),
         ChangeNotifierProvider(create: (_) => ClassController()),
-        ChangeNotifierProvider(create: (_) => DivisionController()),
         ChangeNotifierProvider(create: (_) => SubjectController()),
         ChangeNotifierProvider(create: (_) => CourseController()),
+        ChangeNotifierProvider(create: (_) => TeacherController()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

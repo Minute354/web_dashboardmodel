@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_web_app/views/class_list_screen.dart';
-import 'package:school_web_app/views/division_list_screen.dart';
+
 import 'package:school_web_app/views/student_list_screen.dart';
 
 class SidebarDrawer extends StatelessWidget {
@@ -21,10 +21,7 @@ class SidebarDrawer extends StatelessWidget {
           _buildSidebarItem(icon: Icons.class_, label: 'Class', context: context, onTap: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassListPage()));
           }),
-          _buildSidebarItem(icon: Icons.group, label: 'Division', context: context, onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => DivisionListPage()));
-
-          }),
+        
           _buildSidebarItem(icon: Icons.school, label: 'Teacher', context: context, onTap: () {}),
           _buildSidebarItem(icon: Icons.person, label: 'Student', context: context, onTap: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => StudentListPage()));
