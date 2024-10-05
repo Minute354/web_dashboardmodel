@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:school_web_app/controllers/class_controller.dart';
 import 'package:school_web_app/models/class_model.dart';
 import 'package:school_web_app/views/sidebars.dart';
-import 'dashboard_screen.dart';
+
 
 class ClassListPage extends StatefulWidget {
   const ClassListPage({super.key});
