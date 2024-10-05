@@ -1,142 +1,63 @@
-// lib/screens/class_list_page.dart
+// lib/screens/subject_list_page.dart
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import for input formatters
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:school_web_app/controllers/class_controller.dart';
-import 'package:school_web_app/models/class_model.dart';
-import 'package:school_web_app/screens/sidebars.dart';
+import 'package:school_web_app/controllers/subject_controller.dart';
+import 'package:school_web_app/models/subject_model.dart';
+import 'package:school_web_app/views/sidebars.dart';
 
-// Custom InputFormatter to convert input to uppercase
-class UpperCaseTextFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    return newValue.copyWith(text: newValue.text.toUpperCase());
-  }
-}
-
-class ClassListPage extends StatefulWidget {
-  const ClassListPage({super.key});
+class SubjectListPage extends StatefulWidget {
+  const SubjectListPage({super.key});
 
   @override
-  _ClassListPageState createState() => _ClassListPageState();
+  _SubjectListPageState createState() => _SubjectListPageState();
 }
 
-class _ClassListPageState extends State<ClassListPage> {
-  // Separate GlobalKeys for Add and Edit forms to avoid validation conflicts
+class _SubjectListPageState extends State<SubjectListPage> {
   final _addFormKey = GlobalKey<FormState>();
   final _editFormKey = GlobalKey<FormState>();
 
-  // Define allowed class names as Roman numerals from I to XII and digits from 1 to 12
-  final List<String> allowedClassNames = [
-    'I',
-    'II',
-    'III',
-    'IV',
-    'V',
-    'VI',
-    'VII',
-    'VIII',
-    'IX',
-    'X',
-    'XI',
-    'XII',
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-  ];
-
-  // Method to show the Add Class popup
-  void _showAddClassPopup(BuildContext context) {
-    final TextEditingController classNameController = TextEditingController();
-    final TextEditingController divisionController = TextEditingController(); // New Controller
-    final classController = Provider.of<ClassController>(context, listen: false);
+  // Method to show the Add Subject popup
+  void _showAddSubjectPopup(BuildContext context) {
+    final TextEditingController subjectNameController = TextEditingController();
+    final subjectController =
+        Provider.of<SubjectController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Add New Class',
+            'Add New Subject',
             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
           ),
           content: Form(
-            key: _addFormKey, // Assign the GlobalKey to the Form
+            key: _addFormKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Class Name Field
                 TextFormField(
-                  controller: classNameController,
+                  controller: subjectNameController,
                   decoration: InputDecoration(
-                    labelText: 'Class Name',
+                    labelText: 'Subject Name',
                     border: OutlineInputBorder(),
                   ),
                   style: GoogleFonts.poppins(),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(3), // Limit input to 3 characters
-                    FilteringTextInputFormatter.allow(RegExp('[IVX0-9]')), // Allow I, V, X and digits 0-9
-                    UpperCaseTextFormatter(), // Convert to uppercase
-                  ],
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the class name!';
+                      return 'Please enter the subject name!';
                     }
-                    if (!allowedClassNames.contains(value.trim())) {
-                      return 'Class name must be a Roman numeral (I-XII) or a digit (1-12)!';
+                    // Check if the input contains only alphabets
+                    final RegExp regex = RegExp(r'^[a-zA-Z\s]+$');
+                    if (!regex.hasMatch(value)) {
+                      return 'Please enter only alphabetic characters!';
                     }
-                    // Check for duplicate Class Name and Division combination
-                    bool exists = classController.classes.any((c) =>
-                        c.className.toUpperCase() ==
-                            classNameController.text.trim().toUpperCase() &&
-                        c.division.toUpperCase() ==
-                            divisionController.text.trim().toUpperCase());
+                    bool exists = subjectController.subjects.any((s) =>
+                        s.subjectName.toLowerCase() ==
+                        value.trim().toLowerCase());
                     if (exists) {
-                      return 'This Class and Division combination already exists!';
-                    }
-                    return null; // Validation passed
-                  },
-                ),
-                SizedBox(height: 16),
-                // Division Field
-                TextFormField(
-                  controller: divisionController, // New Division Field
-                  decoration: InputDecoration(
-                    labelText: 'Division',
-                    border: OutlineInputBorder(),
-                  ),
-                  style: GoogleFonts.poppins(),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(1), // Limit input to 1 character
-                    FilteringTextInputFormatter.allow(RegExp('[A-Za-z]')), // Allow only letters
-                    UpperCaseTextFormatter(), // Convert to uppercase
-                  ],
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the division!';
-                    }
-                    if (!RegExp(r'^[A-Z]$').hasMatch(value.trim())) {
-                      return 'Division must be a single uppercase letter (A-Z)!';
-                    }
-                    // Check for duplicate Class Name and Division combination
-                    bool exists = classController.classes.any((c) =>
-                        c.className.toUpperCase() ==
-                            classNameController.text.trim().toUpperCase() &&
-                        c.division.toUpperCase() ==
-                            value.trim().toUpperCase());
-                    if (exists) {
-                      return 'This Class and Division combination already exists!';
+                      return 'Subject name already exists!';
                     }
                     return null; // Validation passed
                   },
@@ -171,25 +92,19 @@ class _ClassListPageState extends State<ClassListPage> {
                   child: ElevatedButton.icon(
                     onPressed: () {
                       if (_addFormKey.currentState!.validate()) {
-                        // If the form is valid, add the class
-                        classController.addClass(
-                          classNameController.text.trim(),
-                          divisionController.text.trim(), // Pass Division
+                        subjectController.addSubject(
+                          subjectNameController.text.trim(),
                         );
-                        classNameController.clear(); // Clear the text fields
-                        divisionController.clear();
+                        subjectNameController.clear(); // Clear the text field
                         Navigator.of(context).pop(); // Close the dialog
-                        // Show SnackBar feedback
-                        
                       }
-                      // If the form is invalid, the validator will display error messages
                     },
                     icon: Icon(
                       Icons.add,
                       color: Colors.blue,
                     ),
                     label: Text(
-                      'Add Class',
+                      'Add Subject',
                       style: GoogleFonts.poppins(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
@@ -211,92 +126,50 @@ class _ClassListPageState extends State<ClassListPage> {
     );
   }
 
-  // Method to show the Edit Class popup
-  void _showEditClassPopup(
-      BuildContext context, int index, ClassModel classItem) {
-    final TextEditingController classNameController =
-        TextEditingController(text: classItem.className);
-    final TextEditingController divisionController =
-        TextEditingController(text: classItem.division); // New Controller
-    final classController =
-        Provider.of<ClassController>(context, listen: false);
+  // Method to show the Edit Subject popup
+  void _showEditSubjectPopup(
+      BuildContext context, int index, SubjectModel subjectItem) {
+    final TextEditingController subjectNameController =
+        TextEditingController(text: subjectItem.subjectName);
+    final subjectController =
+        Provider.of<SubjectController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Edit Class',
+            'Edit Subject',
             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
           ),
           content: Form(
-            key: _editFormKey, // Assign the GlobalKey to the Form
+            key: _editFormKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Class Name Field
                 TextFormField(
-                  controller: classNameController,
+                  controller: subjectNameController,
                   decoration: InputDecoration(
-                    labelText: 'Class Name',
+                    labelText: 'Subject Name',
                     border: OutlineInputBorder(),
                   ),
                   style: GoogleFonts.poppins(),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(3), // Limit input to 3 characters
-                    FilteringTextInputFormatter.allow(RegExp('[IVX0-9]')), // Allow I, V, X and digits 0-9
-                    UpperCaseTextFormatter(), // Convert to uppercase
-                  ],
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the class name!';
+                      return 'Please enter the subject name!';
                     }
-                    if (!allowedClassNames.contains(value.trim())) {
-                      return 'Class name must be a Roman numeral (I-XII) or a digit (1-12)!';
+                    // Check if the input contains only alphabets
+                    final RegExp regex = RegExp(r'^[a-zA-Z\s]+$');
+                    if (!regex.hasMatch(value)) {
+                      return 'Please enter only alphabetic characters!';
                     }
-                    // Check for duplicate Class Name and Division combination excluding the current class
-                    bool exists = classController.classes.any((c) =>
-                        c.className.toUpperCase() ==
-                            classNameController.text.trim().toUpperCase() &&
-                        c.division.toUpperCase() ==
-                            divisionController.text.trim().toUpperCase() &&
-                        c != classItem);
+                    // Check for duplicate subject names excluding the current subject
+                    bool exists = subjectController.subjects.any((s) =>
+                        s.subjectName.toLowerCase() ==
+                            value.trim().toLowerCase() &&
+                        s != subjectItem);
                     if (exists) {
-                      return 'This Class and Division combination already exists!';
-                    }
-                    return null; // Validation passed
-                  },
-                ),
-                SizedBox(height: 16),
-                // Division Field
-                TextFormField(
-                  controller: divisionController, // New Division Field
-                  decoration: InputDecoration(
-                    labelText: 'Division',
-                    border: OutlineInputBorder(),
-                  ),
-                  style: GoogleFonts.poppins(),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(1), // Limit input to 1 character
-                    FilteringTextInputFormatter.allow(RegExp('[A-Za-z]')), // Allow only letters
-                    UpperCaseTextFormatter(), // Convert to uppercase
-                  ],
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the division!';
-                    }
-                    if (!RegExp(r'^[A-Z]$').hasMatch(value.trim())) {
-                      return 'Division must be a single uppercase letter (A-Z)!';
-                    }
-                    // Check for duplicate Class Name and Division combination excluding the current class
-                    bool exists = classController.classes.any((c) =>
-                        c.className.toUpperCase() ==
-                            classNameController.text.trim().toUpperCase() &&
-                        c.division.toUpperCase() ==
-                            value.trim().toUpperCase() &&
-                        c != classItem);
-                    if (exists) {
-                      return 'This Class and Division combination already exists!';
+                      return 'Subject name already exists!';
                     }
                     return null; // Validation passed
                   },
@@ -314,8 +187,8 @@ class _ClassListPageState extends State<ClassListPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -331,17 +204,12 @@ class _ClassListPageState extends State<ClassListPage> {
                 ElevatedButton.icon(
                   onPressed: () {
                     if (_editFormKey.currentState!.validate()) {
-                      // If the form is valid, update the class
-                      classController.updateClass(
+                      subjectController.updateSubject(
                         index,
-                        classNameController.text.trim(),
-                        divisionController.text.trim(), // Pass Division
+                        subjectNameController.text.trim(),
                       );
                       Navigator.of(context).pop(); // Close the dialog
-                      // Show SnackBar feedback
-                    
                     }
-                    // If the form is invalid, the validator will display error messages
                   },
                   icon: Icon(
                     Icons.save,
@@ -356,8 +224,8 @@ class _ClassListPageState extends State<ClassListPage> {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -371,23 +239,23 @@ class _ClassListPageState extends State<ClassListPage> {
     );
   }
 
-  // Method to show the Delete Confirmation dialog
+  // New method to show the Delete Confirmation dialog
   void _showDeleteConfirmationDialog(
-      BuildContext context, int index, ClassModel classItem) {
-    final classController =
-        Provider.of<ClassController>(context, listen: false);
+      BuildContext context, int index, SubjectModel subjectItem) {
+    final subjectController =
+        Provider.of<SubjectController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Delete Class',
+            'Delete Subject',
             style: GoogleFonts.poppins(
                 fontWeight: FontWeight.bold, color: Colors.red),
           ),
           content: Text(
-            'Are you sure you want to delete the class "${classItem.className} - ${classItem.division}"?',
+            'Are you sure you want to delete the subject "${subjectItem.subjectName}"?',
             style: GoogleFonts.poppins(),
           ),
           actions: [
@@ -414,10 +282,8 @@ class _ClassListPageState extends State<ClassListPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    classController.removeClass(index);
+                    subjectController.deleteSubject(index);
                     Navigator.of(context).pop(); // Close the dialog
-                    // Show SnackBar feedback
-                   
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,
@@ -446,7 +312,7 @@ class _ClassListPageState extends State<ClassListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Class List', // Updated title for clarity
+          'Subject List',
           style: GoogleFonts.poppins(),
         ),
         backgroundColor: Colors.blueGrey.shade900,
@@ -456,29 +322,28 @@ class _ClassListPageState extends State<ClassListPage> {
           Sidebar(), // Sidebar remains intact
           Expanded(
             child: Padding(
-              // Added padding for the entire content area
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Align children to the left
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header "Classes"
+                  // Header "Subject"
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'Classes',
+                      'Subject',
                       style: GoogleFonts.poppins(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
+                  // Add Subject button aligned to the right
                   ElevatedButton.icon(
                     onPressed: () {
-                      _showAddClassPopup(context);
+                      _showAddSubjectPopup(context);
                     },
                     icon: Icon(Icons.add),
-                    label: Text('Add Class'),
+                    label: Text('Add Subject'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueGrey.shade900,
                       foregroundColor: Colors.white,
@@ -487,9 +352,10 @@ class _ClassListPageState extends State<ClassListPage> {
                     ),
                   ),
                   SizedBox(height: 16),
+                  // Expanded DataTable wrapped in a Container
                   Expanded(
-                    child: Consumer<ClassController>(
-                      builder: (context, classController, child) {
+                    child: Consumer<SubjectController>(
+                      builder: (context, SubjectController, child) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SingleChildScrollView(
@@ -497,16 +363,16 @@ class _ClassListPageState extends State<ClassListPage> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Container(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.9, // Adjusted width
+                                width: MediaQuery.of(context).size.width * 0.75,
                                 child: DataTable(
-                                  columnSpacing: 20.0, // Adjust spacing as needed
+                                  columnSpacing:
+                                      20.0, // Adjust spacing as needed
                                   headingRowColor: MaterialStateProperty.all(
                                       Colors.blueGrey.shade900),
                                   columns: [
                                     DataColumn(
                                       label: Text(
-                                        'Class ID', // Changed from 'Serial No' to 'Class ID'
+                                        'Sl. No.',
                                         style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -515,16 +381,7 @@ class _ClassListPageState extends State<ClassListPage> {
                                     ),
                                     DataColumn(
                                       label: Text(
-                                        'Class Name',
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Division', // New Division Column
+                                        'Subject Name',
                                         style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -541,7 +398,7 @@ class _ClassListPageState extends State<ClassListPage> {
                                       ),
                                     ),
                                   ],
-                                  rows: classController.classes.isEmpty
+                                  rows: SubjectController.subjects.isEmpty
                                       ? [
                                           DataRow(cells: [
                                             DataCell(Container()),
@@ -554,77 +411,69 @@ class _ClassListPageState extends State<ClassListPage> {
                                                 ),
                                               ),
                                             ),
-                                            DataCell(Container()), // Empty Division Cell
                                             DataCell(Container()),
                                           ])
                                         ]
                                       : List<DataRow>.generate(
-                                          classController.classes.length,
+                                          SubjectController.subjects.length,
                                           (index) {
-                                            final classItem =
-                                                classController.classes[index];
+                                            final subjectItem =
+                                                 SubjectController
+                                                    .subjects[index];
                                             return DataRow(
                                               cells: [
                                                 DataCell(
                                                   Container(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                            horizontal: 8.0,
-                                                            vertical: 12.0),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 12.0),
                                                     child: Text(
-                                                        classItem.id.toString()), // Display Class ID
+                                                        (index + 1).toString()),
                                                   ),
                                                 ),
                                                 DataCell(
                                                   Container(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                            horizontal: 8.0,
-                                                            vertical: 12.0),
-                                                    child:
-                                                        Text(classItem.className),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 12.0),
+                                                    child: Text(subjectItem
+                                                        .subjectName),
                                                   ),
                                                 ),
                                                 DataCell(
                                                   Container(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                            horizontal: 8.0,
-                                                            vertical: 12.0),
-                                                    child: Text(
-                                                        classItem.division), // Display Division
-                                                  ),
-                                                ),
-                                                DataCell(
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                            horizontal: 8.0,
-                                                            vertical: 12.0),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 12.0),
                                                     child: Row(
                                                       children: [
                                                         IconButton(
                                                           icon: Icon(
                                                             Icons.edit,
-                                                            color: Colors.blueAccent,
+                                                            color: Colors
+                                                                .blueAccent,
                                                           ),
                                                           onPressed: () {
-                                                            _showEditClassPopup(
+                                                            _showEditSubjectPopup(
                                                                 context,
                                                                 index,
-                                                                classItem);
+                                                                subjectItem);
                                                           },
                                                         ),
                                                         IconButton(
                                                           icon: Icon(
                                                             Icons.delete,
-                                                            color: Colors.redAccent,
+                                                            color: Colors
+                                                                .redAccent,
                                                           ),
                                                           onPressed: () {
                                                             _showDeleteConfirmationDialog(
                                                                 context,
                                                                 index,
-                                                                classItem);
+                                                                subjectItem);
                                                           },
                                                         ),
                                                       ],

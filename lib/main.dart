@@ -5,8 +5,8 @@ import 'package:school_web_app/controllers/course_controller.dart';
 import 'package:school_web_app/controllers/subject_controller.dart';
 import 'package:school_web_app/controllers/teacher_controller.dart';
 import 'controllers/student_controller.dart';
-import 'screens/screenlogin.dart';
-import 'screens/dashboard_screen.dart';
+import 'views/screenlogin.dart';
+import 'views/dashboard_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,10 +32,14 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/login',
         routes: {
-          '/dashboard': (context) => DashboardPage(),
+          '/dashboard': (context) => const DashboardPage(),
           '/login': (context) => const LoginScreen(),
-         
-
+          // '/students':(context)=> AddStudentPage(),
+          // '/classes':(context)=> ClassListPage(),
+          // '/divisions':(context)=> DivisionListPage(),
+          // '/courses':(context)=> CourseListPage(),
+          // '/subjects':(context)=> SubjectListPage(),
+          // '/settings':(context)=> SettingsPage(),
         },
       ),
     );

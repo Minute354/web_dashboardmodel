@@ -3,10 +3,12 @@ import '../models/student_model.dart';
 
 class StudentController with ChangeNotifier {
   List<Student> _students = [];
-  List<Student> _filteredStudents = []; // New list for filtered students
+  List<Student> _filteredStudents = [];
 
-  List<Student> get students => _students;
-  List<Student> get filteredStudents => _filteredStudents.isNotEmpty ? _filteredStudents : _students; // Show filtered list or all students
+  bool _searchActive = false; // Track if a search is active
+
+  // Return the filtered students or all students if no filter is applied
+  List<Student> get students => _searchActive ? _filteredStudents : _students;
 
   void addStudent(Student student) {
     _students.add(student);
@@ -22,7 +24,14 @@ class StudentController with ChangeNotifier {
   }
 
   void deleteStudent(int id) {
+    // Remove the student from the main list
     _students.removeWhere((student) => student.id == id);
+    
+    // If a search is active, also remove the student from the filtered list
+    if (_searchActive) {
+      _filteredStudents.removeWhere((student) => student.id == id);
+    }
+    
     notifyListeners();
   }
 
@@ -38,17 +47,25 @@ class StudentController with ChangeNotifier {
     notifyListeners();
   }
 
-  // Method to filter students based on search query
+  // Set the student list
+  void setStudents(List<Student> students) {
+    _students = students;
+    _filteredStudents = List.from(_students); // Copy of the students list
+    notifyListeners();
+  }
+
+  // Filter students based on the search query
   void filterStudents(String query) {
     if (query.isEmpty) {
-      _filteredStudents = _students; // Reset to show all students
+      _filteredStudents = List.from(_students); // If query is empty, show all students
+      _searchActive = false;
     } else {
-      _filteredStudents = _students.where((student) {
-        // Check if first name, last name, or any other property contains the search query
-        final fullName = '${student.firstName} ${student.lastName}'.toLowerCase();
-        return fullName.contains(query.toLowerCase());
-      }).toList();
+      _filteredStudents = _students
+          .where((student) =>
+              student.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      _searchActive = true;
     }
-    notifyListeners(); // Notify listeners about the state change
-    }
+    notifyListeners();
+  }
 }

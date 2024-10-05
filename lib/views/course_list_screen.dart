@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:school_web_app/controllers/course_controller.dart';
 import 'package:school_web_app/models/course_model.dart';
-import 'package:school_web_app/screens/sidebars.dart';
+import 'package:school_web_app/views/sidebars.dart';
 import 'dashboard_screen.dart';
 
 class CourseListPage extends StatefulWidget {
