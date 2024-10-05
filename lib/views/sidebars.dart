@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:school_web_app/views/class_list_screen.dart';
 import 'package:school_web_app/views/course_list_screen.dart';
 import 'package:school_web_app/views/dashboard_screen.dart';
-import 'package:school_web_app/views/division_list_screen.dart';
+
 import 'package:school_web_app/views/setting_screen.dart';
 import 'package:school_web_app/views/student_list_screen.dart';
 import 'package:school_web_app/views/subject_list_screen.dart';
+import 'package:school_web_app/views/teacher_list_screen.dart';
 
 class Sidebar extends StatefulWidget {
   @override
@@ -136,19 +137,7 @@ class _SidebarState extends State<Sidebar> {
               },
               isSelected: selectedItem == 'Class',
             ),
-            _buildSidebarItem(
-              icon: Icons.group,
-              label: 'Division',
-              context: context,
-              onTap: () {
-                setState(() {
-                  selectedItem = 'Division';
-                });
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => DivisionListPage()));
-              },
-              isSelected: selectedItem == 'Division',
-            ),
+            
             _buildSidebarItem(
               icon: Icons.book,
               label: 'Course',
@@ -192,6 +181,20 @@ class _SidebarState extends State<Sidebar> {
                 });
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => SubjectListPage()));
+              },
+              isSelected: selectedItem == 'Teacher Subject',
+              
+            ),
+            _buildSidebarItem(
+              icon: Icons.woman_rounded,
+              label: 'Add Teacher',
+              context: context,
+              onTap: () {
+                setState(() {
+                  selectedItem = 'Teacher ';
+                });
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => TeacherListPage()));
               },
               isSelected: selectedItem == 'Teacher Subject',
             ),
