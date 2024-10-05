@@ -3,8 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:school_web_app/controllers/teacher_controller.dart';
 import 'package:school_web_app/models/teacher_model.dart';
-import 'package:school_web_app/screens/add_teacher_screen.dart';
-import 'package:school_web_app/screens/edit_teacher.dart';
+
+import 'add_teacher_screen.dart';
+import 'edit_teacher.dart';
 import 'sidebars.dart';
 
 class TeacherListPage extends StatelessWidget {

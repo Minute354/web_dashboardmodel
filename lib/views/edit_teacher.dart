@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:school_web_app/screens/sidebars.dart'; // Ensure the correct import path
+
 import '../models/teacher_model.dart';
 import '../controllers/teacher_controller.dart';
 import 'package:provider/provider.dart';
+
+import 'sidebars.dart';
 
 class EditTeacherPage extends StatefulWidget {
   final Teacher teacher;
