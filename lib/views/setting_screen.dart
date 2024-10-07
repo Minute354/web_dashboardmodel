@@ -120,6 +120,7 @@ class SettingsPage extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade400), // Border color
             borderRadius: BorderRadius.circular(8), // Rounded corners
+            // ignore: dead_code
             color: isHovered ? Colors.blueGrey.shade100 : Colors.white, // Change background color on hover
           ),
           margin: EdgeInsets.symmetric(vertical: 8.0), // Vertical spacing
@@ -137,7 +138,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ],
               ),
-              Icon(Icons.arrow_forward_ios, color: Colors.grey),
+              const Icon(Icons.arrow_forward_ios, color: Colors.grey),
             ],
           ),
         ),
