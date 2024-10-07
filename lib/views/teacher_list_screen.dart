@@ -3,9 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:school_web_app/controllers/teacher_controller.dart';
-import 'package:school_web_app/models/teacher_model.dart';
-
+import '../controllers/teacher_controller.dart';
+import '../models/teacher_model.dart';
 import 'add_teacher_screen.dart';
 import 'edit_teacher.dart';
 import 'sidebars.dart';
@@ -130,6 +129,15 @@ class TeacherListPage extends StatelessWidget {
                                 columns: const <DataColumn>[
                                   DataColumn(
                                     label: Text(
+                                      'S/N',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
                                       'First Name',
                                       style: TextStyle(
                                         color: Colors.white,
@@ -198,6 +206,7 @@ class TeacherListPage extends StatelessWidget {
                                     final teacher = teachers[index];
                                     return DataRow(
                                       cells: <DataCell>[
+                                        DataCell(Text((index + 1).toString())), // Serial Number
                                         DataCell(
                                           Container(
                                             padding: const EdgeInsets.symmetric(
@@ -249,16 +258,20 @@ class TeacherListPage extends StatelessWidget {
                                           ),
                                         ),
                                         DataCell(
-                                          SizedBox(width: 100,
-                                            child: TextButton(
-                                              onPressed: () {
-                                                // Toggle the status
-                                                teacherController.updateTeacherStatus(teacher, !teacher.isActive);
-                                              },
-                                              child: Text(
-                                                teacher.isActive ? 'Deactivate' : 'Activate',
-                                                style: TextStyle(color: teacher.isActive ? Colors.green : Colors.red),
-                                              ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: teacher.isActive
+                                                  ? Colors.green
+                                                  : Colors.red,
+                                            ),
+                                            onPressed: () {
+                                              // Toggle the active status
+                                              Provider.of<TeacherController>(context, listen: false)
+                                                  .updateTeacherStatus(teacher, !teacher.isActive);
+                                            },
+                                            child: Text(
+                                              teacher.isActive ? 'Deactivate' : 'Activate',
+                                              style: TextStyle(color: Colors.white),
                                             ),
                                           ),
                                         ),
@@ -293,7 +306,7 @@ class TeacherListPage extends StatelessWidget {
                                                         ),
                                                         TextButton(
                                                           onPressed: () {
-                                                            teacherController.deleteTeacher(teacher); // Delete teacher
+                                                            Provider.of<TeacherController>(context, listen: false).deleteTeacher(teacher);
                                                             Navigator.of(context).pop(); // Close dialog
                                                           },
                                                           child: Text('Delete'),

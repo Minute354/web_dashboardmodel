@@ -1,9 +1,11 @@
+// lib/views/add_teacher_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../controllers/teacher_controller.dart'; // Adjust the import path as needed
-import '../models/teacher_model.dart'; // Adjust the import path as needed
-import 'sidebars.dart'; // Import your Sidebar widget
-import 'package:email_validator/email_validator.dart'; // Import email validator package
+import '../controllers/teacher_controller.dart';
+import '../models/teacher_model.dart';
+import 'sidebars.dart';
+import 'package:email_validator/email_validator.dart';
 
 class AddTeacherPage extends StatefulWidget {
   @override
@@ -18,7 +20,6 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
   String _email = '';
   String _contactNo = '';
 
-  // Define your color theme
   final Color primaryColor = Colors.blueGrey.shade900;
   final Color secondaryColor = Colors.blueGrey.shade900;
 
@@ -26,14 +27,17 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Teacher', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white)),
+        title: Text(
+          'Add Teacher',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white),
+        ),
         elevation: 0,
         backgroundColor: secondaryColor,
         centerTitle: true,
       ),
       body: Row(
         children: [
-          Sidebar(), // Add the sidebar here
+          Sidebar(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -58,9 +62,8 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 40), // Spacing after the title
+                        SizedBox(height: 40),
 
-                        // Row for First Name and Last Name
                         Row(
                           children: [
                             Expanded(
@@ -76,7 +79,7 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                                 },
                               ),
                             ),
-                            SizedBox(width: 16), // Spacing between fields
+                            SizedBox(width: 16),
                             Expanded(
                               child: _buildTextField(
                                 label: 'Last Name',
@@ -92,9 +95,8 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 24), // Spacing between rows
+                        SizedBox(height: 24),
 
-                        // Row for Subject, Email, and Contact No
                         Row(
                           children: [
                             Expanded(
@@ -110,7 +112,7 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                                 },
                               ),
                             ),
-                            SizedBox(width: 16), // Spacing between fields
+                            SizedBox(width: 16),
                             Expanded(
                               child: _buildTextField(
                                 label: 'Email',
@@ -129,9 +131,8 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 24), // Spacing between rows
+                        SizedBox(height: 24),
 
-                        // Row for Contact No
                         _buildTextField(
                           label: 'Contact No',
                           icon: Icons.phone,
@@ -147,9 +148,8 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 40), // Spacing before the Add Teacher button
+                        SizedBox(height: 40),
 
-                        // Add Teacher Button
                         Center(
                           child: ElevatedButton.icon(
                             icon: Icon(Icons.check, color: Colors.white),
@@ -174,7 +174,7 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              backgroundColor: primaryColor, // Change button color
+                              backgroundColor: primaryColor,
                             ),
                           ),
                         ),
@@ -190,7 +190,6 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
     );
   }
 
-  // Helper method for text fields
   Widget _buildTextField({
     required String label,
     required IconData icon,
@@ -201,23 +200,23 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
     return TextFormField(
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: primaryColor), // Change icon color
+        prefixIcon: Icon(icon, color: primaryColor),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
         ),
         filled: true,
-        fillColor: Colors.grey[200], // Light background for the text fields
+        fillColor: Colors.grey[200],
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey), // Default border color
+          borderSide: BorderSide(color: Colors.grey),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 2), // Focused border color
+          borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.red, width: 2), // Error border color
+          borderSide: BorderSide(color: Colors.red, width: 2),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

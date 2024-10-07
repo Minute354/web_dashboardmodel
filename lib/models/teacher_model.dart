@@ -1,3 +1,5 @@
+// lib/models/teacher_model.dart
+
 class Teacher {
   // Removed the id attribute to comply with the new design
   final String firstName; // First name of the teacher
