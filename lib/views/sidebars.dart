@@ -63,6 +63,39 @@ class _SidebarState extends State<Sidebar> {
 
           // Lookups dropdown with Teacher and Student sections
           _buildLookupsDropdown(context),
+          ExpansionTile(
+          leading: Icon(Icons.person_outline, color: Colors.white),
+          title: Text('Teacher', style: TextStyle(color: Colors.white)),
+          children: [
+            _buildSidebarItem(
+              icon: Icons.subject,
+              label: 'Subject',
+              context: context,
+              onTap: () {
+                setState(() {
+                  selectedItem = 'Teacher Subject';
+                });
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SubjectListPage()));
+              },
+              isSelected: selectedItem == 'Teacher Subject',
+              
+            ),
+            _buildSidebarItem(
+              icon: Icons.woman_rounded,
+              label: 'Add Teacher',
+              context: context,
+              onTap: () {
+                setState(() {
+                  selectedItem = 'Teacher ';
+                });
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => TeacherListPage()));
+              },
+              isSelected: selectedItem == 'Teacher Subject',
+            ),
+          ],
+        ),
 
           _buildSidebarItem(
             icon: Icons.person,
@@ -195,40 +228,7 @@ class _SidebarState extends State<Sidebar> {
           ],
         ),
         // Teacher section
-        ExpansionTile(
-          leading: Icon(Icons.person_outline, color: Colors.white),
-          title: Text('Teacher', style: TextStyle(color: Colors.white)),
-          children: [
-            _buildSidebarItem(
-              icon: Icons.subject,
-              label: 'Subject',
-              context: context,
-              onTap: () {
-                setState(() {
-                  selectedItem = 'Teacher Subject';
-                });
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SubjectListPage()));
-              },
-              isSelected: selectedItem == 'Teacher Subject',
-              
-            ),
-            _buildSidebarItem(
-              icon: Icons.woman_rounded,
-              label: 'Add Teacher',
-              context: context,
-              onTap: () {
-                setState(() {
-                  selectedItem = 'Teacher ';
-                });
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => TeacherListPage()));
-              },
-              isSelected: selectedItem == 'Teacher Subject',
-            ),
-          ],
-        ),
-      ],
+      ]
     );
   }
 }

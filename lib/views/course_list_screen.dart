@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:school_web_app/controllers/course_controller.dart';
 import 'package:school_web_app/models/course_model.dart';
 import 'package:school_web_app/views/sidebars.dart';
-import 'dashboard_screen.dart';
 
 class CourseListPage extends StatefulWidget {
   const CourseListPage({super.key});
@@ -269,7 +268,6 @@ class _CourseListPageState extends State<CourseListPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    String deletedCourseName = courseItem.courseName;
                     courseController.deleteCourse(index);
                     Navigator.of(context).pop(); // Close the dialog
                     // Show SnackBar feedback
