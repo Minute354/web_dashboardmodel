@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for input formatters
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:school_web_app/controllers/class_controller.dart';
-import 'package:school_web_app/models/class_model.dart';
 import 'package:school_web_app/views/sidebars.dart';
+import '../controllers/class_controller.dart';
+import '../models/class_model.dart';
 
 // Custom InputFormatter to convert input to uppercase
 class UpperCaseTextFormatter extends TextInputFormatter {
@@ -60,7 +60,6 @@ class _ClassListPageState extends State<ClassListPage> {
   // Method to show the Add Class popup
   void _showAddClassPopup(BuildContext context) {
     final TextEditingController classNameController = TextEditingController();
-    final TextEditingController divisionController = TextEditingController(); // New Controller
     final classController = Provider.of<ClassController>(context, listen: false);
 
     showDialog(
@@ -73,75 +72,34 @@ class _ClassListPageState extends State<ClassListPage> {
           ),
           content: Form(
             key: _addFormKey, // Assign the GlobalKey to the Form
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Class Name Field
-                TextFormField(
-                  controller: classNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Class Name',
-                    border: OutlineInputBorder(),
-                  ),
-                  style: GoogleFonts.poppins(),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(3), // Limit input to 3 characters
-                    FilteringTextInputFormatter.allow(RegExp('[IVX0-9]')), // Allow I, V, X and digits 0-9
-                    UpperCaseTextFormatter(), // Convert to uppercase
-                  ],
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the class name!';
-                    }
-                    if (!allowedClassNames.contains(value.trim())) {
-                      return 'Class name must be a Roman numeral (I-XII) or a digit (1-12)!';
-                    }
-                    // Check for duplicate Class Name and Division combination
-                    bool exists = classController.classes.any((c) =>
-                        c.className.toUpperCase() ==
-                            classNameController.text.trim().toUpperCase() &&
-                        c.division.toUpperCase() ==
-                            divisionController.text.trim().toUpperCase());
-                    if (exists) {
-                      return 'This Class and Division combination already exists!';
-                    }
-                    return null; // Validation passed
-                  },
-                ),
-                SizedBox(height: 16),
-                // Division Field
-                TextFormField(
-                  controller: divisionController, // New Division Field
-                  decoration: InputDecoration(
-                    labelText: 'Division',
-                    border: OutlineInputBorder(),
-                  ),
-                  style: GoogleFonts.poppins(),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(1), // Limit input to 1 character
-                    FilteringTextInputFormatter.allow(RegExp('[A-Za-z]')), // Allow only letters
-                    UpperCaseTextFormatter(), // Convert to uppercase
-                  ],
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the division!';
-                    }
-                    if (!RegExp(r'^[A-Z]$').hasMatch(value.trim())) {
-                      return 'Division must be a single uppercase letter (A-Z)!';
-                    }
-                    // Check for duplicate Class Name and Division combination
-                    bool exists = classController.classes.any((c) =>
-                        c.className.toUpperCase() ==
-                            classNameController.text.trim().toUpperCase() &&
-                        c.division.toUpperCase() ==
-                            value.trim().toUpperCase());
-                    if (exists) {
-                      return 'This Class and Division combination already exists!';
-                    }
-                    return null; // Validation passed
-                  },
-                ),
+            child: TextFormField(
+              controller: classNameController,
+              decoration: InputDecoration(
+                labelText: 'Class Name',
+                border: OutlineInputBorder(),
+              ),
+              style: GoogleFonts.poppins(),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(3), // Limit input to 3 characters
+                FilteringTextInputFormatter.allow(RegExp('[IVX0-9]')), // Allow I, V, X and digits 0-9
+                UpperCaseTextFormatter(), // Convert to uppercase
               ],
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Please enter the class name!';
+                }
+                if (!allowedClassNames.contains(value.trim())) {
+                  return 'Class name must be a Roman numeral (I-XII) or a digit (1-12)!';
+                }
+                // Check for duplicate Class Name
+                bool exists = classController.classes.any((c) =>
+                    c.className.toUpperCase() ==
+                    classNameController.text.trim().toUpperCase());
+                if (exists) {
+                  return 'This Class already exists!';
+                }
+                return null; // Validation passed
+              },
             ),
           ),
           actions: [
@@ -174,13 +132,13 @@ class _ClassListPageState extends State<ClassListPage> {
                         // If the form is valid, add the class
                         classController.addClass(
                           classNameController.text.trim(),
-                          divisionController.text.trim(), // Pass Division
                         );
                         classNameController.clear(); // Clear the text fields
-                        divisionController.clear();
                         Navigator.of(context).pop(); // Close the dialog
                         // Show SnackBar feedback
-                        
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Class added successfully!')),
+                        );
                       }
                       // If the form is invalid, the validator will display error messages
                     },
@@ -216,8 +174,6 @@ class _ClassListPageState extends State<ClassListPage> {
       BuildContext context, int index, ClassModel classItem) {
     final TextEditingController classNameController =
         TextEditingController(text: classItem.className);
-    final TextEditingController divisionController =
-        TextEditingController(text: classItem.division); // New Controller
     final classController =
         Provider.of<ClassController>(context, listen: false);
 
@@ -231,77 +187,35 @@ class _ClassListPageState extends State<ClassListPage> {
           ),
           content: Form(
             key: _editFormKey, // Assign the GlobalKey to the Form
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Class Name Field
-                TextFormField(
-                  controller: classNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Class Name',
-                    border: OutlineInputBorder(),
-                  ),
-                  style: GoogleFonts.poppins(),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(3), // Limit input to 3 characters
-                    FilteringTextInputFormatter.allow(RegExp('[IVX0-9]')), // Allow I, V, X and digits 0-9
-                    UpperCaseTextFormatter(), // Convert to uppercase
-                  ],
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the class name!';
-                    }
-                    if (!allowedClassNames.contains(value.trim())) {
-                      return 'Class name must be a Roman numeral (I-XII) or a digit (1-12)!';
-                    }
-                    // Check for duplicate Class Name and Division combination excluding the current class
-                    bool exists = classController.classes.any((c) =>
-                        c.className.toUpperCase() ==
-                            classNameController.text.trim().toUpperCase() &&
-                        c.division.toUpperCase() ==
-                            divisionController.text.trim().toUpperCase() &&
-                        c != classItem);
-                    if (exists) {
-                      return 'This Class and Division combination already exists!';
-                    }
-                    return null; // Validation passed
-                  },
-                ),
-                SizedBox(height: 16),
-                // Division Field
-                TextFormField(
-                  controller: divisionController, // New Division Field
-                  decoration: InputDecoration(
-                    labelText: 'Division',
-                    border: OutlineInputBorder(),
-                  ),
-                  style: GoogleFonts.poppins(),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(1), // Limit input to 1 character
-                    FilteringTextInputFormatter.allow(RegExp('[A-Za-z]')), // Allow only letters
-                    UpperCaseTextFormatter(), // Convert to uppercase
-                  ],
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the division!';
-                    }
-                    if (!RegExp(r'^[A-Z]$').hasMatch(value.trim())) {
-                      return 'Division must be a single uppercase letter (A-Z)!';
-                    }
-                    // Check for duplicate Class Name and Division combination excluding the current class
-                    bool exists = classController.classes.any((c) =>
-                        c.className.toUpperCase() ==
-                            classNameController.text.trim().toUpperCase() &&
-                        c.division.toUpperCase() ==
-                            value.trim().toUpperCase() &&
-                        c != classItem);
-                    if (exists) {
-                      return 'This Class and Division combination already exists!';
-                    }
-                    return null; // Validation passed
-                  },
-                ),
+            child: TextFormField(
+              controller: classNameController,
+              decoration: InputDecoration(
+                labelText: 'Class Name',
+                border: OutlineInputBorder(),
+              ),
+              style: GoogleFonts.poppins(),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(3), // Limit input to 3 characters
+                FilteringTextInputFormatter.allow(RegExp('[IVX0-9]')), // Allow I, V, X and digits 0-9
+                UpperCaseTextFormatter(), // Convert to uppercase
               ],
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Please enter the class name!';
+                }
+                if (!allowedClassNames.contains(value.trim())) {
+                  return 'Class name must be a Roman numeral (I-XII) or a digit (1-12)!';
+                }
+                // Check for duplicate Class Name excluding the current class
+                bool exists = classController.classes.any((c) =>
+                    c.className.toUpperCase() ==
+                        classNameController.text.trim().toUpperCase() &&
+                    c.id != classItem.id);
+                if (exists) {
+                  return 'This Class already exists!';
+                }
+                return null; // Validation passed
+              },
             ),
           ),
           actions: [
@@ -335,11 +249,12 @@ class _ClassListPageState extends State<ClassListPage> {
                       classController.updateClass(
                         index,
                         classNameController.text.trim(),
-                        divisionController.text.trim(), // Pass Division
                       );
                       Navigator.of(context).pop(); // Close the dialog
                       // Show SnackBar feedback
-                    
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Class updated successfully!')),
+                      );
                     }
                     // If the form is invalid, the validator will display error messages
                   },
@@ -387,7 +302,7 @@ class _ClassListPageState extends State<ClassListPage> {
                 fontWeight: FontWeight.bold, color: Colors.red),
           ),
           content: Text(
-            'Are you sure you want to delete the class "${classItem.className} - ${classItem.division}"?',
+            'Are you sure you want to delete the class "${classItem.className}"?',
             style: GoogleFonts.poppins(),
           ),
           actions: [
@@ -417,7 +332,9 @@ class _ClassListPageState extends State<ClassListPage> {
                     classController.removeClass(index);
                     Navigator.of(context).pop(); // Close the dialog
                     // Show SnackBar feedback
-                   
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Class deleted successfully!')),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,
@@ -498,45 +415,49 @@ class _ClassListPageState extends State<ClassListPage> {
                               scrollDirection: Axis.horizontal,
                               child: Container(
                                 width:
-                                    MediaQuery.of(context).size.width * 0.9, // Adjusted width
+                                    MediaQuery.of(context).size.width * 0.75, // 3/4 width
                                 child: DataTable(
                                   columnSpacing: 20.0, // Adjust spacing as needed
                                   headingRowColor: MaterialStateProperty.all(
                                       Colors.blueGrey.shade900),
+                                  border: TableBorder.all(
+                                    color: Colors.black,
+                                    width: 2,
+                                  ), // Thicker border for DataTable
                                   columns: [
                                     DataColumn(
-                                      label: Text(
-                                        'Class ID', // Changed from 'Serial No' to 'Class ID'
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                      label: Padding(
+                                        padding: const EdgeInsets.all(8.0), // Padding within header cells
+                                        child: Text(
+                                          'Class ID',
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
                                     DataColumn(
-                                      label: Text(
-                                        'Class Name',
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                      label: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Class Name',
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
                                     DataColumn(
-                                      label: Text(
-                                        'Division', // New Division Column
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Actions',
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                      label: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Actions',
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -548,14 +469,13 @@ class _ClassListPageState extends State<ClassListPage> {
                                             DataCell(
                                               Center(
                                                 child: Text(
-                                                  'No Records Yet.',
+                                                  'No Classes Added Yet.',
                                                   style: GoogleFonts.poppins(
                                                       fontSize: 18),
                                                 ),
                                               ),
                                             ),
-                                            DataCell(Container()), // Empty Division Cell
-                                            DataCell(Container()),
+                                            DataCell(Container()), // Empty Actions Cell
                                           ])
                                         ]
                                       : List<DataRow>.generate(
@@ -566,41 +486,27 @@ class _ClassListPageState extends State<ClassListPage> {
                                             return DataRow(
                                               cells: [
                                                 DataCell(
-                                                  Container(
+                                                  Padding(
                                                     padding:
-                                                        const EdgeInsets.symmetric(
-                                                            horizontal: 8.0,
-                                                            vertical: 12.0),
+                                                        const EdgeInsets.all(8.0), // Padding within cell
                                                     child: Text(
-                                                        classItem.id.toString()), // Display Class ID
+                                                      classItem.id.toString(),
+                                                      style: GoogleFonts.poppins(),
+                                                    ),
                                                   ),
                                                 ),
                                                 DataCell(
-                                                  Container(
+                                                  Padding(
                                                     padding:
-                                                        const EdgeInsets.symmetric(
-                                                            horizontal: 8.0,
-                                                            vertical: 12.0),
+                                                        const EdgeInsets.all(8.0),
                                                     child:
                                                         Text(classItem.className),
                                                   ),
                                                 ),
                                                 DataCell(
-                                                  Container(
+                                                  Padding(
                                                     padding:
-                                                        const EdgeInsets.symmetric(
-                                                            horizontal: 8.0,
-                                                            vertical: 12.0),
-                                                    child: Text(
-                                                        classItem.division), // Display Division
-                                                  ),
-                                                ),
-                                                DataCell(
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                            horizontal: 8.0,
-                                                            vertical: 12.0),
+                                                        const EdgeInsets.all(8.0),
                                                     child: Row(
                                                       children: [
                                                         IconButton(

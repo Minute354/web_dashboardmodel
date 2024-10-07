@@ -20,7 +20,7 @@ class SettingsPage extends StatelessWidget {
         child: Column(
           children: [
             // Circular Avatar Section
-            CircleAvatar(
+            const CircleAvatar(
               radius: 50,
               backgroundImage: AssetImage(
                   'student logo.png'), // Placeholder image
