@@ -17,6 +17,7 @@ class UpperCaseTextFormatter extends TextInputFormatter {
   }
 }
 
+
 class DivisionListPage extends StatefulWidget {
   const DivisionListPage({super.key});
 
