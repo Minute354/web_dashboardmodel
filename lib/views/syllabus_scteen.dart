@@ -1,9 +1,12 @@
-// pages/syllabus_page.dart
+// lib/screens/syllabus_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:school_web_app/views/sidebars.dart';
 import '../controllers/syllabus_controller.dart';
 import '../models/syllabus_model.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'sidebars.dart';
 
 class SyllabusPage extends StatefulWidget {
   @override
@@ -17,6 +20,7 @@ class _SyllabusPageState extends State<SyllabusPage> {
   String _downloadUrl = '';
   int? _currentSyllabusIndex; // Track the index of the current syllabus for editing
 
+  // Method to add a new syllabus
   void _addSyllabus() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -33,9 +37,12 @@ class _SyllabusPageState extends State<SyllabusPage> {
 
       Navigator.of(context).pop(); // Close dialog
       setState(() {}); // Refresh the page
+
+     
     }
   }
 
+  // Method to edit an existing syllabus
   void _editSyllabus() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -52,75 +59,102 @@ class _SyllabusPageState extends State<SyllabusPage> {
 
       Navigator.of(context).pop(); // Close dialog
       setState(() {}); // Refresh the page
+
+      
     }
   }
 
+  // Method to show the Add Syllabus dialog
   void _showAddSyllabusDialog() {
     // Clear previous values
     _syllabusId = '';
     _content = '';
     _downloadUrl = '';
+    _currentSyllabusIndex = null;
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Add New Syllabus'),
+        title: Text(
+          'Add New Syllabus',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+        ),
         content: Form(
           key: _formKey,
-          child: Container(
-            width: MediaQuery.of(context).size.width-1000,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Syllabus ID'),
-                  onSaved: (value) => _syllabusId = value!,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a syllabus ID';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Content'),
-                  maxLines: 5, // Allow multiple lines for content
-                  onSaved: (value) => _content = value!,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the syllabus content';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Download URL'),
-                  onSaved: (value) => _downloadUrl = value!,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a download URL';
-                    }
-                    return null;
-                  },
-                ),
-              ],
+          child: SingleChildScrollView(
+            // Ensure the dialog is scrollable if content overflows
+            child: Container(
+              width: MediaQuery.of(context).size.width - 1200,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Syllabus ID'),
+                    onSaved: (value) => _syllabusId = value!,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a syllabus ID';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Content'),
+                    maxLines: 5, // Allow multiple lines for content
+                    onSaved: (value) => _content = value!,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the syllabus content';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Download URL'),
+                    onSaved: (value) => _downloadUrl = value!,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a download URL';
+                      }
+                      // Validate URL format
+                      final urlPattern =
+                          r'^(http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\-\.]*)*$';
+                      final result = RegExp(urlPattern, caseSensitive: false)
+                          .firstMatch(value);
+                      if (result == null) {
+                        return 'Please enter a valid URL';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
         actions: [
           TextButton(
             onPressed: _addSyllabus,
-            child: Text('Add Syllabus'),
+            child: Text(
+              'Add Syllabus',
+              style: GoogleFonts.poppins(color: Colors.blueAccent),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(), // Close dialog without saving
-            child: Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.poppins(color: Colors.redAccent),
+            ),
           ),
         ],
       ),
     );
   }
 
+  // Method to show the Edit Syllabus dialog
   void _showEditSyllabusDialog(Syllabus syllabus, int index) {
     // Set the current syllabus values for editing
     _syllabusId = syllabus.syllabusId;
@@ -131,66 +165,89 @@ class _SyllabusPageState extends State<SyllabusPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Edit Syllabus'),
+        title: Text(
+          'Edit Syllabus',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+        ),
         content: Form(
           key: _formKey,
-          child: Container(
-            width: MediaQuery.of(context).size.width-1000,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Syllabus ID'),
-                  initialValue: _syllabusId,
-                  onSaved: (value) => _syllabusId = value!,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a syllabus ID';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Content'),
-                  initialValue: _content,
-                  maxLines: 5, // Allow multiple lines for content
-                  onSaved: (value) => _content = value!,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the syllabus content';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Download URL'),
-                  initialValue: _downloadUrl,
-                  onSaved: (value) => _downloadUrl = value!,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a download URL';
-                    }
-                    return null;
-                  },
-                ),
-              ],
+          child: SingleChildScrollView(
+            // Ensure the dialog is scrollable if content overflows
+            child: Container(
+              width: MediaQuery.of(context).size.width - 1200,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Syllabus ID'),
+                    initialValue: _syllabusId,
+                    onSaved: (value) => _syllabusId = value!,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a syllabus ID';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Content'),
+                    initialValue: _content,
+                    maxLines: 5,
+                    onSaved: (value) => _content = value!,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the syllabus content';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Download URL'),
+                    initialValue: _downloadUrl,
+                    onSaved: (value) => _downloadUrl = value!,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a download URL';
+                      }
+                      // Validate URL format
+                      final urlPattern =
+                          r'^(http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\-\.]*)*$';
+                      final result = RegExp(urlPattern, caseSensitive: false)
+                          .firstMatch(value);
+                      if (result == null) {
+                        return 'Please enter a valid URL';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
         actions: [
           TextButton(
             onPressed: _editSyllabus,
-            child: Text('Update Syllabus'),
+            child: Text(
+              'Update Syllabus',
+              style: GoogleFonts.poppins(color: Colors.blueAccent),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(), // Close dialog without saving
-            child: Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.poppins(color: Colors.redAccent),
+            ),
           ),
         ],
       ),
     );
   }
 
+  // Method to delete a syllabus
   void _deleteSyllabus(int index) {
     Provider.of<SyllabusController>(context, listen: false).deleteSyllabus(index);
     setState(() {}); // Refresh the page
@@ -223,108 +280,157 @@ class _SyllabusPageState extends State<SyllabusPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey.shade900,
-        title: const Text(
+        title: Text(
           'Syllabus Management',
           style: TextStyle(color: Colors.white),
         ),
+        backgroundColor: Colors.blueGrey.shade900,
       ),
       body: Row(
         children: [
-          Sidebar(),
+          Sidebar(), // Your sidebar widget here
           Expanded(
-            child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Consumer<SyllabusController>(
                 builder: (context, syllabusController, child) {
-                  if (syllabusController.syllabi.isEmpty) {
-                    return ElevatedButton(
-                      onPressed: _showAddSyllabusDialog,
-                      child: Text('Add Syllabus'),
-                    );
-                  } else {
-                    final lastSyllabus = syllabusController.syllabi.last;
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Container for Syllabus Information
-                        Container(
-                          width: MediaQuery.of(context).size.width-800,
-                          padding: EdgeInsets.all(16.0),
-                          margin: EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200], // Background color for the status area
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 8.0,
-                                spreadRadius: 1.0,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'Current Syllabus Status',
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 10),
-                              // Syllabus ID Box
-                              Container(
-                                padding: EdgeInsets.all(15), // Increased padding
-                                margin: EdgeInsets.only(bottom: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.blueGrey[100],
+                  bool isEmpty = syllabusController.syllabi.isEmpty;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch to fill width
+                    children: [
+                      // Show "Add Syllabus" button only if the syllabi list is empty
+                      if (isEmpty)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              onPressed: _showAddSyllabusDialog,
+                              child: Text('Add Syllabus'),
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.blueAccent, // Text color
+                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Text(' ID: ${lastSyllabus.syllabusId}', style: TextStyle(fontSize: 16)), // Increased font size
                               ),
-                              // Content Box
-                              Container(
-                                padding: EdgeInsets.all(15), // Increased padding
-                                margin: EdgeInsets.only(bottom: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.blueGrey[100],
-                                  borderRadius: BorderRadius.circular(8),
+                            ),
+                          ],
+                        ),
+                      SizedBox(height: 20),
+                      // Main Content Area
+                      Expanded(
+                        child: isEmpty
+                            ? Center(
+                                child: Text(
+                                  'No syllabus are exist.',
+                                  style: GoogleFonts.poppins(fontSize: 18),
                                 ),
-                                child: Text('Content: \n${formatContent(lastSyllabus.content)}', style: TextStyle(fontSize: 16), textAlign: TextAlign.left), // Increased font size
-                              ),
-                              // Download URL Box
-                              Container(
-                                padding: EdgeInsets.all(15), // Increased padding
-                                margin: EdgeInsets.only(bottom: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.blueGrey[100],
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text('Download URL: \n ${lastSyllabus.downloadUrl}', style: TextStyle(fontSize: 16)), // Increased font size
-                              ),
-                              // Button Row
-                              Align(
-                                alignment: Alignment.bottomRight, // Align buttons to the bottom right
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
+                              )
+                            : SingleChildScrollView(
+                                child: Column(
                                   children: [
-                                    ElevatedButton(
-                                      onPressed: () => _showEditSyllabusDialog(lastSyllabus, syllabusController.syllabi.length - 1),
-                                      child: Text('Edit'),
-                                    ),
-                                    SizedBox(width: 10), // Space between buttons
-                                    ElevatedButton(
-                                      onPressed: () => _deleteSyllabus(syllabusController.syllabi.length - 1),
-                                      child: Text('Delete'),
+                                    // Container for Syllabus Information
+                                    Container(
+                                      width: MediaQuery.of(context).size.width * 0.5, // 3/4 of the screen width
+                                      padding: EdgeInsets.all(16.0),
+                                      margin: EdgeInsets.symmetric(vertical: 16.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200], // Background color for the status area
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black12,
+                                            blurRadius: 8.0,
+                                            spreadRadius: 1.0,
+                                            offset: Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Current Syllabus Status',
+                                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(height: 10),
+                                          // Syllabus ID Box
+                                          Container(
+                                            padding: EdgeInsets.all(15), // Increased padding
+                                            margin: EdgeInsets.only(bottom: 10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.blueGrey[100],
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Text(
+                                              'ID: ${syllabusController.syllabi.last.syllabusId}',
+                                              style: TextStyle(fontSize: 16),
+                                            ), // Increased font size
+                                          ),
+                                          // Content Box
+                                          Container(
+                                            padding: EdgeInsets.all(15), // Increased padding
+                                            margin: EdgeInsets.only(bottom: 10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.blueGrey[100],
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Text(
+                                              'Content: \n${formatContent(syllabusController.syllabi.last.content)}',
+                                              style: TextStyle(fontSize: 16),
+                                              textAlign: TextAlign.left,
+                                            ), // Increased font size
+                                          ),
+                                          // Download URL Box
+                                          Container(
+                                            padding: EdgeInsets.all(15), // Increased padding
+                                            margin: EdgeInsets.only(bottom: 10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.blueGrey[100],
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Text(
+                                              'Download URL: \n${syllabusController.syllabi.last.downloadUrl}',
+                                              style: TextStyle(fontSize: 16),
+                                            ), // Increased font size
+                                          ),
+                                          // Button Row
+                                          Align(
+                                            alignment: Alignment.bottomRight, // Align buttons to the bottom right
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: () => _showEditSyllabusDialog(
+                                                      syllabusController.syllabi.last, syllabusController.syllabi.length - 1),
+                                                  child: Text('Edit'),
+                                                  style: ElevatedButton.styleFrom(
+                                                    foregroundColor: Colors.white,
+                                                    backgroundColor: Colors.blueAccent,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10), // Space between buttons
+                                                ElevatedButton(
+                                                  onPressed: () => _deleteSyllabus(syllabusController.syllabi.length - 1),
+                                                  child: Text('Delete'),
+                                                  style: ElevatedButton.styleFrom(
+                                                    foregroundColor: Colors.white,
+                                                    backgroundColor: Colors.redAccent,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  }
+                      ),
+                    ],
+                  );
                 },
               ),
             ),
