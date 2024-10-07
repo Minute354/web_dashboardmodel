@@ -80,98 +80,111 @@ class StudentListPage extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   // Search TextField
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _searchController,
-                            decoration: InputDecoration(
-                              labelText: 'Search by name',
-                              prefixIcon: Icon(Icons.search),
-                              border: OutlineInputBorder(),
+                  SizedBox(width: 500,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _searchController,
+                              decoration: InputDecoration(
+                                labelText: 'Search by name',
+                                prefixIcon: Icon(Icons.search),
+                                border: OutlineInputBorder(),
+                              ),
+                              onChanged: (value) {
+                                // Filter students based on the input
+                                context
+                                    .read<StudentController>()
+                                    .filterStudents(value);
+                              },
                             ),
-                            onChanged: (value) {
-                              // Filter students based on the input
-                              context
-                                  .read<StudentController>()
-                                  .filterStudents(value);
-                            },
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                  Expanded(
-                    child: Consumer<StudentController>(
-                      builder: (context, studentController, child) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // DataTable Header
-                            Center(
-                              child: SizedBox(
+                  SizedBox(
+                    width: 2000,
+                    child: Expanded(
+                      child: Consumer<StudentController>(
+                        builder: (context, studentController, child) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // DataTable Header
+                              SizedBox(
                                 width: MediaQuery.of(context).size.width - 400,
                                 child: DataTable(
                                   columnSpacing: 20.0,
                                   headingRowColor:
-                                      WidgetStateProperty.all(Colors.black),
+                                      WidgetStateProperty.all(Colors.blueGrey.shade900),
                                   columns: const <DataColumn>[
                                     DataColumn(
-                                      headingRowAlignment:
-                                          MainAxisAlignment.start,
-                                      label: Text(
-                                        'No',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
+                                      label: SizedBox(
+                                        child: Text(
+                                          'No',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
                                     DataColumn(
-                                      label: Text(
-                                        'Name',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
+                                      label: SizedBox(
+                                        child: Text(
+                                          'Name',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
                                     DataColumn(
-                                      label: Text(
-                                        'Class',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
+                                      label: SizedBox(
+                                        child: Text(
+                                          'Class',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
                                     DataColumn(
-                                      label: Text(
-                                        'Division',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
+                                      label: SizedBox(
+                                        child: Text(
+                                          'Division',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
                                     DataColumn(
-                                      label: Text(
-                                        'Status',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
+                                      label: SizedBox(
+                                        child: Text(
+                                          'Status',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
                                     DataColumn(
-                                      label: Text(
-                                        'Actions',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
+                                      label: SizedBox(
+                                        child: Text(
+                                          'Actions',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -188,22 +201,24 @@ class StudentListPage extends StatelessWidget {
                                           DataCell(Text(student.studentClass)),
                                           DataCell(Text(student.division)),
                                           DataCell(
-                                            Chip(
-                                              label: Text(
-                                                student.isActive
-                                                    ? 'Active'
-                                                    : 'Inactive',
-                                                style: const TextStyle(
-                                                    color: Colors.white),
+                                            SizedBox(width: 100,
+                                              child: Chip(
+                                                label: Text(
+                                                  student.isActive
+                                                      ? 'Active'
+                                                      : 'Inactive',
+                                                  style: const TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                                backgroundColor: student.isActive
+                                                    ? Colors.green
+                                                    : Colors.red,
                                               ),
-                                              backgroundColor: student.isActive
-                                                  ? Colors.green
-                                                  : Colors.red,
                                             ),
                                           ),
                                           DataCell(
-                                            _buildActionButtons(context,
-                                                student, studentController),
+                                            _buildActionButtons(context, student,
+                                                studentController),
                                           ),
                                         ],
                                       );
@@ -211,22 +226,22 @@ class StudentListPage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            ),
-                            // Show message if no records found
-                            if (studentController.students.isEmpty)
-                              Center(
-                                child: Text(
-                                  'No records found',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey,
+                              // Show message if no records found
+                              if (studentController.students.isEmpty)
+                                Center(
+                                  child: Text(
+                                    'No records found',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
-                        );
-                      },
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
