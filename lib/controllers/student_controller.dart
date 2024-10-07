@@ -4,17 +4,18 @@ import '../models/student_model.dart';
 class StudentController with ChangeNotifier {
   List<Student> _students = [];
   List<Student> _filteredStudents = [];
-
   bool _searchActive = false; // Track if a search is active
 
   // Return the filtered students or all students if no filter is applied
   List<Student> get students => _searchActive ? _filteredStudents : _students;
 
+  // Add a new student to the list
   void addStudent(Student student) {
     _students.add(student);
     notifyListeners();
   }
 
+  // Update an existing student's details
   void updateStudent(int id, Student updatedStudent) {
     final index = _students.indexWhere((student) => student.id == id);
     if (index != -1) {
@@ -23,26 +24,26 @@ class StudentController with ChangeNotifier {
     }
   }
 
+  // Delete a student from the list
   void deleteStudent(int id) {
-    // Remove the student from the main list
     _students.removeWhere((student) => student.id == id);
-    
     // If a search is active, also remove the student from the filtered list
     if (_searchActive) {
       _filteredStudents.removeWhere((student) => student.id == id);
     }
-    
     notifyListeners();
   }
 
+  // Activate a student
   void activateStudent(int id) {
-    final student = _students.firstWhere((student) => student.id == id);
+    final student = _students.firstWhere((student) => student.id == id, orElse: () => throw Exception('Student not found'));
     student.isActive = true;
     notifyListeners();
   }
 
+  // Deactivate a student
   void deactivateStudent(int id) {
-    final student = _students.firstWhere((student) => student.id == id);
+    final student = _students.firstWhere((student) => student.id == id, orElse: () => throw Exception('Student not found'));
     student.isActive = false;
     notifyListeners();
   }
@@ -65,6 +66,15 @@ class StudentController with ChangeNotifier {
               student.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
       _searchActive = true;
+    }
+    notifyListeners();
+  }
+
+  // Sort students by name
+  void sortStudentsByName() {
+    _students.sort((a, b) => a.name.compareTo(b.name));
+    if (_searchActive) {
+      _filteredStudents.sort((a, b) => a.name.compareTo(b.name));
     }
     notifyListeners();
   }
