@@ -24,16 +24,19 @@ class TeacherController with ChangeNotifier {
     notifyListeners(); // Notify listeners about the state change
   }
 
-  // Method to delete a teacher by ID
-  void deleteTeacher(int id) {
-    _teachers.removeWhere((teacher) => teacher.id == id);
+  // Method to delete a teacher (updated to not use ID)
+  void deleteTeacher(Teacher teacher) {
+    _teachers.remove(teacher);
     _filteredTeachers = _teachers; // Reset the filtered list
     notifyListeners(); // Notify listeners about the state change
   }
 
-  // Method to update an existing teacher
-  void updateTeacher(int id, Teacher updatedTeacher) {
-    final index = _teachers.indexWhere((teacher) => teacher.id == id);
+  // Method to update an existing teacher (updated to not use ID)
+  void updateTeacher(Teacher updatedTeacher) {
+    final index = _teachers.indexWhere((teacher) =>
+        teacher.firstName == updatedTeacher.firstName && 
+        teacher.lastName == updatedTeacher.lastName &&
+        teacher.email == updatedTeacher.email); // Ensure unique identification
     if (index != -1) {
       _teachers[index] = updatedTeacher;
       _filteredTeachers = _teachers; // Reset the filtered list
@@ -41,9 +44,12 @@ class TeacherController with ChangeNotifier {
     }
   }
 
-  // Method to update teacher's active status
-  void updateTeacherStatus(int id, bool isActive) {
-    final index = _teachers.indexWhere((teacher) => teacher.id == id);
+  // Method to update teacher's active status (updated to not use ID)
+  void updateTeacherStatus(Teacher teacher, bool isActive) {
+    final index = _teachers.indexWhere((t) =>
+        t.firstName == teacher.firstName &&
+        t.lastName == teacher.lastName &&
+        t.email == teacher.email); // Ensure unique identification
     if (index != -1) {
       _teachers[index].isActive = isActive; // Update the isActive property
       notifyListeners(); // Notify listeners about the state change

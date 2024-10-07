@@ -1,3 +1,5 @@
+// lib/views/teacher_list_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -124,17 +126,8 @@ class TeacherListPage extends StatelessWidget {
                               child: DataTable(
                                 columnSpacing: 20.0,
                                 headingRowColor:
-                                    WidgetStateProperty.all(Colors.blueGrey.shade900),
+                                    MaterialStateProperty.all(Colors.blueGrey.shade900),
                                 columns: const <DataColumn>[
-                                  DataColumn(
-                                    label: Text(
-                                      'Teacher ID',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
                                   DataColumn(
                                     label: Text(
                                       'First Name',
@@ -210,16 +203,6 @@ class TeacherListPage extends StatelessWidget {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0, vertical: 12.0),
                                             child: Text(
-                                              teacher.id.toString(),
-                                              style: GoogleFonts.poppins(),
-                                            ),
-                                          ),
-                                        ),
-                                        DataCell(
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 12.0),
-                                            child: Text(
                                               teacher.firstName,
                                               style: GoogleFonts.poppins(),
                                             ),
@@ -270,20 +253,58 @@ class TeacherListPage extends StatelessWidget {
                                             child: TextButton(
                                               onPressed: () {
                                                 // Toggle the status
-                                                teacherController.updateTeacherStatus(teacher.id, !teacher.isActive);
+                                                teacherController.updateTeacherStatus(teacher, !teacher.isActive);
                                               },
-                                              style: TextButton.styleFrom(
-                                                foregroundColor: Colors.white, backgroundColor: teacher.isActive ? Colors.green : Colors.red, // Text color
-                                              ),
                                               child: Text(
-                                                teacher.isActive ? 'Active' : 'Inactive',
-                                                style: GoogleFonts.poppins(),
+                                                teacher.isActive ? 'Deactivate' : 'Activate',
+                                                style: TextStyle(color: teacher.isActive ? Colors.green : Colors.red),
                                               ),
                                             ),
                                           ),
                                         ),
                                         DataCell(
-                                          _buildActionButtons(context, teacher, teacherController),
+                                          Row(
+                                            children: [
+                                              IconButton(
+                                                icon: Icon(Icons.edit),
+                                                onPressed: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) => EditTeacherPage(teacher: teacher),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                              IconButton(
+                                                icon: Icon(Icons.delete),
+                                                onPressed: () {
+                                                  // Remove the teacher from the list
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) => AlertDialog(
+                                                      title: Text('Delete Teacher'),
+                                                      content: Text('Are you sure you want to delete ${teacher.firstName} ${teacher.lastName}?'),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(context).pop(); // Close dialog
+                                                          },
+                                                          child: Text('Cancel'),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            teacherController.deleteTeacher(teacher); // Delete teacher
+                                                            Navigator.of(context).pop(); // Close dialog
+                                                          },
+                                                          child: Text('Delete'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     );
@@ -302,62 +323,6 @@ class TeacherListPage extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildActionButtons(BuildContext context, Teacher teacher, TeacherController controller) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        IconButton(
-          icon: Icon(Icons.edit, color: Colors.blueAccent),
-          tooltip: 'Edit Teacher',
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => EditTeacherPage(teacher: teacher),
-              ),
-            );
-          },
-        ),
-        IconButton(
-          icon: Icon(Icons.delete, color: Colors.red),
-          tooltip: 'Delete Teacher',
-          onPressed: () {
-            _showDeleteConfirmationDialog(context, teacher, controller);
-          },
-        ),
-      ],
-    );
-  }
-
-  void _showDeleteConfirmationDialog(BuildContext context, Teacher teacher, TeacherController teacherController) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Delete Teacher',
-            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-          ),
-          content: Text('Are you sure you want to delete ${teacher.firstName} ${teacher.lastName}?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Dismiss the dialog
-              },
-            ),
-            TextButton(
-              child: Text('Delete'),
-              onPressed: () {
-                teacherController.deleteTeacher(teacher.id); // Call delete method
-                Navigator.of(context).pop(); // Dismiss the dialog
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }
