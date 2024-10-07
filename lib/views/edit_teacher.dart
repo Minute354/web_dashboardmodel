@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
 import '../models/teacher_model.dart';
 import '../controllers/teacher_controller.dart';
 import 'package:provider/provider.dart';
-
 import 'sidebars.dart';
 
 class EditTeacherPage extends StatefulWidget {
@@ -19,7 +17,6 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
   final _formKey = GlobalKey<FormState>();
 
   // Form fields
-  late String _teacherId;
   late String _firstName;
   late String _lastName;
   late String _subject;
@@ -33,7 +30,6 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
   }
 
   void _initializeFields() {
-    _teacherId = widget.teacher.id.toString(); // Initialize teacher ID
     _firstName = widget.teacher.firstName;
     _lastName = widget.teacher.lastName;
     _subject = widget.teacher.subject;
@@ -191,9 +187,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                                       // Update the teacher in the controller
                                       Provider.of<TeacherController>(context, listen: false)
                                           .updateTeacher(
-                                        widget.teacher.id,
                                         Teacher(
-                                          id: widget.teacher.id, // Use the existing ID
                                           firstName: _firstName,
                                           lastName: _lastName,
                                           subject: _subject,

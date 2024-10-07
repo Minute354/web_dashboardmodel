@@ -159,7 +159,6 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                                 _formKey.currentState!.save();
                                 Provider.of<TeacherController>(context, listen: false).addTeacher(
                                   Teacher(
-                                    id: DateTime.now().millisecondsSinceEpoch,
                                     firstName: _firstName,
                                     lastName: _lastName,
                                     subject: _subject,
