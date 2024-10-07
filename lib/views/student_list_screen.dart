@@ -108,102 +108,107 @@ class StudentListPage extends StatelessWidget {
                     child: Consumer<StudentController>(
                       builder: (context, studentController, child) {
                         return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // DataTable Header
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width - 400,
-                              child: DataTable(
-                                columnSpacing: 20.0,
-                                headingRowColor:
-                                    WidgetStateProperty.all(Colors.black),
-                                columns: const <DataColumn>[
-                                  DataColumn(
-                                    label: Text(
-                                      'No',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
+                            Center(
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width - 400,
+                                child: DataTable(
+                                  columnSpacing: 20.0,
+                                  headingRowColor:
+                                      WidgetStateProperty.all(Colors.black),
+                                  columns: const <DataColumn>[
+                                    DataColumn(
+                                      headingRowAlignment:
+                                          MainAxisAlignment.start,
+                                      label: Text(
+                                        'No',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Name',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
+                                    DataColumn(
+                                      label: Text(
+                                        'Name',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Class',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
+                                    DataColumn(
+                                      label: Text(
+                                        'Class',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Division',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
+                                    DataColumn(
+                                      label: Text(
+                                        'Division',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Status',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
+                                    DataColumn(
+                                      label: Text(
+                                        'Status',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Actions',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
+                                    DataColumn(
+                                      label: Text(
+                                        'Actions',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                                rows: List<DataRow>.generate(
-                                  studentController.students.length,
-                                  (index) {
-                                    final student =
-                                        studentController.students[index];
-                                    return DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text('${index + 1}')),
-                                        DataCell(Text(student.name)),
-                                        DataCell(Text(student.studentClass)),
-                                        DataCell(Text(student.division)),
-                                        DataCell(
-                                          Chip(
-                                            label: Text(
-                                              student.isActive
-                                                  ? 'Active'
-                                                  : 'Inactive',
-                                              style: const TextStyle(
-                                                  color: Colors.white),
+                                  ],
+                                  rows: List<DataRow>.generate(
+                                    studentController.students.length,
+                                    (index) {
+                                      final student =
+                                          studentController.students[index];
+                                      return DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('${index + 1}')),
+                                          DataCell(Text(student.name)),
+                                          DataCell(Text(student.studentClass)),
+                                          DataCell(Text(student.division)),
+                                          DataCell(
+                                            Chip(
+                                              label: Text(
+                                                student.isActive
+                                                    ? 'Active'
+                                                    : 'Inactive',
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              backgroundColor: student.isActive
+                                                  ? Colors.green
+                                                  : Colors.red,
                                             ),
-                                            backgroundColor: student.isActive
-                                                ? Colors.green
-                                                : Colors.red,
                                           ),
-                                        ),
-                                        DataCell(
-                                          _buildActionButtons(context, student,
-                                              studentController),
-                                        ),
-                                      ],
-                                    );
-                                  },
+                                          DataCell(
+                                            _buildActionButtons(context,
+                                                student, studentController),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
