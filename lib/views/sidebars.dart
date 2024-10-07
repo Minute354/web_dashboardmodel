@@ -6,6 +6,7 @@ import 'package:school_web_app/views/dashboard_screen.dart';
 import 'package:school_web_app/views/setting_screen.dart';
 import 'package:school_web_app/views/student_list_screen.dart';
 import 'package:school_web_app/views/subject_list_screen.dart';
+import 'package:school_web_app/views/syllabus_scteen.dart';
 import 'package:school_web_app/views/teacher_list_screen.dart';
 
 class Sidebar extends StatefulWidget {
@@ -74,6 +75,19 @@ class _SidebarState extends State<Sidebar> {
                   MaterialPageRoute(builder: (context) => StudentListPage()));
             },
             isSelected: selectedItem == 'Student',
+          ),
+          _buildSidebarItem(
+            icon: Icons.grading_rounded,
+            label: 'Syllabus',
+            context: context,
+            onTap: () {
+              setState(() {
+                selectedItem = 'Syllabus';
+              });
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SyllabusPage()));
+            },
+            isSelected: selectedItem == 'Settings',
           ),
           _buildSidebarItem(
             icon: Icons.settings,
