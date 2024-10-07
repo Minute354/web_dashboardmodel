@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:school_web_app/views/class_list_screen.dart';
 import 'package:school_web_app/views/course_list_screen.dart';
 import 'package:school_web_app/views/dashboard_screen.dart';
+import 'package:school_web_app/views/division_list_screen.dart';
 
 import 'package:school_web_app/views/setting_screen.dart';
 import 'package:school_web_app/views/student_list_screen.dart';
@@ -22,7 +23,7 @@ class _SidebarState extends State<Sidebar> {
     return Container(
       width: 250,
       color: Colors.blueGrey.shade900,
-      child: Column(
+      child: ListView(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
@@ -150,6 +151,19 @@ class _SidebarState extends State<Sidebar> {
                     MaterialPageRoute(builder: (context) => ClassListPage()));
               },
               isSelected: selectedItem == 'Class',
+            ),
+             _buildSidebarItem(
+              icon: Icons.insert_drive_file_outlined,
+              label: 'Division',
+              context: context,
+              onTap: () {
+                setState(() {
+                  selectedItem = 'Division';
+                });
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => DivisionListPage()));
+              },
+              isSelected: selectedItem == 'Division',
             ),
             
             _buildSidebarItem(
