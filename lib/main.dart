@@ -4,6 +4,7 @@ import 'package:school_web_app/controllers/calendar_holiday_controller.dart';
 import 'package:school_web_app/controllers/class_controller.dart';
 import 'package:school_web_app/controllers/course_controller.dart';
 import 'package:school_web_app/controllers/division_controller.dart';
+import 'package:school_web_app/controllers/sidebar_controller.dart';
 import 'package:school_web_app/controllers/subject_controller.dart';
 import 'package:school_web_app/controllers/syllabus_controller.dart';
 import 'package:school_web_app/controllers/teacher_controller.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CourseController()),
         ChangeNotifierProvider(create: (_) => TeacherController()),
         ChangeNotifierProvider(create: (_) => SyllabusController()),
+        ChangeNotifierProvider(create: (_) => SidebarController()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -51,3 +53,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

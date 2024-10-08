@@ -1,36 +1,29 @@
+// lib/widgets/sidebar.dart
 import 'package:flutter/material.dart';
-import 'package:school_web_app/views/calender_page.dart';
-import 'package:school_web_app/views/class_list_screen.dart';
-import 'package:school_web_app/views/course_list_screen.dart';
-import 'package:school_web_app/views/dashboard_screen.dart';
-import 'package:school_web_app/views/division_list_screen.dart';
+import 'package:provider/provider.dart';
+import '../controllers/sidebar_controller.dart';
+import '../models/sidebar_model.dart';
+import '../data/sidebar_data.dart';
 
-import 'package:school_web_app/views/setting_screen.dart';
-import 'package:school_web_app/views/student_list_screen.dart';
-import 'package:school_web_app/views/subject_list_screen.dart';
-import 'package:school_web_app/views/syllabus_scteen.dart';
-import 'package:school_web_app/views/teacher_list_screen.dart';
-
-class Sidebar extends StatefulWidget {
-  @override
-  _SidebarState createState() => _SidebarState();
-}
-
-class _SidebarState extends State<Sidebar> {
-  String selectedItem = 'Dashboard'; // Default selected item
+class Sidebar extends StatelessWidget {
+  const Sidebar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final sidebarController = Provider.of<SidebarController>(context);
+    final selectedItem = sidebarController.selectedItem;
+
     return Container(
       width: 250,
       color: Colors.blueGrey.shade900,
       child: ListView(
         children: [
+          // User Profile Section
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Column(
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   backgroundImage: NetworkImage(
                       "https://png.pngitem.com/pimgs/s/111-1114675_user-login-person-man-enter-person-login-icon.png"),
                   radius: 40,
@@ -48,201 +41,80 @@ class _SidebarState extends State<Sidebar> {
             ),
           ),
           const Divider(color: Colors.white54),
-          _buildSidebarItem(
-            icon: Icons.dashboard,
-            label: 'Dashboard',
-            context: context,
-            onTap: () {
-              setState(() {
-                selectedItem = 'Dashboard';
-              });
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => DashboardPage()));
-            },
-            isSelected: selectedItem == 'Dashboard',
-          ),
 
-          // Lookups dropdown with Teacher and Student sections
-          _buildLookupsDropdown(context),
-          ExpansionTile(
-          leading: Icon(Icons.person_outline, color: Colors.white),
-          title: Text('Teacher', style: TextStyle(color: Colors.white)),
-          children: [
-            _buildSidebarItem(
-              icon: Icons.subject,
-              label: 'Subject',
-              context: context,
-              onTap: () {
-                setState(() {
-                  selectedItem = 'Teacher Subject';
-                });
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SubjectListPage()));
-              },
-              isSelected: selectedItem == 'Teacher Subject',
-              
-            ),
-            _buildSidebarItem(
-              icon: Icons.woman_rounded,
-              label: 'Add Teacher',
-              context: context,
-              onTap: () {
-                setState(() {
-                  selectedItem = 'Teacher ';
-                });
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => TeacherListPage()));
-              },
-              isSelected: selectedItem == 'Teacher Subject',
-            ),
-          ],
-        ),
-
-          _buildSidebarItem(
-            icon: Icons.person,
-            label: 'Student',
-            context: context,
-            onTap: () {
-              setState(() {
-                selectedItem = 'Student';
-              });
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => StudentListPage()));
-            },
-            isSelected: selectedItem == 'Student',
-          ),
-          _buildSidebarItem(
-            icon: Icons.grading_rounded,
-            label: 'Syllabus',
-            context: context,
-            onTap: () {
-              setState(() {
-                selectedItem = 'Syllabus';
-              });
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SyllabusPage()));
-            },
-            isSelected: selectedItem == 'Settings',
-          ),
-          _buildSidebarItem(
-            icon: Icons.settings,
-            label: 'Settings',
-            context: context,
-            onTap: () {
-              setState(() {
-                selectedItem = 'Settings';
-              });
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SettingsPage()));
-            },
-            isSelected: selectedItem == 'Settings',
-          ),
+          // Generate Sidebar Items
+          ...sidebarItems.map((item) {
+            if (item.subItems != null && item.subItems!.isNotEmpty) {
+              return _buildExpansionSidebarItem(
+                  context, item, selectedItem, sidebarController);
+            } else {
+              return _buildSidebarItem(
+                icon: item.icon,
+                label: item.label,
+                onTap: () {
+                  sidebarController.selectItem(item.label);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => item.page),
+                  );
+                },
+                isSelected: selectedItem == item.label,
+              );
+            }
+          }).toList(),
         ],
       ),
     );
   }
 
+  // Widget for simple sidebar items
   Widget _buildSidebarItem({
     required IconData icon,
     required String label,
-    required BuildContext context,
     required Function onTap,
     required bool isSelected,
   }) {
-    return ListTile(
-      leading: Icon(icon, color: isSelected ? Colors.white : Colors.white54),
-      title: Text(
-        label,
-        style: TextStyle(color: isSelected ? Colors.white : Colors.white54),
+    return Container(
+      color: isSelected ? Colors.blueGrey.shade700 : Colors.transparent,
+      child: ListTile(
+        leading: Icon(icon, color: isSelected ? Colors.white : Colors.white54),
+        title: Text(
+          label,
+          style: TextStyle(color: isSelected ? Colors.white : Colors.white54),
+        ),
+        onTap: () {
+          Future.delayed(const Duration(milliseconds: 100), () {
+            onTap();
+          });
+        },
       ),
-      onTap: () {
-        Future.delayed(const Duration(milliseconds: 100), () {
-          onTap();
-        });
-      },
     );
   }
 
-  Widget _buildLookupsDropdown(BuildContext context) {
+  // Widget for expandable sidebar items
+  Widget _buildExpansionSidebarItem(BuildContext context, SidebarItem item,
+      String selectedItem, SidebarController controller) {
+    bool isCurrentlyExpanded = controller.isExpanded(item.label);
+
     return ExpansionTile(
-      leading: Icon(Icons.search, color: Colors.white),
-      title: Text('Lookups', style: TextStyle(color: Colors.white)),
-      children: [
-        // Student section
-        ExpansionTile(
-          leading: Icon(Icons.person, color: Colors.white),
-          title: Text('Student', style: TextStyle(color: Colors.white)),
-          children: [
-            _buildSidebarItem(
-              icon: Icons.class_,
-              label: 'Class',
-              context: context,
-              onTap: () {
-                setState(() {
-                  selectedItem = 'Class';
-                });
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ClassListPage()));
-              },
-              isSelected: selectedItem == 'Class',
-            ),
-             _buildSidebarItem(
-              icon: Icons.insert_drive_file_outlined,
-              label: 'Division',
-              context: context,
-              onTap: () {
-                setState(() {
-                  selectedItem = 'Division';
-                });
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => DivisionListPage()));
-              },
-              isSelected: selectedItem == 'Division',
-            ),
-            
-            _buildSidebarItem(
-              icon: Icons.book,
-              label: 'Course',
-              context: context,
-              onTap: () {
-                setState(() {
-                  selectedItem = 'Course';
-                });
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => CourseListPage()));
-              },
-              isSelected: selectedItem == 'Course',
-            ),
-            _buildSidebarItem(
-              icon: Icons.subject,
-              label: 'Subject',
-              context: context,
-              onTap: () {
-                setState(() {
-                  selectedItem = 'Subject';
-                });
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SubjectListPage()));
-              },
-              isSelected: selectedItem == 'Subject',
-            ),
-            _buildSidebarItem(
-              icon: Icons.calendar_month,
-             label: 'Calender',
-              context: context,
-               onTap: (){
-                setState(() {
-                  selectedItem = 'Calender';
-                });
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => HolidayCalendarPage()));
-               },
-                isSelected: selectedItem=="Calender"
-                )
-          ],
-        ),
-        // Teacher section
-      ]
+      leading: Icon(item.icon, color: Colors.white),
+      title: Text(item.label, style: const TextStyle(color: Colors.white)),
+      initiallyExpanded: isCurrentlyExpanded,
+      onExpansionChanged: (bool expanded) {
+        controller.setExpanded(item.label, expanded);
+      },
+      children: item.subItems!.map((subItem) {
+        return _buildSidebarItem(
+          icon: subItem.icon,
+          label: subItem.label,
+          onTap: () {
+            controller.selectItem(subItem.label);
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => subItem.page),
+            );
+          },
+          isSelected: selectedItem == subItem.label,
+        );
+      }).toList(),
     );
   }
 }
