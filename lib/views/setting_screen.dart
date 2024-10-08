@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:school_web_app/views/screenlogin.dart';
+import 'package:school_web_app/views/sidebars.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,84 +16,91 @@ class SettingsPage extends StatelessWidget {
         ),
         backgroundColor: Colors.blueGrey.shade900,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Circular Avatar Section
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage(
-                  'student logo.png'), // Placeholder image
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Admin', // Placeholder for the user name
-              style: GoogleFonts.poppins(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              'admin@gmail.com', // Placeholder for the user email
-              style: GoogleFonts.poppins(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            SizedBox(height: 24),
-
-            // List of Settings Options
-            Expanded(
-              child: ListView(
+      body: Row(
+        children: [
+          Sidebar(),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 children: [
-                  _buildCenteredListTile(
-                    context,
-                    icon: Icons.person,
-                    title: 'Profile',
-                    onTap: () {
-                      // Navigate to Profile Page
-                    },
+                  // Circular Avatar Section
+                  const CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage(
+                        'student logo.png'), // Placeholder image
                   ),
-                  _buildCenteredListTile(
-                    context,
-                    icon: Icons.lock,
-                    title: 'Security',
-                    onTap: () {
-                      // Navigate to Security Page
-                    },
+                  SizedBox(height: 16),
+                  Text(
+                    'Admin', // Placeholder for the user name
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  _buildCenteredListTile(
-                    context,
-                    icon: Icons.payment,
-                    title: 'Payments',
-                    onTap: () {
-                      // Navigate to Payments Page
-                    },
+                  SizedBox(height: 4),
+                  Text(
+                    'admin@gmail.com', // Placeholder for the user email
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
                   ),
-                  _buildCenteredListTile(
-                    context,
-                    icon: Icons.help,
-                    title: 'Help',
-                    onTap: () {
-                      // Navigate to Feedback Page
-                    },
-                  ),
-                  _buildCenteredListTile(
-                    context,
-                    icon: Icons.logout,
-                    title: 'Log Out',
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
-                      // Implement log out functionality
-                    },
+                  SizedBox(height: 24),
+            
+                  // List of Settings Options
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        _buildCenteredListTile(
+                          context,
+                          icon: Icons.person,
+                          title: 'Profile',
+                          onTap: () {
+                            // Navigate to Profile Page
+                          },
+                        ),
+                        _buildCenteredListTile(
+                          context,
+                          icon: Icons.lock,
+                          title: 'Security',
+                          onTap: () {
+                            // Navigate to Security Page
+                          },
+                        ),
+                        _buildCenteredListTile(
+                          context,
+                          icon: Icons.payment,
+                          title: 'Payments',
+                          onTap: () {
+                            // Navigate to Payments Page
+                          },
+                        ),
+                        _buildCenteredListTile(
+                          context,
+                          icon: Icons.help,
+                          title: 'Help',
+                          onTap: () {
+                            // Navigate to Feedback Page
+                          },
+                        ),
+                        _buildCenteredListTile(
+                          context,
+                          icon: Icons.logout,
+                          title: 'Log Out',
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+                            // Implement log out functionality
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

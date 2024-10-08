@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:school_web_app/views/add_student_screen.dart';
 import 'package:school_web_app/views/dashboardcard.dart';
-import 'package:school_web_app/views/screenlogin.dart';
+import 'package:school_web_app/views/payment_screen.dart';
 import 'package:school_web_app/views/setting_screen.dart';
 import 'package:school_web_app/views/sidebars.dart';
 import 'package:school_web_app/views/sidedrawer.dart';
+import 'package:school_web_app/views/student_list_screen.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -13,8 +15,6 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  
-
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 800;
@@ -27,7 +27,7 @@ class _DashboardPageState extends State<DashboardPage> {
           Expanded(
             child: Row(
               children: [
-                if (!isSmallScreen) Sidebar(),
+                if (!isSmallScreen)Sidebar(),
                 Expanded(child: _buildDashboardGrid(isSmallScreen)),
               ],
             ),
@@ -72,51 +72,55 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
- Widget _buildProfileDropdown() {
-  return Container(
-    margin: const EdgeInsets.only(right: 50.0,), // Adjust the right margin as needed
-    child: DropdownButtonHideUnderline(
-      child: DropdownButton<String>(
-        icon: const Icon(Icons.person_2_rounded, color: Colors.white, size: 28),
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
-        dropdownColor: const Color.fromARGB(255, 87, 86, 86), // Dropdown background color
-       
-        items: <String>['Profile', 'Logout']
-            .map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-              child: Text(
-                value,
-                style: const TextStyle(
-                  color: Colors.white, // Dropdown item text color
-                  fontSize: 16,
+  Widget _buildProfileDropdown() {
+    return Container(
+      margin: const EdgeInsets.only(
+        right: 50.0,
+      ), // Adjust the right margin as needed
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          icon:
+              const Icon(Icons.person_2_rounded, color: Colors.white, size: 28),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          dropdownColor: const Color.fromARGB(
+              255, 87, 86, 86), // Dropdown background color
+
+          items: <String>['Profile', 'Logout']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Text(
+                  value,
+                  style: const TextStyle(
+                    color: Colors.white, // Dropdown item text color
+                    fontSize: 16,
+                  ),
                 ),
               ),
-            ),
-          );
-        }).toList(),
-        onChanged: (String? newValue) {
-          
-          if (newValue == 'Logout') {
-            _handleLogout();
-          }
-          if(newValue =='Profile' ){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage(),));
-          }
-          // Add other profile-related actions here as needed
-        },
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            if (newValue == 'Logout') {
+              _handleLogout();
+            }
+            if (newValue == 'Profile') {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => SettingsPage(),
+              ));
+            }
+            // Add other profile-related actions here as needed
+          },
+        ),
       ),
-    ),
-  );
-}
-
-
+    );
+  }
 
   Widget _buildDashboardGrid(bool isSmallScreen) {
     return Padding(
@@ -138,7 +142,8 @@ class _DashboardPageState extends State<DashboardPage> {
         label: 'Add Student',
         color: Colors.blueAccent,
         onTap: () {
-          // Navigate to Add Student page
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => AddStudentPage()));
         },
       ),
       DashboardCard(
@@ -146,7 +151,8 @@ class _DashboardPageState extends State<DashboardPage> {
         label: 'Manage Students',
         color: Colors.green,
         onTap: () {
-          // Navigate to Manage Students page
+         Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => StudentListPage()));
         },
       ),
       DashboardCard(
@@ -154,7 +160,8 @@ class _DashboardPageState extends State<DashboardPage> {
         label: 'Payments',
         color: Colors.orangeAccent,
         onTap: () {
-          // Navigate to Payments page
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => PaymentScreen()));
         },
       ),
       DashboardCard(

@@ -18,7 +18,8 @@ class _SyllabusPageState extends State<SyllabusPage> {
   String _syllabusId = '';
   String _content = '';
   String _downloadUrl = '';
-  int? _currentSyllabusIndex; // Track the index of the current syllabus for editing
+  int?
+      _currentSyllabusIndex; // Track the index of the current syllabus for editing
 
   // Method to add a new syllabus
   void _addSyllabus() {
@@ -37,8 +38,6 @@ class _SyllabusPageState extends State<SyllabusPage> {
 
       Navigator.of(context).pop(); // Close dialog
       setState(() {}); // Refresh the page
-
-     
     }
   }
 
@@ -59,8 +58,6 @@ class _SyllabusPageState extends State<SyllabusPage> {
 
       Navigator.of(context).pop(); // Close dialog
       setState(() {}); // Refresh the page
-
-      
     }
   }
 
@@ -143,7 +140,8 @@ class _SyllabusPageState extends State<SyllabusPage> {
             ),
           ),
           TextButton(
-            onPressed: () => Navigator.of(context).pop(), // Close dialog without saving
+            onPressed: () =>
+                Navigator.of(context).pop(), // Close dialog without saving
             child: Text(
               'Cancel',
               style: GoogleFonts.poppins(color: Colors.redAccent),
@@ -236,7 +234,8 @@ class _SyllabusPageState extends State<SyllabusPage> {
             ),
           ),
           TextButton(
-            onPressed: () => Navigator.of(context).pop(), // Close dialog without saving
+            onPressed: () =>
+                Navigator.of(context).pop(), // Close dialog without saving
             child: Text(
               'Cancel',
               style: GoogleFonts.poppins(color: Colors.redAccent),
@@ -249,7 +248,8 @@ class _SyllabusPageState extends State<SyllabusPage> {
 
   // Method to delete a syllabus
   void _deleteSyllabus(int index) {
-    Provider.of<SyllabusController>(context, listen: false).deleteSyllabus(index);
+    Provider.of<SyllabusController>(context, listen: false)
+        .deleteSyllabus(index);
     setState(() {}); // Refresh the page
   }
 
@@ -273,7 +273,9 @@ class _SyllabusPageState extends State<SyllabusPage> {
       formattedContent.writeln(line);
     }
 
-    return formattedContent.toString().trim(); // Trim to remove any trailing spaces/newlines
+    return formattedContent
+        .toString()
+        .trim(); // Trim to remove any trailing spaces/newlines
   }
 
   @override
@@ -296,23 +298,33 @@ class _SyllabusPageState extends State<SyllabusPage> {
                 builder: (context, syllabusController, child) {
                   bool isEmpty = syllabusController.syllabi.isEmpty;
                   return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch to fill width
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start, // Stretch to fill width
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Syllabus',
+                          style: GoogleFonts.poppins(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                       // Show "Add Syllabus" button only if the syllabi list is empty
                       if (isEmpty)
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            ElevatedButton(
+                            ElevatedButton.icon(
                               onPressed: _showAddSyllabusDialog,
-                              child: Text('Add Syllabus'),
+                              icon: Icon(Icons.add),
+                              label: Text('Add Syllabus'),
                               style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                backgroundColor: Colors.blueAccent, // Text color
-                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
+                                backgroundColor: Colors.blueGrey.shade900,
+                                foregroundColor: Colors.white, // Text color
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12),
                               ),
                             ),
                           ],
@@ -332,12 +344,16 @@ class _SyllabusPageState extends State<SyllabusPage> {
                                   children: [
                                     // Container for Syllabus Information
                                     Container(
-                                      width: MediaQuery.of(context).size.width * 0.5, // 3/4 of the screen width
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5, // 3/4 of the screen width
                                       padding: EdgeInsets.all(16.0),
-                                      margin: EdgeInsets.symmetric(vertical: 16.0),
+                                      margin:
+                                          EdgeInsets.symmetric(vertical: 16.0),
                                       decoration: BoxDecoration(
-                                        color: Colors.grey[200], // Background color for the status area
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        color: Colors.grey[
+                                            200], // Background color for the status area
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                         boxShadow: [
                                           BoxShadow(
                                             color: Colors.black12,
@@ -348,20 +364,25 @@ class _SyllabusPageState extends State<SyllabusPage> {
                                         ],
                                       ),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             'Current Syllabus Status',
-                                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           SizedBox(height: 10),
                                           // Syllabus ID Box
                                           Container(
-                                            padding: EdgeInsets.all(15), // Increased padding
+                                            padding: EdgeInsets.all(
+                                                15), // Increased padding
                                             margin: EdgeInsets.only(bottom: 10),
                                             decoration: BoxDecoration(
                                               color: Colors.blueGrey[100],
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: Text(
                                               'ID: ${syllabusController.syllabi.last.syllabusId}',
@@ -370,11 +391,13 @@ class _SyllabusPageState extends State<SyllabusPage> {
                                           ),
                                           // Content Box
                                           Container(
-                                            padding: EdgeInsets.all(15), // Increased padding
+                                            padding: EdgeInsets.all(
+                                                15), // Increased padding
                                             margin: EdgeInsets.only(bottom: 10),
                                             decoration: BoxDecoration(
                                               color: Colors.blueGrey[100],
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: Text(
                                               'Content: \n${formatContent(syllabusController.syllabi.last.content)}',
@@ -384,11 +407,13 @@ class _SyllabusPageState extends State<SyllabusPage> {
                                           ),
                                           // Download URL Box
                                           Container(
-                                            padding: EdgeInsets.all(15), // Increased padding
+                                            padding: EdgeInsets.all(
+                                                15), // Increased padding
                                             margin: EdgeInsets.only(bottom: 10),
                                             decoration: BoxDecoration(
                                               color: Colors.blueGrey[100],
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: Text(
                                               'Download URL: \n${syllabusController.syllabi.last.downloadUrl}',
@@ -397,26 +422,46 @@ class _SyllabusPageState extends State<SyllabusPage> {
                                           ),
                                           // Button Row
                                           Align(
-                                            alignment: Alignment.bottomRight, // Align buttons to the bottom right
+                                            alignment: Alignment
+                                                .bottomRight, // Align buttons to the bottom right
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 ElevatedButton(
-                                                  onPressed: () => _showEditSyllabusDialog(
-                                                      syllabusController.syllabi.last, syllabusController.syllabi.length - 1),
+                                                  onPressed: () =>
+                                                      _showEditSyllabusDialog(
+                                                          syllabusController
+                                                              .syllabi.last,
+                                                          syllabusController
+                                                                  .syllabi
+                                                                  .length -
+                                                              1),
                                                   child: Text('Edit'),
-                                                  style: ElevatedButton.styleFrom(
-                                                    foregroundColor: Colors.white,
-                                                    backgroundColor: Colors.blueAccent,
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    foregroundColor:
+                                                        Colors.white,
+                                                    backgroundColor:
+                                                        Colors.blueAccent,
                                                   ),
                                                 ),
-                                                SizedBox(width: 10), // Space between buttons
+                                                SizedBox(
+                                                    width:
+                                                        10), // Space between buttons
                                                 ElevatedButton(
-                                                  onPressed: () => _deleteSyllabus(syllabusController.syllabi.length - 1),
+                                                  onPressed: () =>
+                                                      _deleteSyllabus(
+                                                          syllabusController
+                                                                  .syllabi
+                                                                  .length -
+                                                              1),
                                                   child: Text('Delete'),
-                                                  style: ElevatedButton.styleFrom(
-                                                    foregroundColor: Colors.white,
-                                                    backgroundColor: Colors.redAccent,
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    foregroundColor:
+                                                        Colors.white,
+                                                    backgroundColor:
+                                                        Colors.redAccent,
                                                   ),
                                                 ),
                                               ],
