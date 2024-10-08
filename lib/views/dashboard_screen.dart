@@ -20,6 +20,7 @@ class _DashboardPageState extends State<DashboardPage> {
     bool isSmallScreen = MediaQuery.of(context).size.width < 800;
 
     return Scaffold(
+      extendBody: true,extendBodyBehindAppBar: true,
       appBar: _buildAppBar(isSmallScreen),
       drawer: isSmallScreen ? SidebarDrawer() : null,
       body: Column(
@@ -42,11 +43,9 @@ class _DashboardPageState extends State<DashboardPage> {
     return AppBar(
       flexibleSpace: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blueGrey.shade900, Colors.black54],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          
+            color: Colors.blueGrey.shade900,
+            
         ),
       ),
       elevation: 0,
