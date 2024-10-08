@@ -135,10 +135,7 @@ class _ClassListPageState extends State<ClassListPage> {
                         );
                         classNameController.clear(); // Clear the text fields
                         Navigator.of(context).pop(); // Close the dialog
-                        // Show SnackBar feedback
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Class added successfully!')),
-                        );
+                       
                       }
                       // If the form is invalid, the validator will display error messages
                     },
@@ -251,10 +248,7 @@ class _ClassListPageState extends State<ClassListPage> {
                         classNameController.text.trim(),
                       );
                       Navigator.of(context).pop(); // Close the dialog
-                      // Show SnackBar feedback
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Class updated successfully!')),
-                      );
+                      
                     }
                     // If the form is invalid, the validator will display error messages
                   },
@@ -331,10 +325,7 @@ class _ClassListPageState extends State<ClassListPage> {
                   onPressed: () {
                     classController.removeClass(index);
                     Navigator.of(context).pop(); // Close the dialog
-                    // Show SnackBar feedback
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Class deleted successfully!')),
-                    );
+                    
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,
