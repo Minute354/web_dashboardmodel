@@ -80,37 +80,34 @@ class StudentListPage extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   // Search TextField
-                  SizedBox(width: 500,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _searchController,
-                              decoration: InputDecoration(
-                                labelText: 'Search by name',
-                                prefixIcon: Icon(Icons.search),
-                                border: OutlineInputBorder(),
-                              ),
-                              onChanged: (value) {
-                                // Filter students based on the input
-                                context
-                                    .read<StudentController>()
-                                    .filterStudents(value);
-                              },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _searchController,
+                            decoration: InputDecoration(
+                              labelText: 'Search by name',
+                              prefixIcon: Icon(Icons.search),
+                              border: OutlineInputBorder(),
                             ),
+                            onChanged: (value) {
+                              // Filter students based on the input
+                              context
+                                  .read<StudentController>()
+                                  .filterStudents(value);
+                            },
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(
                     child: Consumer<StudentController>(
                       builder: (context, studentController, child) {
                         return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // DataTable Header
                             SizedBox(
@@ -118,71 +115,59 @@ class StudentListPage extends StatelessWidget {
                               child: DataTable(
                                 columnSpacing: 20.0,
                                 headingRowColor:
-                                    WidgetStateProperty.all(Colors.blueGrey.shade900),
+                                    WidgetStateProperty.all(Colors.black),
                                 columns: const <DataColumn>[
                                   DataColumn(
-                                    label: SizedBox(
-                                      child: Text(
-                                        'No',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    label: Text(
+                                      'No',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
                                   DataColumn(
-                                    label: SizedBox(
-                                      child: Text(
-                                        'Name',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    label: Text(
+                                      'Name',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
                                   DataColumn(
-                                    label: SizedBox(
-                                      child: Text(
-                                        'Class',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    label: Text(
+                                      'Class',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
                                   DataColumn(
-                                    label: SizedBox(
-                                      child: Text(
-                                        'Division',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    label: Text(
+                                      'Division',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
                                   DataColumn(
-                                    label: SizedBox(
-                                      child: Text(
-                                        'Status',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    label: Text(
+                                      'Status',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
                                   DataColumn(
-                                    label: SizedBox(
-                                      child: Text(
-                                        'Actions',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    label: Text(
+                                      'Actions',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
@@ -199,19 +184,17 @@ class StudentListPage extends StatelessWidget {
                                         DataCell(Text(student.studentClass)),
                                         DataCell(Text(student.division)),
                                         DataCell(
-                                          SizedBox(width: 100,
-                                            child: Chip(
-                                              label: Text(
-                                                student.isActive
-                                                    ? 'Active'
-                                                    : 'Inactive',
-                                                style: const TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                              backgroundColor: student.isActive
-                                                  ? Colors.green
-                                                  : Colors.red,
+                                          Chip(
+                                            label: Text(
+                                              student.isActive
+                                                  ? 'Active'
+                                                  : 'Inactive',
+                                              style: const TextStyle(
+                                                  color: Colors.white),
                                             ),
+                                            backgroundColor: student.isActive
+                                                ? Colors.green
+                                                : Colors.red,
                                           ),
                                         ),
                                         DataCell(

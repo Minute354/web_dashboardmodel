@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_web_app/views/calender_page.dart';
 import 'package:school_web_app/views/class_list_screen.dart';
 import 'package:school_web_app/views/course_list_screen.dart';
 import 'package:school_web_app/views/dashboard_screen.dart';
@@ -225,6 +226,19 @@ class _SidebarState extends State<Sidebar> {
               },
               isSelected: selectedItem == 'Subject',
             ),
+            _buildSidebarItem(
+              icon: Icons.calendar_month,
+             label: 'Calender',
+              context: context,
+               onTap: (){
+                setState(() {
+                  selectedItem = 'Calender';
+                });
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => HolidayCalendarPage()));
+               },
+                isSelected: selectedItem=="Calender"
+                )
           ],
         ),
         // Teacher section
