@@ -198,7 +198,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _handleLogout() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
+      MaterialPageRoute(builder: (context) => const DashboardPage()),
     );
   }
 }

@@ -6,4 +6,6 @@ class DivisionModel {
   DivisionModel({
     required this.divisionName,
   });
+
+  get id => null;
 }

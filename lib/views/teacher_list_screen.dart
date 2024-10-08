@@ -12,7 +12,7 @@ import 'sidebars.dart';
 class TeacherListPage extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
 
-  TeacherListPage({Key? key}) : super(key: key);
+  TeacherListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class TeacherListPage extends StatelessWidget {
                             ),
                           );
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.add,
                           color: Colors.blue,
                         ),
@@ -85,7 +85,7 @@ class TeacherListPage extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -95,7 +95,7 @@ class TeacherListPage extends StatelessWidget {
                         Expanded(
                           child: TextField(
                             controller: _searchController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Search by name',
                               prefixIcon: Icon(Icons.search),
                               border: OutlineInputBorder(),
@@ -106,7 +106,7 @@ class TeacherListPage extends StatelessWidget {
                             },
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                       ],
                     ),
                   ),
@@ -125,7 +125,7 @@ class TeacherListPage extends StatelessWidget {
                               child: DataTable(
                                 columnSpacing: 20.0,
                                 headingRowColor:
-                                    MaterialStateProperty.all(Colors.blueGrey.shade900),
+                                    WidgetStateProperty.all(Colors.blueGrey.shade900),
                                 columns: const <DataColumn>[
                                   DataColumn(
                                     label: Text(
@@ -258,20 +258,23 @@ class TeacherListPage extends StatelessWidget {
                                           ),
                                         ),
                                         DataCell(
-                                          ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: teacher.isActive
-                                                  ? Colors.green
-                                                  : Colors.red,
-                                            ),
-                                            onPressed: () {
-                                              // Toggle the active status
-                                              Provider.of<TeacherController>(context, listen: false)
-                                                  .updateTeacherStatus(teacher, !teacher.isActive);
-                                            },
-                                            child: Text(
-                                              teacher.isActive ? 'Deactivate' : 'Activate',
-                                              style: TextStyle(color: Colors.white),
+                                          SizedBox(
+                                            width: 120,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: teacher.isActive
+                                                    ? Colors.green
+                                                    : Colors.red,
+                                              ),
+                                              onPressed: () {
+                                                // Toggle the active status
+                                                Provider.of<TeacherController>(context, listen: false)
+                                                    .updateTeacherStatus(teacher, !teacher.isActive);
+                                              },
+                                              child: Text(
+                                                teacher.isActive ? 'Deactivate' : 'Activate',
+                                                style: const TextStyle(color: Colors.white),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -279,7 +282,7 @@ class TeacherListPage extends StatelessWidget {
                                           Row(
                                             children: [
                                               IconButton(
-                                                icon: Icon(Icons.edit),
+                                                icon: const Icon(Icons.edit),
                                                 onPressed: () {
                                                   Navigator.of(context).push(
                                                     MaterialPageRoute(
@@ -289,27 +292,27 @@ class TeacherListPage extends StatelessWidget {
                                                 },
                                               ),
                                               IconButton(
-                                                icon: Icon(Icons.delete),
+                                                icon: const Icon(Icons.delete),
                                                 onPressed: () {
                                                   // Remove the teacher from the list
                                                   showDialog(
                                                     context: context,
                                                     builder: (context) => AlertDialog(
-                                                      title: Text('Delete Teacher'),
+                                                      title: const Text('Delete Teacher'),
                                                       content: Text('Are you sure you want to delete ${teacher.firstName} ${teacher.lastName}?'),
                                                       actions: [
                                                         TextButton(
                                                           onPressed: () {
                                                             Navigator.of(context).pop(); // Close dialog
                                                           },
-                                                          child: Text('Cancel'),
+                                                          child: const Text('Cancel'),
                                                         ),
                                                         TextButton(
                                                           onPressed: () {
                                                             Provider.of<TeacherController>(context, listen: false).deleteTeacher(teacher);
                                                             Navigator.of(context).pop(); // Close dialog
                                                           },
-                                                          child: Text('Delete'),
+                                                          child: const Text('Delete'),
                                                         ),
                                                       ],
                                                     ),
