@@ -28,8 +28,8 @@ class DropdownScreenState extends State<DropdownScreen> {
               children: [
                 const CircleAvatar(
                   radius: 30, // Radius for the circular avatar
-                  backgroundImage: NetworkImage(
-                      'https://png.pngitem.com/pimgs/s/111-1114675_user-login-person-man-enter-person-login-icon.png'), // Replace with your image URL
+                  backgroundImage: AssetImage(
+                      'assets/student logo.png'), // Replace with your image URL
                 ),
                 const SizedBox(width: 10), // Space between avatar and button
                 TextButton(
@@ -97,8 +97,8 @@ class DropdownScreenState extends State<DropdownScreen> {
                     ListTile(
                       leading: const CircleAvatar(
                         radius: 20,
-                        backgroundImage: NetworkImage(
-                            'https://png.pngitem.com/pimgs/s/111-1114675_user-login-person-man-enter-person-login-icon.png'),
+                        backgroundImage: AssetImage(
+                            'assets/student logo.png'),
                       ),
                       title: Text('View Profile', style: GoogleFonts.poppins()),
                       onTap: () {

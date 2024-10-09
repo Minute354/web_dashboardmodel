@@ -74,10 +74,28 @@ List<SidebarItem> sidebarItems = [
     page: HolidayCalendarPage(),
   ),
   SidebarItem(
+    icon: Icons.currency_bitcoin_outlined,
+    label: 'Fees',
+    page: TeacherListPage(), // Placeholder, as Teacher has subItems
+    subItems: [
+      SidebarItem(
+        icon: Icons.directions_bus_sharp,
+        label: 'Bus Fees',
+        page: DashboardPage(),
+      ),
+      SidebarItem(
+        icon: Icons.youtube_searched_for_sharp,
+        label: 'Annual Fees',
+        page: DashboardPage(),
+      ),
+    ],
+  ),
+  SidebarItem(
     icon: Icons.grading_rounded,
     label: 'Syllabus',
     page: SyllabusPage(),
   ),
+  
   SidebarItem(
     icon: Icons.settings,
     label: 'Settings',

@@ -23,8 +23,8 @@ class SettingsPage extends StatelessWidget {
                   // Circular Avatar Section
                   const CircleAvatar(
                     radius: 50,
-                    backgroundImage:
-                        AssetImage('student logo.png'), // Placeholder image
+                    backgroundImage: AssetImage(
+                        'assets/student logo.png'), // Placeholder image
                   ),
                   SizedBox(height: 16),
                   Text(
