@@ -24,8 +24,8 @@ class Sidebar extends StatelessWidget {
             child: Column(
               children: [
                 const CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://png.pngitem.com/pimgs/s/111-1114675_user-login-person-man-enter-person-login-icon.png"),
+                  backgroundImage: AssetImage(
+                      "assets/student logo.png"),
                   radius: 40,
                 ),
                 const SizedBox(height: 10),

@@ -194,7 +194,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
 
   // Mobile View
   Widget _buildMobileView(BoxConstraints constraints) {
-    const double textSize = 40.0;
+    const double textSize = 60.0;
     final double imageSize = MediaQuery.of(context).size.width * 0.5;
     final double cardSize = MediaQuery.of(context).size.width * 0.8;
 
@@ -247,7 +247,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
   // Desktop View
   Widget _buildDesktopView(BoxConstraints constraints) {
     const double textSize = 60.0;
-    final double imageSize = MediaQuery.of(context).size.width * 0.5;
+    final double imageSize = MediaQuery.of(context).size.width * 0.32;
     const double cardSize = 500;
 
     return Stack(
@@ -315,7 +315,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
       width: imageSize.clamp(200.0, 600.0),
       height: imageSize.clamp(200.0, 600.0),
       child: Image.asset(
-        "assets/view-3d-young-school-student (1) (1).png",
+        "assets/login_logo.png",
         fit: BoxFit.cover,
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_web_app/views/add_student_screen.dart';
+import 'package:school_web_app/views/analytics_screen.dart';
+import 'package:school_web_app/views/attendance_screen.dart';
 import 'package:school_web_app/views/dashboardcard.dart';
 import 'package:school_web_app/views/payment_screen.dart';
 import 'package:school_web_app/views/setting_screen.dart';
@@ -169,6 +171,8 @@ class _DashboardPageState extends State<DashboardPage> {
         color: Colors.purpleAccent,
         onTap: () {
           // Navigate to Analytics page
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => AnalyticsPage()));
         },
       ),
       DashboardCard(
@@ -177,6 +181,8 @@ class _DashboardPageState extends State<DashboardPage> {
         color: Colors.redAccent,
         onTap: () {
           // Navigate to Attendance page
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => AttendanceScreen()));
         },
       ),
       DashboardCard(
