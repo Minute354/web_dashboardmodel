@@ -59,7 +59,7 @@ class _EditStudentPageState extends State<EditStudentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Student'),
+       
         elevation: 0,
         backgroundColor: Colors.blueGrey.shade900,
         centerTitle: true,

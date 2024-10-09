@@ -41,14 +41,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Edit Teacher',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-            color: Colors.white,
-          ),
-        ),
+        
         elevation: 0,
         backgroundColor: Colors.blueGrey.shade900,
         centerTitle: true,

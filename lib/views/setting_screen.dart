@@ -10,10 +10,6 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Settings',
-          style: GoogleFonts.poppins(),
-        ),
         backgroundColor: Colors.blueGrey.shade900,
       ),
       body: Row(
@@ -47,7 +43,7 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 24),
-            
+
                   // List of Settings Options
                   Expanded(
                     child: ListView(
@@ -89,7 +85,8 @@ class SettingsPage extends StatelessWidget {
                           icon: Icons.logout,
                           title: 'Log Out',
                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => LoginScreen()));
                             // Implement log out functionality
                           },
                         ),
@@ -124,17 +121,21 @@ class SettingsPage extends StatelessWidget {
         child: AnimatedContainer(
           duration: Duration(milliseconds: 200), // Animation duration
           height: 40, // Reduced height for buttons
-          width: MediaQuery.of(context).size.width / 3, // Width set to one-third of the screen
+          width: MediaQuery.of(context).size.width /
+              3, // Width set to one-third of the screen
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade400), // Border color
             borderRadius: BorderRadius.circular(8), // Rounded corners
             // ignore: dead_code
-            color: isHovered ? Colors.blueGrey.shade100 : Colors.white, // Change background color on hover
+            color: isHovered
+                ? Colors.blueGrey.shade100
+                : Colors.white, // Change background color on hover
           ),
           margin: EdgeInsets.symmetric(vertical: 8.0), // Vertical spacing
           padding: EdgeInsets.symmetric(horizontal: 16.0), // Horizontal padding
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between items
+            mainAxisAlignment:
+                MainAxisAlignment.spaceBetween, // Space between items
             children: [
               Row(
                 children: [

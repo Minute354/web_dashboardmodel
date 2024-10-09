@@ -22,7 +22,8 @@ class _DashboardPageState extends State<DashboardPage> {
     bool isSmallScreen = MediaQuery.of(context).size.width < 800;
 
     return Scaffold(
-      extendBody: true,extendBodyBehindAppBar: true,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       appBar: _buildAppBar(isSmallScreen),
       drawer: isSmallScreen ? SidebarDrawer() : null,
       body: Column(
@@ -30,7 +31,7 @@ class _DashboardPageState extends State<DashboardPage> {
           Expanded(
             child: Row(
               children: [
-                if (!isSmallScreen)Sidebar(),
+                if (!isSmallScreen) Sidebar(),
                 Expanded(child: _buildDashboardGrid(isSmallScreen)),
               ],
             ),
@@ -45,21 +46,11 @@ class _DashboardPageState extends State<DashboardPage> {
     return AppBar(
       flexibleSpace: Container(
         decoration: BoxDecoration(
-          
-            color: Colors.blueGrey.shade900,
-            
+          color: Colors.blueGrey.shade900,
         ),
       ),
       elevation: 0,
       centerTitle: true,
-      title: const Text(
-        'Admin Panel',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-          color: Colors.white,
-        ),
-      ),
       actions: [
         _buildProfileDropdown(),
         if (isSmallScreen)
@@ -152,7 +143,7 @@ class _DashboardPageState extends State<DashboardPage> {
         label: 'Manage Students',
         color: Colors.green,
         onTap: () {
-         Navigator.of(context)
+          Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => StudentListPage()));
         },
       ),

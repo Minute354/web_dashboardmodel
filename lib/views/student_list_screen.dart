@@ -19,10 +19,6 @@ class StudentListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
-        title: const Text(
-          'Student Management',
-          style: TextStyle(color: Colors.white),
-        ),
       ),
       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
@@ -121,13 +117,19 @@ class StudentListPage extends StatelessWidget {
                                 columnSpacing: 20.0,
                                 headingRowColor:
                                     WidgetStateProperty.all(Colors.black),
+                                     border: TableBorder.all(
+                                      color: Colors.grey,
+                                      width: 1,
+                                    ), // Thicker border for DataTable
                                 columns: const <DataColumn>[
                                   DataColumn(
+                                    
                                     label: Text(
                                       'No',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
+                                        
                                       ),
                                     ),
                                   ),

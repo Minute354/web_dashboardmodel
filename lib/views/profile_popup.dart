@@ -15,7 +15,7 @@ class DropdownScreenState extends State<DropdownScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dropdown Screen', style: GoogleFonts.poppins()),
+       
         backgroundColor: Colors.blueGrey.shade900,
       ),
       body: Center(

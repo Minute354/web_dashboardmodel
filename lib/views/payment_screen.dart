@@ -4,25 +4,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:school_web_app/views/sidebars.dart';
 
-void main() {
-  runApp(PaymentApp());
-}
-
-// Entry point of the application
-class PaymentApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Payment Overview',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
-      home: PaymentScreen(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
 // Define the enum outside the class
 enum SelectedView { income, expense, account }
 
@@ -363,15 +344,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   child: Stack(
                     children: [
                       Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Payments',
-                        style: GoogleFonts.poppins(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Payments',
+                          style: GoogleFonts.poppins(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
                       Container(
                         padding: EdgeInsets.all(8),
                         child: PieChart(

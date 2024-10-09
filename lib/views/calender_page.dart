@@ -29,12 +29,13 @@ class _HolidayCalendarPageState extends State<HolidayCalendarPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Holiday Calendar'),
+       
         backgroundColor: Colors.blueGrey.shade900,
       ),
-      body: Row(crossAxisAlignment: CrossAxisAlignment.start,
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Sidebar(),
+          const Sidebar(),
           Expanded(
             flex: 5,
             child: SingleChildScrollView(
@@ -42,29 +43,36 @@ class _HolidayCalendarPageState extends State<HolidayCalendarPage> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(right: 20, left: 200, top: 50),
+                    padding:
+                        const EdgeInsets.only(right: 20, left: 200, top: 50),
                     child: Card(
                       color: Colors.grey,
                       elevation: 10,
                       child: Container(
-                        height: 350,
+                        height: MediaQuery.of(context).size.height-500,
                         margin: EdgeInsets.all(100),
                         child: TableCalendar(
+                          
                           focusedDay: _selectedDay,
                           firstDay: DateTime(2020),
                           lastDay: DateTime(2030),
-                          selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                          selectedDayPredicate: (day) =>
+                              isSameDay(_selectedDay, day),
                           onDaySelected: (selectedDay, focusedDay) {
                             setState(() {
                               _selectedDay = selectedDay;
-                              _selectedHoliday = holidayController.getHolidayByDate(selectedDay);
+                              _selectedHoliday = holidayController
+                                  .getHolidayByDate(selectedDay);
                             });
                           },
                           holidayPredicate: (day) {
-                            return holidayController.getHolidayByDate(day) != null;
+                            return holidayController.getHolidayByDate(day) !=
+                                null;
                           },
                           calendarStyle: CalendarStyle(
+                            
                             holidayTextStyle: TextStyle(
+                              
                               color: Colors.red,
                               fontWeight: FontWeight.bold,
                             ),
@@ -109,10 +117,12 @@ class _HolidayCalendarPageState extends State<HolidayCalendarPage> {
               ),
             ),
           ),
-          Expanded(flex: 2,child: Padding(
-            padding: const EdgeInsets.only(right: 250,top: 100),
-            child: AddHolidayPage(),
-          ))
+          Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 250, top: 100),
+                child: AddHolidayPage(),
+              ))
         ],
       ),
     );

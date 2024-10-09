@@ -27,10 +27,7 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Add Teacher',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white),
-        ),
+        
         elevation: 0,
         backgroundColor: secondaryColor,
         centerTitle: true,
