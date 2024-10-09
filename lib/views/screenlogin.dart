@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
 class LoginScreen extends StatefulWidget {
   
@@ -208,7 +209,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize),
+                _buildImage(imageSize,"assets/view-3d-young-school-student (1) (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -234,7 +235,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize),
+                _buildImage(imageSize,"assets/view-3d-young-school-student (1) (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -262,7 +263,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Flexible(child: _buildAnimatedText(textSize, cardSize * 0.8)),
-                  Flexible(child: _buildImage(imageSize)),
+                  Flexible(child: _buildImage(imageSize,"assets/3d-cartoon-back-school (1).png")),
                   Flexible(
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.5,
@@ -278,12 +279,19 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
 
   // Background Gradient
   Widget _buildBackground() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.indigo.shade900, Colors.blueAccent.shade100],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Shimmer.fromColors(
+      
+      baseColor: const Color.fromARGB(255, 58, 102, 172),
+    highlightColor: const Color.fromARGB(255, 76, 111, 168),
+    period: Duration(milliseconds: 2000),
+
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [const Color.fromARGB(255, 78, 91, 226), const Color.fromARGB(255, 88, 134, 207)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
       ),
     );
@@ -310,13 +318,14 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
   }
 
   // Image Widget
-  Widget _buildImage(double imageSize) {
+  Widget _buildImage(double imageSize,String image) {
     return SizedBox(
       width: imageSize.clamp(200.0, 600.0),
       height: imageSize.clamp(200.0, 600.0),
       child: Image.asset(
-        "assets/view-3d-young-school-student (1) (1).png",
+        image,
         fit: BoxFit.cover,
+       
       ),
     );
   }

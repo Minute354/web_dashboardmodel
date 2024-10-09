@@ -21,17 +21,13 @@ class TeacherListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
-        title: const Text(
-          'Teacher Management',
-          style: TextStyle(color: Colors.white),
-        ),
       ),
       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
           if (!isSmallScreen)
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.16,
+              // width: MediaQuery.of(context).size.width * 0.16,
               child: Sidebar(),
             ),
           Expanded(
@@ -84,9 +80,7 @@ class TeacherListPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 10),
-
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
@@ -101,7 +95,8 @@ class TeacherListPage extends StatelessWidget {
                               border: OutlineInputBorder(),
                             ),
                             onChanged: (value) {
-                              Provider.of<TeacherController>(context, listen: false)
+                              Provider.of<TeacherController>(context,
+                                      listen: false)
                                   .filterTeachers(value);
                             },
                           ),
@@ -110,11 +105,11 @@ class TeacherListPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   Expanded(
                     child: Consumer<TeacherController>(
                       builder: (context, teacherController, child) {
-                        List<Teacher> teachers = teacherController.filteredTeachers;
+                        List<Teacher> teachers =
+                            teacherController.filteredTeachers;
 
                         return SingleChildScrollView(
                           scrollDirection: Axis.vertical,
@@ -124,8 +119,8 @@ class TeacherListPage extends StatelessWidget {
                               width: MediaQuery.of(context).size.width * 0.75,
                               child: DataTable(
                                 columnSpacing: 20.0,
-                                headingRowColor:
-                                    WidgetStateProperty.all(Colors.blueGrey.shade900),
+                                headingRowColor: WidgetStateProperty.all(
+                                    Colors.blueGrey.shade900),
                                 columns: const <DataColumn>[
                                   DataColumn(
                                     label: Text(
@@ -206,11 +201,13 @@ class TeacherListPage extends StatelessWidget {
                                     final teacher = teachers[index];
                                     return DataRow(
                                       cells: <DataCell>[
-                                        DataCell(Text((index + 1).toString())), // Serial Number
+                                        DataCell(Text((index + 1)
+                                            .toString())), // Serial Number
                                         DataCell(
                                           Container(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 12.0),
+                                                horizontal: 8.0,
+                                                vertical: 12.0),
                                             child: Text(
                                               teacher.firstName,
                                               style: GoogleFonts.poppins(),
@@ -220,7 +217,8 @@ class TeacherListPage extends StatelessWidget {
                                         DataCell(
                                           Container(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 12.0),
+                                                horizontal: 8.0,
+                                                vertical: 12.0),
                                             child: Text(
                                               teacher.lastName,
                                               style: GoogleFonts.poppins(),
@@ -230,7 +228,8 @@ class TeacherListPage extends StatelessWidget {
                                         DataCell(
                                           Container(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 12.0),
+                                                horizontal: 8.0,
+                                                vertical: 12.0),
                                             child: Text(
                                               teacher.subject,
                                               style: GoogleFonts.poppins(),
@@ -240,7 +239,8 @@ class TeacherListPage extends StatelessWidget {
                                         DataCell(
                                           Container(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 12.0),
+                                                horizontal: 8.0,
+                                                vertical: 12.0),
                                             child: Text(
                                               teacher.email,
                                               style: GoogleFonts.poppins(),
@@ -250,7 +250,8 @@ class TeacherListPage extends StatelessWidget {
                                         DataCell(
                                           Container(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 12.0),
+                                                horizontal: 8.0,
+                                                vertical: 12.0),
                                             child: Text(
                                               teacher.contactNo,
                                               style: GoogleFonts.poppins(),
@@ -262,18 +263,26 @@ class TeacherListPage extends StatelessWidget {
                                             width: 120,
                                             child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: teacher.isActive
-                                                    ? Colors.green
-                                                    : Colors.red,
+                                                backgroundColor:
+                                                    teacher.isActive
+                                                        ? Colors.green
+                                                        : Colors.red,
                                               ),
                                               onPressed: () {
                                                 // Toggle the active status
-                                                Provider.of<TeacherController>(context, listen: false)
-                                                    .updateTeacherStatus(teacher, !teacher.isActive);
+                                                Provider.of<TeacherController>(
+                                                        context,
+                                                        listen: false)
+                                                    .updateTeacherStatus(
+                                                        teacher,
+                                                        !teacher.isActive);
                                               },
                                               child: Text(
-                                                teacher.isActive ? 'Deactivate' : 'Activate',
-                                                style: const TextStyle(color: Colors.white),
+                                                teacher.isActive
+                                                    ? 'Deactivate'
+                                                    : 'Activate',
+                                                style: const TextStyle(
+                                                    color: Colors.white),
                                               ),
                                             ),
                                           ),
@@ -286,7 +295,9 @@ class TeacherListPage extends StatelessWidget {
                                                 onPressed: () {
                                                   Navigator.of(context).push(
                                                     MaterialPageRoute(
-                                                      builder: (context) => EditTeacherPage(teacher: teacher),
+                                                      builder: (context) =>
+                                                          EditTeacherPage(
+                                                              teacher: teacher),
                                                     ),
                                                   );
                                                 },
@@ -297,22 +308,36 @@ class TeacherListPage extends StatelessWidget {
                                                   // Remove the teacher from the list
                                                   showDialog(
                                                     context: context,
-                                                    builder: (context) => AlertDialog(
-                                                      title: const Text('Delete Teacher'),
-                                                      content: Text('Are you sure you want to delete ${teacher.firstName} ${teacher.lastName}?'),
+                                                    builder: (context) =>
+                                                        AlertDialog(
+                                                      title: const Text(
+                                                          'Delete Teacher'),
+                                                      content: Text(
+                                                          'Are you sure you want to delete ${teacher.firstName} ${teacher.lastName}?'),
                                                       actions: [
                                                         TextButton(
                                                           onPressed: () {
-                                                            Navigator.of(context).pop(); // Close dialog
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(); // Close dialog
                                                           },
-                                                          child: const Text('Cancel'),
+                                                          child: const Text(
+                                                              'Cancel'),
                                                         ),
                                                         TextButton(
                                                           onPressed: () {
-                                                            Provider.of<TeacherController>(context, listen: false).deleteTeacher(teacher);
-                                                            Navigator.of(context).pop(); // Close dialog
+                                                            Provider.of<TeacherController>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .deleteTeacher(
+                                                                    teacher);
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(); // Close dialog
                                                           },
-                                                          child: const Text('Delete'),
+                                                          child: const Text(
+                                                              'Delete'),
                                                         ),
                                                       ],
                                                     ),

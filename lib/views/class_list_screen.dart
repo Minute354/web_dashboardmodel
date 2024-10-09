@@ -60,7 +60,8 @@ class _ClassListPageState extends State<ClassListPage> {
   // Method to show the Add Class popup
   void _showAddClassPopup(BuildContext context) {
     final TextEditingController classNameController = TextEditingController();
-    final classController = Provider.of<ClassController>(context, listen: false);
+    final classController =
+        Provider.of<ClassController>(context, listen: false);
 
     showDialog(
       context: context,
@@ -80,8 +81,10 @@ class _ClassListPageState extends State<ClassListPage> {
               ),
               style: GoogleFonts.poppins(),
               inputFormatters: [
-                LengthLimitingTextInputFormatter(3), // Limit input to 3 characters
-                FilteringTextInputFormatter.allow(RegExp('[IVX0-9]')), // Allow I, V, X and digits 0-9
+                LengthLimitingTextInputFormatter(
+                    3), // Limit input to 3 characters
+                FilteringTextInputFormatter.allow(
+                    RegExp('[IVX0-9]')), // Allow I, V, X and digits 0-9
                 UpperCaseTextFormatter(), // Convert to uppercase
               ],
               validator: (value) {
@@ -135,7 +138,6 @@ class _ClassListPageState extends State<ClassListPage> {
                         );
                         classNameController.clear(); // Clear the text fields
                         Navigator.of(context).pop(); // Close the dialog
-                       
                       }
                       // If the form is invalid, the validator will display error messages
                     },
@@ -192,8 +194,10 @@ class _ClassListPageState extends State<ClassListPage> {
               ),
               style: GoogleFonts.poppins(),
               inputFormatters: [
-                LengthLimitingTextInputFormatter(3), // Limit input to 3 characters
-                FilteringTextInputFormatter.allow(RegExp('[IVX0-9]')), // Allow I, V, X and digits 0-9
+                LengthLimitingTextInputFormatter(
+                    3), // Limit input to 3 characters
+                FilteringTextInputFormatter.allow(
+                    RegExp('[IVX0-9]')), // Allow I, V, X and digits 0-9
                 UpperCaseTextFormatter(), // Convert to uppercase
               ],
               validator: (value) {
@@ -225,8 +229,8 @@ class _ClassListPageState extends State<ClassListPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -248,7 +252,6 @@ class _ClassListPageState extends State<ClassListPage> {
                         classNameController.text.trim(),
                       );
                       Navigator.of(context).pop(); // Close the dialog
-                      
                     }
                     // If the form is invalid, the validator will display error messages
                   },
@@ -265,8 +268,8 @@ class _ClassListPageState extends State<ClassListPage> {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -325,7 +328,6 @@ class _ClassListPageState extends State<ClassListPage> {
                   onPressed: () {
                     classController.removeClass(index);
                     Navigator.of(context).pop(); // Close the dialog
-                    
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,
@@ -353,10 +355,6 @@ class _ClassListPageState extends State<ClassListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Class List', // Updated title for clarity
-          style: GoogleFonts.poppins(),
-        ),
         backgroundColor: Colors.blueGrey.shade900,
       ),
       body: Row(
@@ -405,20 +403,22 @@ class _ClassListPageState extends State<ClassListPage> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Container(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.75, // 3/4 width
+                                width: MediaQuery.of(context).size.width *
+                                    0.75, // 3/4 width
                                 child: DataTable(
-                                  columnSpacing: 20.0, // Adjust spacing as needed
+                                  columnSpacing:
+                                      20.0, // Adjust spacing as needed
                                   headingRowColor: MaterialStateProperty.all(
                                       Colors.blueGrey.shade900),
                                   border: TableBorder.all(
-                                    color: Colors.black,
-                                    width: 2,
+                                    color: Colors.grey,
+                                    width: 1,
                                   ), // Thicker border for DataTable
                                   columns: [
                                     DataColumn(
                                       label: Padding(
-                                        padding: const EdgeInsets.all(8.0), // Padding within header cells
+                                        padding: const EdgeInsets.all(
+                                            8.0), // Padding within header cells
                                         child: Text(
                                           'Class ID',
                                           style: GoogleFonts.poppins(
@@ -466,7 +466,8 @@ class _ClassListPageState extends State<ClassListPage> {
                                                 ),
                                               ),
                                             ),
-                                            DataCell(Container()), // Empty Actions Cell
+                                            DataCell(
+                                                Container()), // Empty Actions Cell
                                           ])
                                         ]
                                       : List<DataRow>.generate(
@@ -478,32 +479,37 @@ class _ClassListPageState extends State<ClassListPage> {
                                               cells: [
                                                 DataCell(
                                                   Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(8.0), // Padding within cell
+                                                    padding: const EdgeInsets
+                                                        .all(
+                                                        8.0), // Padding within cell
                                                     child: Text(
                                                       classItem.id.toString(),
-                                                      style: GoogleFonts.poppins(),
+                                                      style:
+                                                          GoogleFonts.poppins(),
                                                     ),
                                                   ),
                                                 ),
                                                 DataCell(
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets.all(8.0),
-                                                    child:
-                                                        Text(classItem.className),
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                        classItem.className),
                                                   ),
                                                 ),
                                                 DataCell(
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Row(
                                                       children: [
                                                         IconButton(
                                                           icon: Icon(
                                                             Icons.edit,
-                                                            color: Colors.blueAccent,
+                                                            color: Colors
+                                                                .blueAccent,
                                                           ),
                                                           onPressed: () {
                                                             _showEditClassPopup(
@@ -515,7 +521,8 @@ class _ClassListPageState extends State<ClassListPage> {
                                                         IconButton(
                                                           icon: Icon(
                                                             Icons.delete,
-                                                            color: Colors.redAccent,
+                                                            color: Colors
+                                                                .redAccent,
                                                           ),
                                                           onPressed: () {
                                                             _showDeleteConfirmationDialog(

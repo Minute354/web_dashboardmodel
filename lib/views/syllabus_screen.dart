@@ -282,10 +282,6 @@ class _SyllabusPageState extends State<SyllabusPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Syllabus Management',
-          style: TextStyle(color: Colors.white),
-        ),
         backgroundColor: Colors.blueGrey.shade900,
       ),
       body: Row(

@@ -311,10 +311,6 @@ class _SubjectListPageState extends State<SubjectListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Subject List',
-          style: GoogleFonts.poppins(),
-        ),
         backgroundColor: Colors.blueGrey.shade900,
       ),
       body: Row(
@@ -367,8 +363,12 @@ class _SubjectListPageState extends State<SubjectListPage> {
                                 child: DataTable(
                                   columnSpacing:
                                       20.0, // Adjust spacing as needed
-                                  headingRowColor: MaterialStateProperty.all(
+                                  headingRowColor: WidgetStateProperty.all(
                                       Colors.blueGrey.shade900),
+                                       border: TableBorder.all(
+                                      color: Colors.grey,
+                                      width: 1,
+                                    ), // Thicker border for DataTable
                                   columns: [
                                     DataColumn(
                                       label: Text(
@@ -418,7 +418,7 @@ class _SubjectListPageState extends State<SubjectListPage> {
                                           SubjectController.subjects.length,
                                           (index) {
                                             final subjectItem =
-                                                 SubjectController
+                                                SubjectController
                                                     .subjects[index];
                                             return DataRow(
                                               cells: [

@@ -285,10 +285,6 @@ class _DivisionListPageState extends State<DivisionListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Division List',
-            style: GoogleFonts.poppins(),
-          ),
           backgroundColor: Colors.blueGrey.shade900,
         ),
         body: Row(
@@ -343,11 +339,11 @@ class _DivisionListPageState extends State<DivisionListPage> {
                                   child: DataTable(
                                     columnSpacing:
                                         20.0, // Adjust spacing as needed
-                                    headingRowColor: MaterialStateProperty.all(
+                                    headingRowColor: WidgetStateProperty.all(
                                         Colors.blueGrey.shade900),
                                     border: TableBorder.all(
-                                      color: Colors.black,
-                                      width: 2,
+                                      color: Colors.grey,
+                                      width: 1,
                                     ), // Thicker border for DataTable
                                     columns: [
                                       DataColumn(

@@ -18,9 +18,7 @@ class _AddHolidayPageState extends State<AddHolidayPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-     
-      body: Padding(
+    return  Padding(
         padding: const EdgeInsets.all(10.0),
         child: Form(
           key: _formKey,
@@ -86,8 +84,7 @@ class _AddHolidayPageState extends State<AddHolidayPage> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   // Method to pick a date
