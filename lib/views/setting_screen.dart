@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:school_web_app/views/profile_screen.dart';
 import 'package:school_web_app/views/screenlogin.dart';
 import 'package:school_web_app/views/sidebars.dart';
 
@@ -54,6 +55,8 @@ class SettingsPage extends StatelessWidget {
                           title: 'Profile',
                           onTap: () {
                             // Navigate to Profile Page
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ProfilePage()));
                           },
                         ),
                         _buildCenteredListTile(
