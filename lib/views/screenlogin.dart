@@ -31,10 +31,10 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
   }
 
   void startLetterAnimation() {
-    Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      if (currentLetterIndex < "WELCOME\n TO \n LOGIN...".length) {
+    Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (currentLetterIndex < "Let's\nLogin...".length) {
         setState(() {
-          letters.add("WELCOME\n TO \n LOGIN..."[currentLetterIndex]);
+          letters.add("Let's\nLogin......"[currentLetterIndex]);
           currentLetterIndex++;
         });
       } else {
@@ -195,7 +195,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
 
   // Mobile View
   Widget _buildMobileView(BoxConstraints constraints) {
-    const double textSize = 60.0;
+    const double textSize = 300.0;
     final double imageSize = MediaQuery.of(context).size.width * 0.5;
     final double cardSize = MediaQuery.of(context).size.width * 0.8;
 
@@ -248,7 +248,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
   // Desktop View
   Widget _buildDesktopView(BoxConstraints constraints) {
     const double textSize = 60.0;
-    final double imageSize = MediaQuery.of(context).size.width * 0.32;
+    final double imageSize = MediaQuery.of(context).size.width * 1;
     const double cardSize = 500;
 
     return Stack(
@@ -262,7 +262,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Flexible(child: _buildAnimatedText(textSize, cardSize * 0.8)),
+                  Flexible(child: _buildAnimatedText(textSize, cardSize )),
                   Flexible(child: _buildImage(imageSize,"assets/3d-cartoon-back-school (1).png")),
                   Flexible(
                       child: SizedBox(
@@ -307,7 +307,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
         child: Text(
           letters.join(),
           textAlign: TextAlign.left,
-          style: GoogleFonts.alata(
+          style: GoogleFonts.acme(
             fontSize: textSize,
             color: Colors.white,
             fontWeight: FontWeight.bold,
