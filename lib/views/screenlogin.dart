@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
 class LoginScreen extends StatefulWidget {
+  
   const LoginScreen({super.key});
 
   @override
   LoginScreenState createState() => LoginScreenState();
 }
 
-class LoginScreenState extends State<LoginScreen>
-    with SingleTickerProviderStateMixin {
+class LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -44,10 +45,13 @@ class LoginScreenState extends State<LoginScreen>
 
   @override
   void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
     _controller.dispose();
     super.dispose();
   }
 
+  // Validate email input
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter an email';
@@ -57,6 +61,7 @@ class LoginScreenState extends State<LoginScreen>
     return null;
   }
 
+  // Validate password input
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
@@ -69,15 +74,11 @@ class LoginScreenState extends State<LoginScreen>
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
-          // Determine the screen size based on constraints
           if (constraints.maxWidth >= 1024) {
-            // Desktop view
             return _buildDesktopView(constraints);
           } else if (constraints.maxWidth >= 600) {
-            // Tablet view
             return _buildTabletView(constraints);
           } else {
-            // Mobile view
             return _buildMobileView(constraints);
           }
         },
@@ -88,7 +89,7 @@ class LoginScreenState extends State<LoginScreen>
   // Common Form Widget
   Widget _buildLoginForm(double cardSize) {
     return SizedBox(
-      width: cardSize, // Set the card size based on the input parameter
+      width: cardSize,
       child: Card(
         elevation: 12,
         margin: const EdgeInsets.all(20),
@@ -102,7 +103,6 @@ class LoginScreenState extends State<LoginScreen>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Your form fields here...
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -115,12 +115,11 @@ class LoginScreenState extends State<LoginScreen>
                       borderRadius: BorderRadius.circular(12),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(color: Colors.indigo, width: 2),
+                      borderSide: const BorderSide(color: Colors.indigo, width: 2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  validator: _validateEmail,
+                  validator: _validateEmail, // Added email validation
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
@@ -135,13 +134,12 @@ class LoginScreenState extends State<LoginScreen>
                       borderRadius: BorderRadius.circular(12),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(color: Colors.indigo, width: 2),
+                      borderSide: const BorderSide(color: Colors.indigo, width: 2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   obscureText: true,
-                  validator: _validatePassword,
+                  validator: _validatePassword, // Added password validation
                 ),
                 const SizedBox(height: 20),
                 Align(
@@ -154,8 +152,7 @@ class LoginScreenState extends State<LoginScreen>
                       fit: BoxFit.none,
                       child: Text(
                         'Forgot Password?',
-                        style: GoogleFonts.poppins(
-                            color: Colors.indigo, fontSize: 14),
+                        style: GoogleFonts.poppins(color: Colors.indigo, fontSize: 14),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -166,14 +163,13 @@ class LoginScreenState extends State<LoginScreen>
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Handle login logic
+                      // Handle login logic here
                       Navigator.pushNamed(context, '/dashboard');
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15), // Only vertical padding
-                    fixedSize: const Size(200, 50), // Fixed width and height
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    fixedSize: const Size(200, 50),
                     backgroundColor: Colors.indigo,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -185,8 +181,7 @@ class LoginScreenState extends State<LoginScreen>
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
-                      overflow: TextOverflow
-                          .ellipsis, // Ensures text does not overflow
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
@@ -200,7 +195,7 @@ class LoginScreenState extends State<LoginScreen>
 
   // Mobile View
   Widget _buildMobileView(BoxConstraints constraints) {
-    const double textSize = 40.0;
+    const double textSize = 60.0;
     final double imageSize = MediaQuery.of(context).size.width * 0.5;
     final double cardSize = MediaQuery.of(context).size.width * 0.8;
 
@@ -214,7 +209,7 @@ class LoginScreenState extends State<LoginScreen>
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize),
+                _buildImage(imageSize,"assets/view-3d-young-school-student (1) (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -240,7 +235,7 @@ class LoginScreenState extends State<LoginScreen>
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize),
+                _buildImage(imageSize,"assets/view-3d-young-school-student (1) (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -253,7 +248,7 @@ class LoginScreenState extends State<LoginScreen>
   // Desktop View
   Widget _buildDesktopView(BoxConstraints constraints) {
     const double textSize = 60.0;
-    final double imageSize = MediaQuery.of(context).size.width * 0.5;
+    final double imageSize = MediaQuery.of(context).size.width * 0.32;
     const double cardSize = 500;
 
     return Stack(
@@ -268,7 +263,7 @@ class LoginScreenState extends State<LoginScreen>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Flexible(child: _buildAnimatedText(textSize, cardSize * 0.8)),
-                  Flexible(child: _buildImage(imageSize)),
+                  Flexible(child: _buildImage(imageSize,"assets/3d-cartoon-back-school (1).png")),
                   Flexible(
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.5,
@@ -284,12 +279,19 @@ class LoginScreenState extends State<LoginScreen>
 
   // Background Gradient
   Widget _buildBackground() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.indigo.shade900, Colors.blueAccent.shade100],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Shimmer.fromColors(
+      
+      baseColor: const Color.fromARGB(255, 58, 102, 172),
+    highlightColor: const Color.fromARGB(255, 76, 111, 168),
+    period: Duration(milliseconds: 2000),
+
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [const Color.fromARGB(255, 78, 91, 226), const Color.fromARGB(255, 88, 134, 207)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
       ),
     );
@@ -297,17 +299,16 @@ class LoginScreenState extends State<LoginScreen>
 
   Widget _buildAnimatedText(double textSize, double width) {
     return Container(
-      width: width, // Adjusts based on the screen size
-      alignment: Alignment.centerLeft, // Ensures left alignment
+      width: width,
+      alignment: Alignment.centerLeft,
       child: FittedBox(
-        fit: BoxFit.scaleDown, // Scales the text down for smaller screens
-        alignment:
-            Alignment.centerLeft, // Ensures the text inside is left-aligned
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
         child: Text(
-          letters.join(), // Combines the letters into a single string
-          textAlign: TextAlign.left, // Ensures the text is left-aligned
-          style: GoogleFonts.poppins(
-            fontSize: textSize, // Text size is dynamic
+          letters.join(),
+          textAlign: TextAlign.left,
+          style: GoogleFonts.alata(
+            fontSize: textSize,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -317,13 +318,14 @@ class LoginScreenState extends State<LoginScreen>
   }
 
   // Image Widget
-  Widget _buildImage(double imageSize) {
+  Widget _buildImage(double imageSize,String image) {
     return SizedBox(
       width: imageSize.clamp(200.0, 600.0),
       height: imageSize.clamp(200.0, 600.0),
       child: Image.asset(
-        "assets/view-3d-young-school-student (1) (1).png",
+        image,
         fit: BoxFit.cover,
+       
       ),
     );
   }

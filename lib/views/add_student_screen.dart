@@ -35,7 +35,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Student', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white)),
+        
         elevation: 0,
         backgroundColor: secondaryColor,
         centerTitle: true,
@@ -356,4 +356,3 @@ class _AddStudentPageState extends State<AddStudentPage> {
     );
   }
 }
-

@@ -1,59 +1,63 @@
-// lib/screens/course_list_page.dart
+// lib/screens/subject_list_page.dart
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:school_web_app/controllers/course_controller.dart';
-import 'package:school_web_app/models/course_model.dart';
-import 'package:school_web_app/screens/sidebars.dart';
-import 'dashboard_screen.dart';
+import 'package:school_web_app/controllers/subject_controller.dart';
+import 'package:school_web_app/models/subject_model.dart';
+import 'package:school_web_app/views/sidebars.dart';
 
-class CourseListPage extends StatefulWidget {
-  const CourseListPage({super.key});
+class SubjectListPage extends StatefulWidget {
+  const SubjectListPage({super.key});
 
   @override
-  _CourseListPageState createState() => _CourseListPageState();
+  _SubjectListPageState createState() => _SubjectListPageState();
 }
 
-class _CourseListPageState extends State<CourseListPage> {
-  // Separate GlobalKeys for Add and Edit forms to avoid validation conflicts
+class _SubjectListPageState extends State<SubjectListPage> {
   final _addFormKey = GlobalKey<FormState>();
   final _editFormKey = GlobalKey<FormState>();
 
-  // Method to show the Add Course popup
-  void _showAddCoursePopup(BuildContext context) {
-    final TextEditingController courseNameController = TextEditingController();
-    final courseController = Provider.of<CourseController>(context, listen: false);
+  // Method to show the Add Subject popup
+  void _showAddSubjectPopup(BuildContext context) {
+    final TextEditingController subjectNameController = TextEditingController();
+    final subjectController =
+        Provider.of<SubjectController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Add New Course',
+            'Add New Subject',
             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
           ),
           content: Form(
-            key: _addFormKey, // Assign the GlobalKey to the Form
+            key: _addFormKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
-                  controller: courseNameController,
+                  controller: subjectNameController,
                   decoration: InputDecoration(
-                    labelText: 'Course Name',
+                    labelText: 'Subject Name',
                     border: OutlineInputBorder(),
                   ),
                   style: GoogleFonts.poppins(),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the course name!';
+                      return 'Please enter the subject name!';
                     }
-                    // Check for duplicate course names
-                    bool exists = courseController.courses.any((c) =>
-                        c.courseName.toLowerCase() == value.trim().toLowerCase());
+                    // Check if the input contains only alphabets
+                    final RegExp regex = RegExp(r'^[a-zA-Z\s]+$');
+                    if (!regex.hasMatch(value)) {
+                      return 'Please enter only alphabetic characters!';
+                    }
+                    bool exists = subjectController.subjects.any((s) =>
+                        s.subjectName.toLowerCase() ==
+                        value.trim().toLowerCase());
                     if (exists) {
-                      return 'Course name already exists!';
+                      return 'Subject name already exists!';
                     }
                     return null; // Validation passed
                   },
@@ -88,22 +92,19 @@ class _CourseListPageState extends State<CourseListPage> {
                   child: ElevatedButton.icon(
                     onPressed: () {
                       if (_addFormKey.currentState!.validate()) {
-                        // If the form is valid, add the course
-                        String newCourseName = courseNameController.text.trim();
-                        courseController.addCourse(newCourseName);
-                        courseNameController.clear(); // Clear the text field
+                        subjectController.addSubject(
+                          subjectNameController.text.trim(),
+                        );
+                        subjectNameController.clear(); // Clear the text field
                         Navigator.of(context).pop(); // Close the dialog
-                        // Show SnackBar feedback
-                       
                       }
-                      // If the form is invalid, the validator will display error messages
                     },
                     icon: Icon(
                       Icons.add,
                       color: Colors.blue,
                     ),
                     label: Text(
-                      'Add Course',
+                      'Add Subject',
                       style: GoogleFonts.poppins(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
@@ -125,41 +126,50 @@ class _CourseListPageState extends State<CourseListPage> {
     );
   }
 
-  // Method to show the Edit Course popup
-  void _showEditCoursePopup(BuildContext context, int index, CourseModel courseItem) {
-    final TextEditingController courseNameController =
-        TextEditingController(text: courseItem.courseName);
-    final courseController = Provider.of<CourseController>(context, listen: false);
+  // Method to show the Edit Subject popup
+  void _showEditSubjectPopup(
+      BuildContext context, int index, SubjectModel subjectItem) {
+    final TextEditingController subjectNameController =
+        TextEditingController(text: subjectItem.subjectName);
+    final subjectController =
+        Provider.of<SubjectController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Edit Course',
+            'Edit Subject',
             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
           ),
           content: Form(
-            key: _editFormKey, // Assign the GlobalKey to the Form
+            key: _editFormKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
-                  controller: courseNameController,
+                  controller: subjectNameController,
                   decoration: InputDecoration(
-                    labelText: 'Course Name',
+                    labelText: 'Subject Name',
                     border: OutlineInputBorder(),
                   ),
                   style: GoogleFonts.poppins(),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter the course name!';
+                      return 'Please enter the subject name!';
                     }
-                    // Check for duplicate course names excluding the current course
-                    bool exists = courseController.courses.any((c) =>
-                        c.courseName.toLowerCase() == value.trim().toLowerCase() && c != courseItem);
+                    // Check if the input contains only alphabets
+                    final RegExp regex = RegExp(r'^[a-zA-Z\s]+$');
+                    if (!regex.hasMatch(value)) {
+                      return 'Please enter only alphabetic characters!';
+                    }
+                    // Check for duplicate subject names excluding the current subject
+                    bool exists = subjectController.subjects.any((s) =>
+                        s.subjectName.toLowerCase() ==
+                            value.trim().toLowerCase() &&
+                        s != subjectItem);
                     if (exists) {
-                      return 'Course name already exists!';
+                      return 'Subject name already exists!';
                     }
                     return null; // Validation passed
                   },
@@ -177,7 +187,8 @@ class _CourseListPageState extends State<CourseListPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -193,14 +204,12 @@ class _CourseListPageState extends State<CourseListPage> {
                 ElevatedButton.icon(
                   onPressed: () {
                     if (_editFormKey.currentState!.validate()) {
-                      // If the form is valid, update the course
-                      String updatedCourseName = courseNameController.text.trim();
-                      courseController.updateCourse(index, updatedCourseName);
+                      subjectController.updateSubject(
+                        index,
+                        subjectNameController.text.trim(),
+                      );
                       Navigator.of(context).pop(); // Close the dialog
-                      // Show SnackBar feedback
-                      
                     }
-                    // If the form is invalid, the validator will display error messages
                   },
                   icon: Icon(
                     Icons.save,
@@ -215,7 +224,8 @@ class _CourseListPageState extends State<CourseListPage> {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -230,19 +240,22 @@ class _CourseListPageState extends State<CourseListPage> {
   }
 
   // New method to show the Delete Confirmation dialog
-  void _showDeleteConfirmationDialog(BuildContext context, int index, CourseModel courseItem) {
-    final courseController = Provider.of<CourseController>(context, listen: false);
+  void _showDeleteConfirmationDialog(
+      BuildContext context, int index, SubjectModel subjectItem) {
+    final subjectController =
+        Provider.of<SubjectController>(context, listen: false);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Delete Course',
-            style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.red),
+            'Delete Subject',
+            style: GoogleFonts.poppins(
+                fontWeight: FontWeight.bold, color: Colors.red),
           ),
           content: Text(
-            'Are you sure you want to delete the course "${courseItem.courseName}"?',
+            'Are you sure you want to delete the subject "${subjectItem.subjectName}"?',
             style: GoogleFonts.poppins(),
           ),
           actions: [
@@ -269,11 +282,8 @@ class _CourseListPageState extends State<CourseListPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    String deletedCourseName = courseItem.courseName;
-                    courseController.deleteCourse(index);
+                    subjectController.deleteSubject(index);
                     Navigator.of(context).pop(); // Close the dialog
-                    // Show SnackBar feedback
-                    
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,
@@ -301,10 +311,6 @@ class _CourseListPageState extends State<CourseListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Course List', // Updated title for clarity
-          style: GoogleFonts.poppins(),
-        ),
         backgroundColor: Colors.blueGrey.shade900,
       ),
       body: Row(
@@ -312,30 +318,28 @@ class _CourseListPageState extends State<CourseListPage> {
           Sidebar(), // Sidebar remains intact
           Expanded(
             child: Padding(
-              // Added padding for the entire content area
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Align children to the left
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header "Course"
+                  // Header "Subject"
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'Course',
+                      'Subject',
                       style: GoogleFonts.poppins(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  // Add Course button aligned to the right
+                  // Add Subject button aligned to the right
                   ElevatedButton.icon(
                     onPressed: () {
-                      _showAddCoursePopup(context);
+                      _showAddSubjectPopup(context);
                     },
                     icon: Icon(Icons.add),
-                    label: Text('Add Course'),
+                    label: Text('Add Subject'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueGrey.shade900,
                       foregroundColor: Colors.white,
@@ -346,8 +350,8 @@ class _CourseListPageState extends State<CourseListPage> {
                   SizedBox(height: 16),
                   // Expanded DataTable wrapped in a Container
                   Expanded(
-                    child: Consumer<CourseController>(
-                      builder: (context, courseController, child) {
+                    child: Consumer<SubjectController>(
+                      builder: (context, SubjectController, child) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SingleChildScrollView(
@@ -355,11 +359,16 @@ class _CourseListPageState extends State<CourseListPage> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Container(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.75,
+                                width: MediaQuery.of(context).size.width * 0.75,
                                 child: DataTable(
-                                  columnSpacing: 20.0, // Adjust spacing as needed
-                                  headingRowColor: MaterialStateProperty.all(Colors.blueGrey.shade900),
+                                  columnSpacing:
+                                      20.0, // Adjust spacing as needed
+                                  headingRowColor: WidgetStateProperty.all(
+                                      Colors.blueGrey.shade900),
+                                       border: TableBorder.all(
+                                      color: Colors.grey,
+                                      width: 1,
+                                    ), // Thicker border for DataTable
                                   columns: [
                                     DataColumn(
                                       label: Text(
@@ -372,7 +381,7 @@ class _CourseListPageState extends State<CourseListPage> {
                                     ),
                                     DataColumn(
                                       label: Text(
-                                        'Course Name',
+                                        'Subject Name',
                                         style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -389,7 +398,7 @@ class _CourseListPageState extends State<CourseListPage> {
                                       ),
                                     ),
                                   ],
-                                  rows: courseController.courses.isEmpty
+                                  rows: SubjectController.subjects.isEmpty
                                       ? [
                                           DataRow(cells: [
                                             DataCell(Container()),
@@ -397,7 +406,8 @@ class _CourseListPageState extends State<CourseListPage> {
                                               Center(
                                                 child: Text(
                                                   'No Records Yet.',
-                                                  style: GoogleFonts.poppins(fontSize: 18),
+                                                  style: GoogleFonts.poppins(
+                                                      fontSize: 18),
                                                 ),
                                               ),
                                             ),
@@ -405,44 +415,65 @@ class _CourseListPageState extends State<CourseListPage> {
                                           ])
                                         ]
                                       : List<DataRow>.generate(
-                                          courseController.courses.length,
+                                          SubjectController.subjects.length,
                                           (index) {
-                                            final courseItem = courseController.courses[index];
+                                            final subjectItem =
+                                                SubjectController
+                                                    .subjects[index];
                                             return DataRow(
                                               cells: [
                                                 DataCell(
                                                   Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                                                    child: Text((index + 1).toString()),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 12.0),
+                                                    child: Text(
+                                                        (index + 1).toString()),
                                                   ),
                                                 ),
                                                 DataCell(
                                                   Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                                                    child: Text(courseItem.courseName),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 12.0),
+                                                    child: Text(subjectItem
+                                                        .subjectName),
                                                   ),
                                                 ),
                                                 DataCell(
                                                   Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 12.0),
                                                     child: Row(
                                                       children: [
                                                         IconButton(
                                                           icon: Icon(
                                                             Icons.edit,
-                                                            color: Colors.blueAccent,
+                                                            color: Colors
+                                                                .blueAccent,
                                                           ),
                                                           onPressed: () {
-                                                            _showEditCoursePopup(context, index, courseController.courses[index]);
+                                                            _showEditSubjectPopup(
+                                                                context,
+                                                                index,
+                                                                subjectItem);
                                                           },
                                                         ),
                                                         IconButton(
                                                           icon: Icon(
                                                             Icons.delete,
-                                                            color: Colors.redAccent,
+                                                            color: Colors
+                                                                .redAccent,
                                                           ),
                                                           onPressed: () {
-                                                            _showDeleteConfirmationDialog(context, index, courseController.courses[index]);
+                                                            _showDeleteConfirmationDialog(
+                                                                context,
+                                                                index,
+                                                                subjectItem);
                                                           },
                                                         ),
                                                       ],

@@ -13,8 +13,8 @@ class DivisionController with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateDivision(int index, String divisionName) {
-    _divisions[index] = DivisionModel(divisionName: divisionName);
+  void updateDivision(int index, String newDivisionName) {
+    _divisions[index] = DivisionModel(divisionName: newDivisionName);
     notifyListeners();
   }
 
