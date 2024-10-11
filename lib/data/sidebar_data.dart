@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_web_app/models/sidebar_model.dart';
 import 'package:school_web_app/views/calender_page.dart';
-import 'package:school_web_app/views/calender_page.dart';
 import 'package:school_web_app/views/syllabus_screen.dart';
 import '../views/dashboard_screen.dart';
 import '../views/class_list_screen.dart';
