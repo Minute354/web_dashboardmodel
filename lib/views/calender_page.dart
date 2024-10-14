@@ -4,7 +4,6 @@ import 'package:school_web_app/controllers/calendar_holiday_controller.dart';
 import 'package:school_web_app/models/calendar_holiday_model.dart';
 import 'package:school_web_app/views/calender_add_holidaypage.dart';
 import 'package:school_web_app/views/sidebars.dart';
-
 import 'package:table_calendar/table_calendar.dart';
 
 class HolidayCalendarPage extends StatefulWidget {
@@ -29,8 +28,7 @@ class _HolidayCalendarPageState extends State<HolidayCalendarPage> {
 
     return Scaffold(
       appBar: AppBar(
-       
-        backgroundColor: Colors.blueGrey.shade900,
+      backgroundColor: Colors.blueGrey.shade900,
       ),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,53 +47,52 @@ class _HolidayCalendarPageState extends State<HolidayCalendarPage> {
                       color: Colors.grey,
                       elevation: 10,
                       child: Container(
-                        height: MediaQuery.of(context).size.height-500,
+                        height: MediaQuery.of(context).size.height - 500,
                         margin: EdgeInsets.all(100),
-                        child: TableCalendar(
-                          
-                          focusedDay: _selectedDay,
-                          firstDay: DateTime(2020),
-                          lastDay: DateTime(2030),
-                          selectedDayPredicate: (day) =>
-                              isSameDay(_selectedDay, day),
-                          onDaySelected: (selectedDay, focusedDay) {
-                            setState(() {
-                              _selectedDay = selectedDay;
-                              _selectedHoliday = holidayController
-                                  .getHolidayByDate(selectedDay);
-                            });
-                          },
-                          holidayPredicate: (day) {
-                            return holidayController.getHolidayByDate(day) !=
-                                null;
-                          },
-                          calendarStyle: CalendarStyle(
-                            
-                            holidayTextStyle: TextStyle(
-                              
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
+                        child: SingleChildScrollView( // Add this for scrolling
+                          child: TableCalendar(
+                            focusedDay: _selectedDay,
+                            firstDay: DateTime(2020),
+                            lastDay: DateTime(2030),
+                            selectedDayPredicate: (day) =>
+                                isSameDay(_selectedDay, day),
+                            onDaySelected: (selectedDay, focusedDay) {
+                              setState(() {
+                                _selectedDay = selectedDay;
+                                _selectedHoliday = holidayController
+                                    .getHolidayByDate(selectedDay);
+                              });
+                            },
+                            holidayPredicate: (day) {
+                              return holidayController.getHolidayByDate(day) !=
+                                  null;
+                            },
+                            calendarStyle: CalendarStyle(
+                              holidayTextStyle: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              holidayDecoration: BoxDecoration(
+                                color: Colors.redAccent,
+                                shape: BoxShape.circle,
+                              ),
+                              selectedDecoration: BoxDecoration(
+                                color: Colors.blueGrey.shade900,
+                                shape: BoxShape.circle,
+                              ),
+                              todayDecoration: BoxDecoration(
+                                color: Colors.blueGrey.shade500,
+                                shape: BoxShape.circle,
+                              ),
                             ),
-                            holidayDecoration: BoxDecoration(
-                              color: Colors.redAccent,
-                              shape: BoxShape.circle,
-                            ),
-                            selectedDecoration: BoxDecoration(
-                              color: Colors.blueGrey.shade900,
-                              shape: BoxShape.circle,
-                            ),
-                            todayDecoration: BoxDecoration(
-                              color: Colors.blueGrey.shade500,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          headerStyle: HeaderStyle(
-                            titleCentered: true,
-                            formatButtonVisible: false,
-                            titleTextStyle: TextStyle(
-                              color: Colors.blueGrey.shade900,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                            headerStyle: HeaderStyle(
+                              titleCentered: true,
+                              formatButtonVisible: false,
+                              titleTextStyle: TextStyle(
+                                color: Colors.blueGrey.shade900,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -118,11 +115,12 @@ class _HolidayCalendarPageState extends State<HolidayCalendarPage> {
             ),
           ),
           Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 250, top: 100),
-                child: AddHolidayPage(),
-              ))
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 250, top: 100),
+              child: AddHolidayPage(),
+            ),
+          )
         ],
       ),
     );
@@ -141,7 +139,7 @@ class HolidayDetailsWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      margin: EdgeInsets.all(16),
+      margin: const EdgeInsets.all(16),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

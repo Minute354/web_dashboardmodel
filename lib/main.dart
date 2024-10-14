@@ -4,6 +4,7 @@ import 'package:school_web_app/controllers/calendar_holiday_controller.dart';
 import 'package:school_web_app/controllers/class_controller.dart';
 import 'package:school_web_app/controllers/course_controller.dart';
 import 'package:school_web_app/controllers/division_controller.dart';
+import 'package:school_web_app/controllers/profile_controller.dart';
 import 'package:school_web_app/controllers/sidebar_controller.dart';
 import 'package:school_web_app/controllers/subject_controller.dart';
 import 'package:school_web_app/controllers/syllabus_controller.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-         ChangeNotifierProvider(create: (_) => HolidayController()),
+        ChangeNotifierProvider(create: (_) => HolidayController()),
         ChangeNotifierProvider(create: (_) => StudentController()),
         ChangeNotifierProvider(create: (_) => ClassController()),
         ChangeNotifierProvider(create: (_) => DivisionController()),
@@ -32,8 +33,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TeacherController()),
         ChangeNotifierProvider(create: (_) => SyllabusController()),
         ChangeNotifierProvider(create: (_) => SidebarController()),
-                
-
+        ChangeNotifierProvider(create: (_) => ProfileController()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -42,8 +42,8 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/login',
         routes: {
+          '/login': (context) => const LoginScreen(),
           '/dashboard': (context) => const DashboardPage(),
-          '/login': (context) =>  LoginScreen(),
           // '/students':(context)=> AddStudentPage(),
           // '/classes':(context)=> ClassListPage(),
           // '/divisions':(context)=> DivisionListPage(),
@@ -55,4 +55,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

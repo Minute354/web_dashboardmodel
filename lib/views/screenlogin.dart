@@ -4,18 +4,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 class LoginScreen extends StatefulWidget {
-  
   const LoginScreen({super.key});
 
   @override
   LoginScreenState createState() => LoginScreenState();
 }
 
-class LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
+class LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   late AnimationController _controller;
+
+  bool _isPasswordVisible = false; // Track visibility of password
 
   List<String> letters = [];
   int currentLetterIndex = 0;
@@ -55,9 +57,28 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter an email';
-    } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-      return 'Enter a valid email address';
     }
+
+    // Regex to disallow uppercase and require ending with @gmail.com
+    String pattern =
+        r"^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+\.[a-z]{2,}$";
+    RegExp regex = RegExp(pattern);
+
+    // Check if email matches regex pattern
+    if (!regex.hasMatch(value)) {
+      return 'Enter a valid email address with only lowercase letters';
+    }
+
+    // Additional validation: Ensure the email ends with '@gmail.com'
+    if (!value.endsWith('@gmail.com')) {
+      return 'Email must end with @gmail.com';
+    }
+
+    // Additional validation: Check for consecutive dots in the email
+    if (value.contains('..')) {
+      return 'Email contains consecutive dots, which is invalid';
+    }
+
     return null;
   }
 
@@ -66,6 +87,24 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
     }
+
+    // Enhanced password rules
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters long';
+    }
+    if (!RegExp(r'[A-Z]').hasMatch(value)) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!RegExp(r'[a-z]').hasMatch(value)) {
+      return 'Password must contain at least one lowercase letter';
+    }
+    if (!RegExp(r'[0-9]').hasMatch(value)) {
+      return 'Password must contain at least one digit';
+    }
+    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+      return 'Password must contain at least one special character';
+    }
+
     return null;
   }
 
@@ -115,7 +154,8 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
                       borderRadius: BorderRadius.circular(12),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.indigo, width: 2),
+                      borderSide:
+                          const BorderSide(color: Colors.indigo, width: 2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -134,11 +174,26 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
                       borderRadius: BorderRadius.circular(12),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.indigo, width: 2),
+                      borderSide:
+                          const BorderSide(color: Colors.indigo, width: 2),
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    // Eye icon to toggle password visibility
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Colors.indigo,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
                   ),
-                  obscureText: true,
+                  obscureText: !_isPasswordVisible, // Toggle password visibility
                   validator: _validatePassword, // Added password validation
                 ),
                 const SizedBox(height: 20),
@@ -152,7 +207,8 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
                       fit: BoxFit.none,
                       child: Text(
                         'Forgot Password?',
-                        style: GoogleFonts.poppins(color: Colors.indigo, fontSize: 14),
+                        style: GoogleFonts.poppins(
+                            color: Colors.indigo, fontSize: 14),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -209,7 +265,8 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize,"assets/view-3d-young-school-student (1) (1).png"),
+                _buildImage(imageSize,
+                    "assets/view-3d-young-school-student (1) (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -235,7 +292,8 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize,"assets/view-3d-young-school-student (1) (1).png"),
+                _buildImage(imageSize,
+                    "assets/view-3d-young-school-student (1) (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -262,8 +320,10 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Flexible(child: _buildAnimatedText(textSize, cardSize )),
-                  Flexible(child: _buildImage(imageSize,"assets/3d-cartoon-back-school (1).png")),
+                  Flexible(child: _buildAnimatedText(textSize, cardSize)),
+                  Flexible(
+                      child: _buildImage(
+                          imageSize, "assets/3d-cartoon-back-school (1).png")),
                   Flexible(
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.5,
@@ -280,15 +340,16 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
   // Background Gradient
   Widget _buildBackground() {
     return Shimmer.fromColors(
-      
       baseColor: const Color.fromARGB(255, 58, 102, 172),
-    highlightColor: const Color.fromARGB(255, 76, 111, 168),
-    period: Duration(milliseconds: 2000),
-
+      highlightColor: const Color.fromARGB(255, 76, 111, 168),
+      period: Duration(milliseconds: 2000),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [const Color.fromARGB(255, 78, 91, 226), const Color.fromARGB(255, 88, 134, 207)],
+            colors: [
+              const Color.fromARGB(255, 78, 91, 226),
+              const Color.fromARGB(255, 88, 134, 207)
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -318,14 +379,13 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
   }
 
   // Image Widget
-  Widget _buildImage(double imageSize,String image) {
+  Widget _buildImage(double imageSize, String image) {
     return SizedBox(
       width: imageSize.clamp(200.0, 600.0),
       height: imageSize.clamp(200.0, 600.0),
       child: Image.asset(
         image,
         fit: BoxFit.cover,
-       
       ),
     );
   }
