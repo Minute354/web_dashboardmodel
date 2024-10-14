@@ -10,7 +10,7 @@ class LoginScreen extends StatefulWidget {
   @override
   LoginScreenState createState() => LoginScreenState();
 }
-
+      
 class LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
