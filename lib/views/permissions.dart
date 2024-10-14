@@ -30,14 +30,14 @@ class _PermissionPageState extends State<PermissionPage> {
     return Scaffold(
       appBar: AppBar(
        
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blueGrey.shade900,
       ),
       body: Row(
         children: [
           Sidebar(),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 70,vertical: 40),
               child: ListView(
                 children: [
                   // Dropdown for Role selection

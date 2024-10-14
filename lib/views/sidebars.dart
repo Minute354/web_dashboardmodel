@@ -14,7 +14,7 @@ class Sidebar extends StatelessWidget {
     final selectedItem = sidebarController.selectedItem;
 
     return Container(
-      width: 250,
+      width: 270,
       color: Colors.blueGrey.shade900,
       child: ListView(
         children: [

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:school_web_app/models/sidebar_model.dart';
 import 'package:school_web_app/views/attendance_screen.dart';
 import 'package:school_web_app/views/calender_page.dart';
+import 'package:school_web_app/views/permissions.dart';
 import 'package:school_web_app/views/role_screen.dart';
 import 'package:school_web_app/views/syllabus_screen.dart';
 import '../views/dashboard_screen.dart';
@@ -26,7 +27,7 @@ List<SidebarItem> sidebarItems = [
     page: DashboardPage(), // Placeholder, as Lookups has subItems
     subItems: [
       SidebarItem(
-        icon: Icons.class_,
+        icon: Icons.collections_bookmark_sharp,
         label: 'Class',
         page: ClassListPage(),
       ),
@@ -36,7 +37,7 @@ List<SidebarItem> sidebarItems = [
         page: DivisionListPage(),
       ),
       SidebarItem(
-        icon: Icons.book,
+        icon: Icons.note_add_outlined,
         label: 'Course',
         page: CourseListPage(),
       ),
@@ -93,13 +94,13 @@ List<SidebarItem> sidebarItems = [
     
   ),
   SidebarItem(
-    icon: Icons.settings,
+    icon: Icons.library_add_check_outlined,
     label: 'Attendence',
     page: AttendanceScreen(),
   ),
   SidebarItem(
     icon: Icons.security_outlined,
-    label: 'Role*Permission',
+    label: 'Role && Permission',
     page: TeacherListPage(), // Placeholder, as Teacher has subItems
     subItems: [
       SidebarItem(
@@ -107,11 +108,11 @@ List<SidebarItem> sidebarItems = [
         label: 'Role',
         page: RoleScreen(),
       ),
-      // SidebarItem(
-      //   icon: Icons.dashboard_customize_outlined,
-      //   label: 'Dashboard Permission',
-      //   page: DashboardPage(),
-      // ),
+      SidebarItem(
+        icon: Icons.grading_rounded,
+    label: 'permissions',
+    page: PermissionPage(),
+      ),
       // SidebarItem(
       //   icon: Icons.move_down_outlined,
       //   label: 'Module Permission',
@@ -124,11 +125,7 @@ List<SidebarItem> sidebarItems = [
     label: 'Syllabus',
     page: SyllabusPage(),
   ),
-  SidebarItem(
-    icon: Icons.grading_rounded,
-    label: 'permissions',
-    page: PermissionPage(),
-  ),
+ 
   
   SidebarItem(
     icon: Icons.settings,
