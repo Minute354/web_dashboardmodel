@@ -9,7 +9,7 @@ class ProfileController with ChangeNotifier {
   // Constructor initializes with default or existing user data
   ProfileController()
       : _userProfile = UserProfile(
-          firstName: 'Adimin',
+          firstName: 'Admin',
           lastName: 'Only',
           email: 'admin@gmail.com',
           phone: '9207176654',
@@ -48,6 +48,8 @@ class ProfileController with ChangeNotifier {
     _userProfile.update(profileImagePath: imagePath);
     notifyListeners();
   }
+
+  void changePassword(String currentPassword, String newPassword) {}
 
   // Optional: Methods to load/save profile from persistent storage
   // For example, using SharedPreferences or a database

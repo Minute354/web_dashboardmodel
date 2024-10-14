@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:school_web_app/views/password_screen.dart';
+import 'package:school_web_app/views/payment_screen.dart';
 import 'package:school_web_app/views/profile_screen.dart';
 import 'package:school_web_app/views/screenlogin.dart';
 import 'package:school_web_app/views/sidebars.dart';
@@ -65,6 +67,8 @@ class SettingsPage extends StatelessWidget {
                           title: 'Security',
                           onTap: () {
                             // Navigate to Security Page
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PasswordManagementPage()));
                           },
                         ),
                         _buildCenteredListTile(
@@ -73,6 +77,8 @@ class SettingsPage extends StatelessWidget {
                           title: 'Payments',
                           onTap: () {
                             // Navigate to Payments Page
+                             Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PaymentScreen()));
                           },
                         ),
                         _buildCenteredListTile(
@@ -131,6 +137,7 @@ class SettingsPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(8), // Rounded corners
             // ignore: dead_code
             color: isHovered
+                // ignore: dead_code
                 ? Colors.blueGrey.shade100
                 : Colors.white, // Change background color on hover
           ),

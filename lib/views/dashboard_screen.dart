@@ -28,6 +28,7 @@ class _DashboardPageState extends State<DashboardPage> {
       drawer: isSmallScreen ? SidebarDrawer() : null,
       body: Column(
         children: [
+          
           Expanded(
             child: Row(
               children: [
@@ -200,8 +201,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _handleLogout() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const DashboardPage()),
-    );
-  }
+  Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+}
+
 }
