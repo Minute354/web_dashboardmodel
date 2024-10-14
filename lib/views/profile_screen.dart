@@ -123,7 +123,6 @@ class _ProfilePageState extends State<ProfilePage> {
       selectedDate: date,
     );
 
-
     // Exit edit mode after saving
     setState(() {
       _isEditing = false;
@@ -190,10 +189,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     : null, // Enable tap only in edit mode
                 child: CircleAvatar(
                   radius: 90, // Increased size from 30 to 45
-                  backgroundColor: Colors.black38,
+                  backgroundColor: Colors.black54,
                 ),
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 20),
 
               // Check if in Edit Mode
               _isEditing ? _buildEditFields() : _buildViewFields(),
@@ -290,7 +289,8 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(width: 150,
+              SizedBox(
+                width: 150,
                 child: ElevatedButton(
                   onPressed: _saveProfile,
                   child: Text(
@@ -303,7 +303,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              SizedBox(width: 150,
+              SizedBox(
+                width: 150,
                 child: ElevatedButton(
                   onPressed: _cancelEdit,
                   child: Text(
@@ -324,100 +325,102 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   // Widget to build fields in View Mode
-  Widget _buildViewFields() {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          ListTile(
-            leading: Icon(Icons.person, color: Colors.blueGrey.shade700),
-            title: Text(
-              'First Name',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),
+ Widget _buildViewFields() {
+  return SingleChildScrollView(
+    child: Column(
+      children: [
+        ListTile(
+          leading: Icon(Icons.person, color: Colors.blueGrey.shade700),
+          title: Text(
+            'First Name',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.blueGrey),
+          ),
+          subtitle: Text(
+            _firstNameController.text.trim(),
+            style: TextStyle(color: Colors.black87, fontSize: 16),
+          ),
+        ),
+        Divider(thickness: 3),
+
+        // Last Name
+        ListTile(
+          leading: Icon(Icons.person_outline, color: Colors.blueGrey.shade700),
+          title: Text(
+            'Last Name',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.blueGrey),
+          ),
+          subtitle: Text(
+            _lastNameController.text.trim(),
+            style: TextStyle(color: Colors.black87, fontSize: 16),
+          ),
+        ),
+        Divider(thickness: 3),
+
+        // Email ID
+        ListTile(
+          leading: Icon(Icons.email, color: Colors.blueGrey.shade700),
+          title: Text(
+            'Email ID',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.blueGrey),
+          ),
+          subtitle: Text(
+            _emailController.text.trim(),
+            style: TextStyle(color: Colors.black87, fontSize: 16),
+          ),
+        ),
+        Divider(thickness: 3),
+
+        // Phone Number
+        ListTile(
+          leading: Icon(Icons.phone, color: Colors.blueGrey.shade700),
+          title: Text(
+            'Phone Number',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.blueGrey),
+          ),
+          subtitle: Text(
+            _phoneController.text.trim(),
+            style: TextStyle(color: Colors.black87, fontSize: 16),
+          ),
+        ),
+        Divider(thickness: 3),
+        SizedBox(height: 16),
+
+        // Display selected date and time
+        ListTile(
+          title: Text(
+            "Last Modified Date: ${_selectedDate != null ? "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}" : "No Date Selected"}",
+          ),
+        ),
+
+        // Edit button
+        SizedBox(height: 15),
+        SizedBox(
+          width: 150,
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _isEditing = true; // Enable editing mode
+              });
+            },
+            child: Text(
+              'Edit Profile',
+              style: TextStyle(color: Colors.white),
             ),
-            subtitle: Text(
-              _firstNameController.text.trim(),
-              style: TextStyle(color: Colors.black87, fontSize: 16),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blueGrey.shade900,
+              padding: EdgeInsets.symmetric(vertical: 16),
             ),
           ),
-          Divider(thickness: 2,),
-      
-          // Last Name
-          ListTile(
-            leading: Icon(Icons.person_outline, color: Colors.blueGrey.shade700),
-            title: Text(
-              'Last Name',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),
-            ),
-            subtitle: Text(
-              _lastNameController.text.trim(),
-              style: TextStyle(color: Colors.black87, fontSize: 16),
-            ),
-          ),
-          Divider(),
-      
-          // Email ID
-          ListTile(
-            leading: Icon(Icons.email, color: Colors.blueGrey.shade700),
-            title: Text(
-              'Email ID',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),
-            ),
-            subtitle: Text(
-              _emailController.text.trim(),
-              style: TextStyle(color: Colors.black87, fontSize: 16),
-            ),
-          ),
-          Divider(),
-      
-          // Phone Number
-          ListTile(
-            leading: Icon(Icons.phone, color: Colors.blueGrey.shade700),
-            title: Text(
-              'Phone Number',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),
-            ),
-            subtitle: Text(
-              _phoneController.text.trim(),
-              style: TextStyle(color: Colors.black87, fontSize: 16),
-            ),
-          ),
-          SizedBox(height: 16),
-      
-          // Display selected date and time
-          ListTile(
-            title: Text(
-              "Last Modified Date: ${_selectedDate != null ? "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}" : "No Date Selected"}",
-            ),
-          ),
-      
-          // Edit button
-          SizedBox(height: 24),
-          SizedBox(
-            width: 150,
-            child: ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _isEditing = true; // Enable editing mode
-                });
-              },
-              child: Text(
-                'Edit Profile',
-                style: TextStyle(color: Colors.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueGrey.shade900,
-                padding: EdgeInsets.symmetric(vertical: 16),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {

@@ -168,7 +168,7 @@ class _DashboardPageState extends State<DashboardPage> {
         },
       ),
       DashboardCard(
-        icon: Icons.schedule,
+        icon: Icons.library_add_check_outlined,
         label: 'Attendance',
         color: Colors.redAccent,
         onTap: () {
