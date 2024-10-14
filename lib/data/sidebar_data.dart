@@ -1,6 +1,7 @@
 // lib/data/sidebar_data.dart
 import 'package:flutter/material.dart';
 import 'package:school_web_app/models/sidebar_model.dart';
+import 'package:school_web_app/views/attendance_screen.dart';
 import 'package:school_web_app/views/calender_page.dart';
 import 'package:school_web_app/views/role_screen.dart';
 import 'package:school_web_app/views/syllabus_screen.dart';
@@ -89,6 +90,12 @@ List<SidebarItem> sidebarItems = [
         page: DashboardPage(),
       ),
     ],
+    
+  ),
+  SidebarItem(
+    icon: Icons.settings,
+    label: 'Attendence',
+    page: AttendanceScreen(),
   ),
   SidebarItem(
     icon: Icons.security_outlined,
@@ -116,6 +123,11 @@ List<SidebarItem> sidebarItems = [
     icon: Icons.grading_rounded,
     label: 'Syllabus',
     page: SyllabusPage(),
+  ),
+  SidebarItem(
+    icon: Icons.grading_rounded,
+    label: 'permissions',
+    page: PermissionPage(),
   ),
   
   SidebarItem(
