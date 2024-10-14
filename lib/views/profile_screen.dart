@@ -24,6 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   bool _isEditing = false; // Flag to toggle edit mode
 
+  // ignore: unused_field
   File? _profileImage; // For storing selected profile image (optional)
 
   @override
@@ -122,14 +123,6 @@ class _ProfilePageState extends State<ProfilePage> {
       selectedDate: date,
     );
 
-    // Show a confirmation SnackBar
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Profile Updated Successfully'),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 2),
-      ),
-    );
 
     // Exit edit mode after saving
     setState(() {

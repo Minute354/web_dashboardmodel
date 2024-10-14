@@ -46,6 +46,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   List<Balance> _balances = [];
 
   // Example data for the chart
+  // ignore: unused_field
   final List<String> _weekDays = [
     'Mon',
     'Tue',
@@ -55,7 +56,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
     'Sat',
     'Sun'
   ];
+  // ignore: unused_field
   final List<double> _incomeData = [5000, 7000, 6000, 8000, 7500, 9000, 6500];
+  // ignore: unused_field
   final List<double> _expenseData = [3000, 4000, 3500, 5000, 4500, 5500, 4000];
 
   @override
@@ -211,7 +214,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: Row(
           children: [
             // Account Details
-            Container(
+            SizedBox(
               width: 300,
               child: Card(
                 elevation: 4,

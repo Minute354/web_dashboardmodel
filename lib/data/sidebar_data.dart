@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:school_web_app/models/sidebar_model.dart';
 import 'package:school_web_app/views/calender_page.dart';
+import 'package:school_web_app/views/role_screen.dart';
 import 'package:school_web_app/views/syllabus_screen.dart';
 import '../views/dashboard_screen.dart';
 import '../views/class_list_screen.dart';
@@ -87,6 +88,28 @@ List<SidebarItem> sidebarItems = [
         label: 'Annual Fees',
         page: DashboardPage(),
       ),
+    ],
+  ),
+  SidebarItem(
+    icon: Icons.security_outlined,
+    label: 'Role*Permission',
+    page: TeacherListPage(), // Placeholder, as Teacher has subItems
+    subItems: [
+      SidebarItem(
+        icon: Icons.flash_on_rounded,
+        label: 'Role',
+        page: RoleScreen(),
+      ),
+      // SidebarItem(
+      //   icon: Icons.dashboard_customize_outlined,
+      //   label: 'Dashboard Permission',
+      //   page: DashboardPage(),
+      // ),
+      // SidebarItem(
+      //   icon: Icons.move_down_outlined,
+      //   label: 'Module Permission',
+      //   page: DashboardPage(),
+      // ),
     ],
   ),
   SidebarItem(
