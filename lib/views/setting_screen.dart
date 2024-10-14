@@ -137,6 +137,7 @@ class SettingsPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(8), // Rounded corners
             // ignore: dead_code
             color: isHovered
+                // ignore: dead_code
                 ? Colors.blueGrey.shade100
                 : Colors.white, // Change background color on hover
           ),
