@@ -1,4 +1,6 @@
+// Attendance view screen to display present and absent students
 import 'package:flutter/material.dart';
+import 'package:school_web_app/views/sidebars.dart';
 
 class ViewAttendanceScreen extends StatelessWidget {
   final List<Map<String, dynamic>> attendanceList;
@@ -15,36 +17,38 @@ class ViewAttendanceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Attendance Summary'),
         backgroundColor: Colors.blueGrey.shade900,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              'Present Students: $presentCount',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              'Absent Students: $absentCount',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: attendanceList.length,
-                itemBuilder: (context, index) {
-                  var student = attendanceList[index];
-                  return ListTile(
-                    title: Text(student['name']),
-                    trailing: Text(student['present'] ? 'Present' : 'Absent'),
-                  );
-                },
+      body: Row(
+        children: [
+          Sidebar(),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Total Present: $presentCount', style: TextStyle(fontSize: 20)),
+                  Text('Total Absent: $absentCount', style: TextStyle(fontSize: 20)),
+                  SizedBox(height: 20),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: attendanceList.length,
+                      itemBuilder: (context, index) {
+                        var student = attendanceList[index];
+                        return ListTile(
+                          title: Text(student['name']),
+                          subtitle: Text(student['id']),
+                          trailing: Text(student['present'] ? 'Present' : 'Absent'),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
