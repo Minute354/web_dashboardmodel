@@ -1,8 +1,10 @@
 // lib/data/sidebar_data.dart
 import 'package:flutter/material.dart';
 import 'package:school_web_app/models/sidebar_model.dart';
+import 'package:school_web_app/views/attendance_screen.dart';
 import 'package:school_web_app/views/calender_page.dart';
 import 'package:school_web_app/views/calender_page.dart';
+import 'package:school_web_app/views/permissions.dart';
 import 'package:school_web_app/views/syllabus_screen.dart';
 import '../views/dashboard_screen.dart';
 import '../views/class_list_screen.dart';
@@ -89,11 +91,22 @@ List<SidebarItem> sidebarItems = [
         page: DashboardPage(),
       ),
     ],
+    
+  ),
+  SidebarItem(
+    icon: Icons.settings,
+    label: 'Attendence',
+    page: AttendanceScreen(),
   ),
   SidebarItem(
     icon: Icons.grading_rounded,
     label: 'Syllabus',
     page: SyllabusPage(),
+  ),
+  SidebarItem(
+    icon: Icons.grading_rounded,
+    label: 'permissions',
+    page: PermissionPage(),
   ),
   
   SidebarItem(

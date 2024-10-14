@@ -8,7 +8,7 @@ import 'package:school_web_app/controllers/sidebar_controller.dart';
 import 'package:school_web_app/controllers/subject_controller.dart';
 import 'package:school_web_app/controllers/syllabus_controller.dart';
 import 'package:school_web_app/controllers/teacher_controller.dart';
-import 'controllers/student_controller.dart';
+ import 'controllers/student_controller.dart';
 import 'views/screenlogin.dart';
 import 'views/dashboard_screen.dart';
 
@@ -32,6 +32,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TeacherController()),
         ChangeNotifierProvider(create: (_) => SyllabusController()),
         ChangeNotifierProvider(create: (_) => SidebarController()),
+                
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:school_web_app/views/sidebars.dart';
 
-void main() {
-  runApp(MaterialApp(
-    home: AttendanceScreen(),
-    debugShowCheckedModeBanner: false,
-  ));
-}
 
 class AttendanceScreen extends StatefulWidget {
   @override
@@ -16,41 +9,49 @@ class AttendanceScreen extends StatefulWidget {
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
   DateTime _selectedDate = DateTime.now();
+  String? _selectedClass;
+  String? _selectedDivision;
 
-  // Mock attendance data mapped by date
-  final Map<String, List<Map<String, dynamic>>> _attendanceData = {
-    '2024-10-09': [
-      {'id': 'S101', 'name': 'John ', 'present': true},
-      {'id': 'S102', 'name': 'Jane ', 'present': false},
-      {'id': 'S101', 'name': 'Smith ', 'present': true},
-      {'id': 'S102', 'name': 'Johnson ', 'present': false},
-      {'id': 'S103', 'name': 'Alice ', 'present': true},
-      {'id': 'S101', 'name': 'Smith ', 'present': true},
-      {'id': 'S102', 'name': 'sanju ', 'present': false},
-      {'id': 'S103', 'name': 'aswadev ', 'present': true},
-      {'id': 'S101', 'name': 'John Doe', 'present': true},
-      {'id': 'S102', 'name': 'Jane Smith', 'present': false},
-      {'id': 'S103', 'name': 'Alice Johnson', 'present': true},
-      {'id': 'S101', 'name': 'John Doe', 'present': true},
-      {'id': 'S102', 'name': 'Jane Smith', 'present': false},
-      {'id': 'S103', 'name': 'Alice Johnson', 'present': true},
-      // Add more students as needed
-    ],
-    // Add more dates and corresponding attendance data
+  final List<String> _classes = ['Class 1', 'Class 2', 'Class 3'];
+  final List<String> _divisions = ['A', 'B', 'C'];
+
+  // Mock attendance data mapped by class, division, and date
+  final Map<String, Map<String, Map<String, List<Map<String, dynamic>>>>> _attendanceData = {
+    'Class 1': {
+      'A': {
+        '2024-10-10': [
+          {'id': 'S101', 'name': 'John', 'present': true},
+          {'id': 'S102', 'name': 'Jane', 'present': false},
+        ],
+      },
+      'B': {
+        '2024-10-10': [
+          {'id': 'S103', 'name': 'Alice', 'present': true},
+          {'id': 'S104', 'name': 'Bob', 'present': false},
+        ],
+      },
+    },
+    'Class 2': {
+      'A': {
+        '2024-10-10': [
+          {'id': 'S105', 'name': 'Tom', 'present': true},
+          {'id': 'S106', 'name': 'Jerry', 'present': false},
+        ],
+      },
+      'B': {
+        '2024-10-10': [
+          {'id': 'S107', 'name': 'Smith', 'present': true},
+          {'id': 'S108', 'name': 'Johnson', 'present': false},
+        ],
+      },
+    },
   };
 
-  // Get attendance for the selected date
   List<Map<String, dynamic>> get _currentAttendance {
+    if (_selectedClass == null || _selectedDivision == null) return [];
+
     String formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate);
-    return _attendanceData[formattedDate] ??
-        List.generate(
-          10,
-          (index) => {
-            'id': 'S10${index + 4}',
-            'name': 'Student ${index + 4}',
-            'present': false,
-          },
-        );
+    return _attendanceData[_selectedClass]?[_selectedDivision]?[formattedDate] ?? [];
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -72,105 +73,183 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     });
   }
 
+  void _viewAttendance() {
+    int presentCount = _currentAttendance.where((student) => student['present']).length;
+    int absentCount = _currentAttendance.length - presentCount;
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ViewAttendanceScreen(
+          attendanceList: _currentAttendance,
+          presentCount: presentCount,
+          absentCount: absentCount,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     String formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate);
     return Scaffold(
       appBar: AppBar(
+        title: Text('Attendance'),
         backgroundColor: Colors.blueGrey.shade900,
-        title: Text(' '),
         centerTitle: true,
       ),
-      body: Row(
-        children: [
-          Sidebar(),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                
-                children: [
-                  
-                  // Date Selection Row
-                  Row(
-                    
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Attendance ',
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Attendance For The Date: $formattedDate',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () => _selectDate(context),
-                        icon: Icon(Icons.calendar_today),
-                        label: Text('Select Date'),
-                      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            // Date, Class, Division Selection Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Date Picker
+                ElevatedButton.icon(
+                  onPressed: () => _selectDate(context),
+                  icon: Icon(Icons.calendar_today),
+                  label: Text('Select Date'),
+                ),
+                // Class Dropdown
+                DropdownButton<String>(
+                  value: _selectedClass,
+                  hint: Text('Select Class'),
+                  items: _classes.map((String className) {
+                    return DropdownMenuItem<String>(
+                      value: className,
+                      child: Text(className),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedClass = newValue;
+                      _selectedDivision = null; // Reset division when class changes
+                    });
+                  },
+                ),
+                // Division Dropdown
+                DropdownButton<String>(
+                  value: _selectedDivision,
+                  hint: Text('Select Division'),
+                  items: _selectedClass != null
+                      ? _divisions.map((String divisionName) {
+                          return DropdownMenuItem<String>(
+                            value: divisionName,
+                            child: Text(divisionName),
+                          );
+                        }).toList()
+                      : [],
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedDivision = newValue;
+                    });
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            // Display Selected Date, Class, and Division
+            Text('Date: $formattedDate'),
+            if (_selectedClass != null) Text('Class: $_selectedClass'),
+            if (_selectedDivision != null) Text('Division: $_selectedDivision'),
+            SizedBox(height: 20),
+            // Attendance DataTable
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    columns: [
+                      DataColumn(label: Text('ID')),
+                      DataColumn(label: Text('Name')),
+                      DataColumn(label: Text('Present')),
+                      DataColumn(label: Text('Absent')),
                     ],
-                  ),
-                  SizedBox(height: 20),
-                  // Attendance DataTable
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          columns: [
-                            DataColumn(label: Text('ID')),
-                            DataColumn(label: Text('Name')),
-                            DataColumn(label: Text('Present')),
-                            DataColumn(label: Text('Absent')),
-                          ],
-                          rows: List.generate(_currentAttendance.length, (index) {
-                            var student = _currentAttendance[index];
-                            return DataRow(cells: [
-                              DataCell(Text(student['id'])),
-                              DataCell(Text(student['name'])),
-                              DataCell(
-                                Checkbox(
-                                  value: student['present'],
-                                  onChanged: (bool? value) {
-                                    _toggleAttendance(index, value);
-                                  },
-                                ),
-                              ),
-                              DataCell(
-                                Checkbox(
-                                  value: !student['present'],
-                                  onChanged: (bool? value) {
-                                    _toggleAttendance(index, !value!);
-                                  },
-                                ),
-                              ),
-                            ]);
-                          }),
+                    rows: List.generate(_currentAttendance.length, (index) {
+                      var student = _currentAttendance[index];
+                      return DataRow(cells: [
+                        DataCell(Text(student['id'])),
+                        DataCell(Text(student['name'])),
+                        DataCell(
+                          Checkbox(
+                            value: student['present'],
+                            onChanged: (bool? value) {
+                              _toggleAttendance(index, value);
+                            },
+                          ),
                         ),
-                      ),
-                    ),
+                        DataCell(
+                          Checkbox(
+                            value: !student['present'],
+                            onChanged: (bool? value) {
+                              _toggleAttendance(index, !value!);
+                            },
+                          ),
+                        ),
+                      ]);
+                    }),
                   ),
-                  SizedBox(height: 20),
-                  // Save Button (Optional)
-                  ElevatedButton(
-                    onPressed: () {
-                      // Handle save action, e.g., save attendance to database
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Attendance Saved for $formattedDate')),
-                      );
-                    },
-                    child: Text('Save Attendance'),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50), // Full-width button
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _viewAttendance,
+              child: Text('View Attendance'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50), // Full-width button
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Attendance view screen to display present and absent students
+class ViewAttendanceScreen extends StatelessWidget {
+  final List<Map<String, dynamic>> attendanceList;
+  final int presentCount;
+  final int absentCount;
+
+  ViewAttendanceScreen({
+    required this.attendanceList,
+    required this.presentCount,
+    required this.absentCount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Attendance Summary'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Present: $presentCount', style: TextStyle(fontSize: 20)),
+            Text('Absent: $absentCount', style: TextStyle(fontSize: 20)),
+            SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: attendanceList.length,
+                itemBuilder: (context, index) {
+                  var student = attendanceList[index];
+                  return ListTile(
+                    title: Text(student['name']),
+                    subtitle: Text(student['id']),
+                    trailing: Text(student['present'] ? 'Present' : 'Absent'),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
