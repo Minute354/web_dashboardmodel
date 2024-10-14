@@ -190,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     : null, // Enable tap only in edit mode
                 child: CircleAvatar(
                   radius: 90, // Increased size from 30 to 45
-                  backgroundImage: AssetImage('assets\student logo.png'),
+                  backgroundColor: Colors.black38,
                 ),
               ),
               SizedBox(height: 24),
@@ -340,7 +340,7 @@ class _ProfilePageState extends State<ProfilePage> {
               style: TextStyle(color: Colors.black87, fontSize: 16),
             ),
           ),
-          Divider(),
+          Divider(thickness: 2,),
       
           // Last Name
           ListTile(
