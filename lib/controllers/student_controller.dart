@@ -78,4 +78,6 @@ class StudentController with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void updateStudentStatus(students, bool bool) {}
 }

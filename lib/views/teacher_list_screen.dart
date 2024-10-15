@@ -46,63 +46,71 @@ class TeacherListPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => AddTeacherPage(),
-                            ),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.add,
-                          color: Colors.blue,
-                        ),
-                        label: Text(
-                          'Add Teacher',
-                          style: GoogleFonts.poppins(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => AddTeacherPage()),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.add,
                           ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                          label: Text(
+                            'Add Teacher',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueGrey.shade900,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _searchController,
-                            decoration: const InputDecoration(
-                              labelText: 'Search by name',
-                              prefixIcon: Icon(Icons.search),
-                              border: OutlineInputBorder(),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Row(
+                        children: [
+                          Expanded(flex: 3, child: SizedBox()),
+                          Expanded(
+                            flex: 1,
+                            child: TextField(
+                              controller: _searchController,
+                              decoration: InputDecoration(
+                                labelText: 'Search by name',
+                                prefixIcon: const Icon(Icons.search),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.indigo, width: 2),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onChanged: (value) {
+                                Provider.of<TeacherController>(context,
+                                        listen: false)
+                                    .filterTeachers(value);
+                              },
                             ),
-                            onChanged: (value) {
-                              Provider.of<TeacherController>(context,
-                                      listen: false)
-                                  .filterTeachers(value);
-                            },
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                      ],
+                          const SizedBox(width: 10),
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(
@@ -121,6 +129,10 @@ class TeacherListPage extends StatelessWidget {
                                 columnSpacing: 20.0,
                                 headingRowColor: WidgetStateProperty.all(
                                     Colors.blueGrey.shade900),
+                                border: TableBorder.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
                                 columns: const <DataColumn>[
                                   DataColumn(
                                     label: Text(
@@ -291,7 +303,8 @@ class TeacherListPage extends StatelessWidget {
                                           Row(
                                             children: [
                                               IconButton(
-                                                icon: const Icon(Icons.edit),
+                                                icon: const Icon(Icons.edit,
+                                                    color: Colors.blueAccent),
                                                 onPressed: () {
                                                   Navigator.of(context).push(
                                                     MaterialPageRoute(
@@ -303,7 +316,8 @@ class TeacherListPage extends StatelessWidget {
                                                 },
                                               ),
                                               IconButton(
-                                                icon: const Icon(Icons.delete),
+                                                icon: const Icon(Icons.delete,
+                                                    color: Colors.red),
                                                 onPressed: () {
                                                   // Remove the teacher from the list
                                                   showDialog(

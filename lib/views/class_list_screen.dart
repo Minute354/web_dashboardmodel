@@ -143,12 +143,12 @@ class _ClassListPageState extends State<ClassListPage> {
                     },
                     icon: Icon(
                       Icons.add,
-                      color: Colors.blue,
+                      color: Colors.blueGrey.shade900,
                     ),
                     label: Text(
                       'Add Class',
                       style: GoogleFonts.poppins(
-                        color: Colors.blue,
+                        color: Colors.blueGrey.shade900,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -23,11 +23,7 @@ class StudentListPage extends StatelessWidget {
       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          if (!isSmallScreen)
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.16,
-              child: Sidebar(),
-            ),
+          if (!isSmallScreen) Sidebar(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -92,6 +88,11 @@ class StudentListPage extends StatelessWidget {
                                 prefixIcon: Icon(Icons.search),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.indigo, width: 2),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
                               ),
                               onChanged: (value) {
                                 // Filter students based on the input
@@ -115,21 +116,19 @@ class StudentListPage extends StatelessWidget {
                               width: MediaQuery.of(context).size.width - 400,
                               child: DataTable(
                                 columnSpacing: 20.0,
-                                headingRowColor:
-                                    WidgetStateProperty.all(Colors.black),
-                                     border: TableBorder.all(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    ), // Thicker border for DataTable
+                                headingRowColor: WidgetStateProperty.all(
+                                    Colors.blueGrey.shade900),
+                                border: TableBorder.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ), // Thicker border for DataTable
                                 columns: const <DataColumn>[
                                   DataColumn(
-                                    
                                     label: Text(
                                       'No',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        
                                       ),
                                     ),
                                   ),
@@ -192,12 +191,15 @@ class StudentListPage extends StatelessWidget {
                                         DataCell(Text(student.division)),
                                         DataCell(
                                           Chip(
-                                            label: Text(
-                                              student.isActive
-                                                  ? 'Active'
-                                                  : 'Inactive',
-                                              style: const TextStyle(
-                                                  color: Colors.white),
+                                            label: SizedBox(
+                                              width: 50,
+                                              child: Text(
+                                                student.isActive
+                                                    ? 'Active'
+                                                    : 'Inactive',
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
                                             ),
                                             backgroundColor: student.isActive
                                                 ? Colors.green

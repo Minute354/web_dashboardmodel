@@ -58,7 +58,6 @@ class _RoleScreenState extends State<RoleScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
-        
       ),
       body: Row(
         children: [
@@ -112,10 +111,11 @@ class _RoleScreenState extends State<RoleScreen> {
                       scrollDirection: Axis.horizontal,
                       child: SingleChildScrollView(
                         child: SizedBox(
-                          width: 1200,
+                          width: MediaQuery.of(context).size.width *
+                              0.9, // Adjust width to 90% of the screen
                           child: DataTable(
-                            headingRowColor:
-                                MaterialStateProperty.all(Colors.blueGrey.shade900),
+                            headingRowColor: MaterialStateProperty.all(
+                                Colors.blueGrey.shade900),
                             columns: [
                               DataColumn(
                                 label: Container(
@@ -211,19 +211,22 @@ class _RoleScreenState extends State<RoleScreen> {
                                 DataCell(Row(
                                   children: [
                                     IconButton(
-                                      icon: Icon(Icons.edit, color: Colors.blue),
+                                      icon:
+                                          Icon(Icons.edit, color: Colors.blue),
                                       onPressed: () {
                                         setState(() {
                                           editIndex = roles.indexOf(role);
                                           roleController.text = role['role'];
-                                          selectedModuleType = null; // Update based on your logic
+                                          selectedModuleType =
+                                              null; // Update based on your logic
                                           isActive = role['status'] == 'ACTIVE';
                                         });
                                         _showAddRoleDialog();
                                       },
                                     ),
                                     IconButton(
-                                      icon: Icon(Icons.delete, color: Colors.red),
+                                      icon:
+                                          Icon(Icons.delete, color: Colors.red),
                                       onPressed: () {
                                         _showDeleteConfirmation(role);
                                       },
@@ -315,7 +318,13 @@ class _RoleScreenState extends State<RoleScreen> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('CANCEL'),
+              child: Text(
+                'CANCEL',
+                style: GoogleFonts.poppins(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -326,7 +335,13 @@ class _RoleScreenState extends State<RoleScreen> {
                 }
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('SAVE'),
+              child: Text(
+                'SAVE',
+                style: GoogleFonts.poppins(
+                  color: Colors.blueGrey.shade900,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         );
