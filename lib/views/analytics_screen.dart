@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:school_web_app/views/sidebars.dart';
 
-
 class AnalyticsPage extends StatefulWidget {
   @override
   _AnalyticsPageState createState() => _AnalyticsPageState();
@@ -25,15 +24,17 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
         title: Text(''),
         centerTitle: true,
       ),
+      drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          Sidebar(),
+          if (!isSmallScreen) Sidebar(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -45,7 +46,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                     children: [
                       Text(
                         'Select Metric: ',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       DropdownButton<String>(
                         value: selectedMetric,
@@ -77,7 +79,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                               reservedSize: 30,
                               interval: 1,
                               getTitlesWidget: (value, meta) {
-                                String year = data[value.toInt()].year.toString();
+                                String year =
+                                    data[value.toInt()].year.toString();
                                 return SideTitleWidget(
                                   axisSide: meta.axisSide,
                                   child: Text(year),
@@ -158,14 +161,26 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     double maxY;
     switch (selectedMetric) {
       case 'Teachers':
-        maxY = data.map((d) => d.teachers).reduce((a, b) => a > b ? a : b).toDouble() + 5;
+        maxY = data
+                .map((d) => d.teachers)
+                .reduce((a, b) => a > b ? a : b)
+                .toDouble() +
+            5;
         break;
       case 'Classes':
-        maxY = data.map((d) => d.classes).reduce((a, b) => a > b ? a : b).toDouble() + 2;
+        maxY = data
+                .map((d) => d.classes)
+                .reduce((a, b) => a > b ? a : b)
+                .toDouble() +
+            2;
         break;
       case 'Students':
       default:
-        maxY = data.map((d) => d.students).reduce((a, b) => a > b ? a : b).toDouble() + 50;
+        maxY = data
+                .map((d) => d.students)
+                .reduce((a, b) => a > b ? a : b)
+                .toDouble() +
+            50;
     }
     return maxY;
   }

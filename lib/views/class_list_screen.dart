@@ -353,22 +353,25 @@ class _ClassListPageState extends State<ClassListPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueGrey.shade900,
-      ),
-      body: Row(
-        children: [
-          Sidebar(), // Sidebar remains intact
-          Expanded(
-            child: Padding(
-              // Added padding for the entire content area
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Align children to the left
-                children: [
+Widget build(BuildContext context) {
+  // Get the screen width
+  final isSmallScreen = MediaQuery.of(context).size.width < 800;
+
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: Colors.blueGrey.shade900,
+    ),
+         drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
+    body: Row(
+      children: [
+        // Conditionally render Sidebar based on screen size
+        if (!isSmallScreen) Sidebar(),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -390,191 +393,167 @@ class _ClassListPageState extends State<ClassListPage> {
                       ),
                     ],
                   ),
-                  // Header "Classes"
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Classes',
-                      style: GoogleFonts.poppins(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Classes',
+                    style: GoogleFonts.poppins(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      _showAddClassPopup(context);
-                    },
-                    icon: Icon(Icons.add),
-                    label: Text('Add Class'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueGrey.shade900,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                    ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    _showAddClassPopup(context);
+                  },
+                  icon: Icon(Icons.add),
+                  label: Text('Add Class'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueGrey.shade900,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
-                  SizedBox(height: 16),
-                  Expanded(
-                    child: Consumer<ClassController>(
-                      builder: (context, classController, child) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width *
-                                    0.75, // 3/4 width
-                                child: DataTable(
-                                  columnSpacing:
-                                      20.0, // Adjust spacing as needed
-                                  headingRowColor: MaterialStateProperty.all(
-                                      Colors.blueGrey.shade900),
-                                  border: TableBorder.all(
-                                    color: Colors.grey,
-                                    width: 1,
-                                  ), // Thicker border for DataTable
-                                  columns: [
-                                    DataColumn(
-                                      label: Padding(
-                                        padding: const EdgeInsets.all(
-                                            8.0), // Padding within header cells
-                                        child: Text(
-                                          'Class ID',
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
+                ),
+                SizedBox(height: 16),
+                Expanded(
+                  child: Consumer<ClassController>(
+                    builder: (context, classController, child) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView(
+                          scrollDirection: Axis.vertical,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              child: DataTable(
+                                columnSpacing: 20.0,
+                                headingRowColor: WidgetStateProperty.all(Colors.blueGrey.shade900),
+                                border: TableBorder.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'ID',
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ),
-                                    DataColumn(
-                                      label: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'Class Name',
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
+                                  ),
+                                  DataColumn(
+                                    label: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Class Name',
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ),
-                                    DataColumn(
-                                      label: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'Actions',
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
+                                  ),
+                                  DataColumn(
+                                    label: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Actions',
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ),
-                                  ],
-                                  rows: classController.classes.isEmpty
-                                      ? [
-                                          DataRow(cells: [
-                                            DataCell(Container()),
-                                            DataCell(
-                                              Center(
-                                                child: Text(
-                                                  'No Classes Added Yet.',
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 18),
-                                                ),
+                                  ),
+                                ],
+                                rows: classController.classes.isEmpty
+                                    ? [
+                                        DataRow(cells: [
+                                          DataCell(Container()),
+                                          DataCell(
+                                            Center(
+                                              child: Text(
+                                                'No Classes Added Yet.',
+                                                style: GoogleFonts.poppins(fontSize: 18),
                                               ),
                                             ),
-                                            DataCell(
-                                                Container()), // Empty Actions Cell
-                                          ])
-                                        ]
-                                      : List<DataRow>.generate(
-                                          classController.classes.length,
-                                          (index) {
-                                            final classItem =
-                                                classController.classes[index];
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .all(
-                                                        8.0), // Padding within cell
-                                                    child: Text(
-                                                      classItem.id.toString(),
-                                                      style:
-                                                          GoogleFonts.poppins(),
-                                                    ),
+                                          ),
+                                          DataCell(Container()),
+                                        ]),
+                                      ]
+                                    : List<DataRow>.generate(
+                                        classController.classes.length,
+                                        (index) {
+                                          final classItem = classController.classes[index];
+                                          return DataRow(
+                                            cells: [
+                                              DataCell(
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    classItem.id.toString(),
+                                                    style: GoogleFonts.poppins(),
                                                   ),
                                                 ),
-                                                DataCell(
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                        classItem.className),
-                                                  ),
+                                              ),
+                                              DataCell(
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text(classItem.className),
                                                 ),
-                                                DataCell(
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Row(
-                                                      children: [
-                                                        IconButton(
-                                                          icon: Icon(
-                                                            Icons.edit,
-                                                            color: Colors
-                                                                .blueAccent,
-                                                          ),
-                                                          onPressed: () {
-                                                            _showEditClassPopup(
-                                                                context,
-                                                                index,
-                                                                classItem);
-                                                          },
+                                              ),
+                                              DataCell(
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      IconButton(
+                                                        icon: Icon(
+                                                          Icons.edit,
+                                                          color: Colors.blueAccent,
                                                         ),
-                                                        IconButton(
-                                                          icon: Icon(
-                                                            Icons.delete,
-                                                            color: Colors
-                                                                .redAccent,
-                                                          ),
-                                                          onPressed: () {
-                                                            _showDeleteConfirmationDialog(
-                                                                context,
-                                                                index,
-                                                                classItem);
-                                                          },
+                                                        onPressed: () {
+                                                          _showEditClassPopup(context, index, classItem);
+                                                        },
+                                                      ),
+                                                      IconButton(
+                                                        icon: Icon(
+                                                          Icons.delete,
+                                                          color: Colors.redAccent,
                                                         ),
-                                                      ],
-                                                    ),
+                                                        onPressed: () {
+                                                          _showDeleteConfirmationDialog(context, index, classItem);
+                                                        },
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 }

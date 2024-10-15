@@ -25,16 +25,17 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
       appBar: AppBar(
-        
         elevation: 0,
         backgroundColor: secondaryColor,
         centerTitle: true,
       ),
+      drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          Sidebar(),
+         if (!isSmallScreen) Sidebar(), 
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -44,7 +45,8 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 40.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 30.0, horizontal: 40.0),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -60,7 +62,6 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: 40),
-
                         Row(
                           children: [
                             Expanded(
@@ -93,7 +94,6 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                           ],
                         ),
                         SizedBox(height: 24),
-
                         Row(
                           children: [
                             Expanded(
@@ -129,7 +129,6 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                           ],
                         ),
                         SizedBox(height: 24),
-
                         _buildTextField(
                           label: 'Contact No',
                           icon: Icons.phone,
@@ -146,15 +145,17 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                           },
                         ),
                         SizedBox(height: 40),
-
                         Center(
                           child: ElevatedButton.icon(
                             icon: Icon(Icons.check, color: Colors.white),
-                            label: Text('Add Teacher', style: TextStyle(color: Colors.white)),
+                            label: Text('Add Teacher',
+                                style: TextStyle(color: Colors.white)),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
-                                Provider.of<TeacherController>(context, listen: false).addTeacher(
+                                Provider.of<TeacherController>(context,
+                                        listen: false)
+                                    .addTeacher(
                                   Teacher(
                                     firstName: _firstName,
                                     lastName: _lastName,
@@ -163,11 +164,13 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                                     contactNo: _contactNo,
                                   ),
                                 );
-                                Navigator.of(context).pop(); // Go back after adding
+                                Navigator.of(context)
+                                    .pop(); // Go back after adding
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 32, vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),

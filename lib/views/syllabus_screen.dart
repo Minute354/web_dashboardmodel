@@ -81,7 +81,7 @@ class _SyllabusPageState extends State<SyllabusPage> {
           child: SingleChildScrollView(
             // Ensure the dialog is scrollable if content overflows
             child: Container(
-              width: MediaQuery.of(context).size.width - 1200,
+              width: MediaQuery.of(context).size.width * 0.5,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -172,7 +172,7 @@ class _SyllabusPageState extends State<SyllabusPage> {
           child: SingleChildScrollView(
             // Ensure the dialog is scrollable if content overflows
             child: Container(
-              width: MediaQuery.of(context).size.width - 1200,
+              width: MediaQuery.of(context).size.width * 0.5,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -280,13 +280,15 @@ class _SyllabusPageState extends State<SyllabusPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
       ),
+      drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          Sidebar(), // Your sidebar widget here
+          if (!isSmallScreen) Sidebar(), // Your sidebar widget here
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -336,137 +338,130 @@ class _SyllabusPageState extends State<SyllabusPage> {
                                 ),
                               )
                             : SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    // Container for Syllabus Information
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.5, // 3/4 of the screen width
-                                      padding: EdgeInsets.all(16.0),
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 16.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[
-                                            200], // Background color for the status area
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black12,
-                                            blurRadius: 8.0,
-                                            spreadRadius: 1.0,
-                                            offset: Offset(0, 2),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Current Syllabus Status',
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          SizedBox(height: 10),
-                                          // Syllabus ID Box
-                                          Container(
-                                            padding: EdgeInsets.all(
-                                                15), // Increased padding
-                                            margin: EdgeInsets.only(bottom: 10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.blueGrey[100],
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            child: Text(
-                                              'ID: ${syllabusController.syllabi.last.syllabusId}',
-                                              style: TextStyle(fontSize: 16),
-                                            ), // Increased font size
-                                          ),
-                                          // Content Box
-                                          Container(
-                                            padding: EdgeInsets.all(
-                                                15), // Increased padding
-                                            margin: EdgeInsets.only(bottom: 10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.blueGrey[100],
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            child: Text(
-                                              'Content: \n${formatContent(syllabusController.syllabi.last.content)}',
-                                              style: TextStyle(fontSize: 16),
-                                              textAlign: TextAlign.left,
-                                            ), // Increased font size
-                                          ),
-                                          // Download URL Box
-                                          Container(
-                                            padding: EdgeInsets.all(
-                                                15), // Increased padding
-                                            margin: EdgeInsets.only(bottom: 10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.blueGrey[100],
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            child: Text(
-                                              'Download URL: \n${syllabusController.syllabi.last.downloadUrl}',
-                                              style: TextStyle(fontSize: 16),
-                                            ), // Increased font size
-                                          ),
-                                          // Button Row
-                                          Align(
-                                            alignment: Alignment
-                                                .bottomRight, // Align buttons to the bottom right
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                ElevatedButton(
-                                                  onPressed: () =>
-                                                      _showEditSyllabusDialog(
-                                                          syllabusController
-                                                              .syllabi.last,
-                                                          syllabusController
-                                                                  .syllabi
-                                                                  .length -
-                                                              1),
-                                                  child: Text('Edit'),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    foregroundColor:
-                                                        Colors.white,
-                                                    backgroundColor:
-                                                        Colors.blueAccent,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                    width:
-                                                        10), // Space between buttons
-                                                ElevatedButton(
-                                                  onPressed: () =>
-                                                      _deleteSyllabus(
-                                                          syllabusController
-                                                                  .syllabi
-                                                                  .length -
-                                                              1),
-                                                  child: Text('Delete'),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    foregroundColor:
-                                                        Colors.white,
-                                                    backgroundColor:
-                                                        Colors.redAccent,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.5, // 3/4 of the screen width
+                                    padding: EdgeInsets.all(16.0),
+                                    margin:
+                                        EdgeInsets.symmetric(vertical: 16.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[
+                                          200], // Background color for the status area
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          blurRadius: 8.0,
+                                          spreadRadius: 1.0,
+                                          offset: Offset(0, 2),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Current Syllabus Status',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(height: 10),
+                                        // Syllabus ID Box
+                                        Container(
+                                          padding: EdgeInsets.all(
+                                              15), // Increased padding
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.blueGrey[100],
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Text(
+                                            'ID: ${syllabusController.syllabi.last.syllabusId}',
+                                            style: TextStyle(fontSize: 16),
+                                          ), // Increased font size
+                                        ),
+                                        // Content Box
+                                        Container(
+                                          padding: EdgeInsets.all(
+                                              15), // Increased padding
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.blueGrey[100],
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Text(
+                                            'Content: \n${formatContent(syllabusController.syllabi.last.content)}',
+                                            style: TextStyle(fontSize: 16),
+                                            textAlign: TextAlign.left,
+                                          ), // Increased font size
+                                        ),
+                                        // Download URL Box
+                                        Container(
+                                          padding: EdgeInsets.all(
+                                              15), // Increased padding
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.blueGrey[100],
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Text(
+                                            'Download URL: \n${syllabusController.syllabi.last.downloadUrl}',
+                                            style: TextStyle(fontSize: 16),
+                                          ), // Increased font size
+                                        ),
+                                        // Button Row
+                                        Align(
+                                          alignment: Alignment
+                                              .bottomRight, // Align buttons to the bottom right
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () =>
+                                                    _showEditSyllabusDialog(
+                                                        syllabusController
+                                                            .syllabi.last,
+                                                        syllabusController
+                                                                .syllabi
+                                                                .length -
+                                                            1),
+                                                child: Text('Edit'),
+                                                style: ElevatedButton.styleFrom(
+                                                  foregroundColor: Colors.white,
+                                                  backgroundColor:
+                                                      Colors.blueAccent,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                  width:
+                                                      10), // Space between buttons
+                                              ElevatedButton(
+                                                onPressed: () =>
+                                                    _deleteSyllabus(
+                                                        syllabusController
+                                                                .syllabi
+                                                                .length -
+                                                            1),
+                                                child: Text('Delete'),
+                                                style: ElevatedButton.styleFrom(
+                                                  foregroundColor: Colors.white,
+                                                  backgroundColor:
+                                                      Colors.redAccent,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
                       ),
