@@ -309,13 +309,15 @@ class _SubjectListPageState extends State<SubjectListPage> {
 
   @override
   Widget build(BuildContext context) {
+     final isSmallScreen = MediaQuery.of(context).size.width < 800; // Check if it's mobile
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
       ),
+       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          Sidebar(), // Sidebar remains intact
+          if (!isSmallScreen) Sidebar(), // Only show Sidebar on larger screens
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -359,7 +361,7 @@ class _SubjectListPageState extends State<SubjectListPage> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Container(
-                                width: MediaQuery.of(context).size.width * 0.75,
+                                width: MediaQuery.of(context).size.width * 0.9,
                                 child: DataTable(
                                   columnSpacing:
                                       20.0, // Adjust spacing as needed

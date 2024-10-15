@@ -237,13 +237,15 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
       ),
+       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          Sidebar(), // Your sidebar widget
+          if (!isSmallScreen) Sidebar(), // Your sidebar widget
           Expanded(child: _buildPasswordManagementContent()),
         ],
       ),

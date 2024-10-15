@@ -112,8 +112,8 @@ class StudentListPage extends StatelessWidget {
                         return Column(
                           children: [
                             // DataTable Header
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width - 400,
+                            Container(
+                              width: MediaQuery.of(context).size.width *0.8,
                               child: DataTable(
                                 columnSpacing: 20.0,
                                 headingRowColor: WidgetStateProperty.all(

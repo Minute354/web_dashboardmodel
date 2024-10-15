@@ -15,21 +15,25 @@ class ViewAttendanceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
       ),
+      drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          Sidebar(),
+          if (!isSmallScreen) Sidebar(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Total Present: $presentCount', style: TextStyle(fontSize: 20)),
-                  Text('Total Absent: $absentCount', style: TextStyle(fontSize: 20)),
+                  Text('Total Present: $presentCount',
+                      style: TextStyle(fontSize: 20)),
+                  Text('Total Absent: $absentCount',
+                      style: TextStyle(fontSize: 20)),
                   SizedBox(height: 20),
                   Expanded(
                     child: ListView.builder(
@@ -39,7 +43,8 @@ class ViewAttendanceScreen extends StatelessWidget {
                         return ListTile(
                           title: Text(student['name']),
                           subtitle: Text(student['id']),
-                          trailing: Text(student['present'] ? 'Present' : 'Absent'),
+                          trailing:
+                              Text(student['present'] ? 'Present' : 'Absent'),
                         );
                       },
                     ),

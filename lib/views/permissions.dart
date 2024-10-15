@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_web_app/views/sidebars.dart';
 
-
-
 class PermissionPage extends StatefulWidget {
   @override
   _PermissionPageState createState() => _PermissionPageState();
@@ -27,17 +25,18 @@ class _PermissionPageState extends State<PermissionPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
       appBar: AppBar(
-       
         backgroundColor: Colors.blueGrey.shade900,
       ),
+      drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          Sidebar(),
+           if (!isSmallScreen) Sidebar(),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 70,vertical: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 40),
               child: ListView(
                 children: [
                   // Dropdown for Role selection
@@ -64,7 +63,7 @@ class _PermissionPageState extends State<PermissionPage> {
                     underline: Container(height: 2, color: Colors.blueGrey),
                   ),
                   SizedBox(height: 20),
-            
+
                   // Modules section (Class, Division, Course, Subject)
                   for (String module in modules)
                     Column(
@@ -72,10 +71,11 @@ class _PermissionPageState extends State<PermissionPage> {
                       children: [
                         Text(
                           'Module: $module',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 8),
-            
+
                         // Multi-select dropdown for actions
                         MultiSelectDropdown(
                           moduleName: module,

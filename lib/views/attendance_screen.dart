@@ -95,15 +95,17 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     String formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
         centerTitle: true,
       ),
+      drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          Sidebar(),
+          if (!isSmallScreen) Sidebar(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),

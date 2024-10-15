@@ -283,13 +283,15 @@ class _DivisionListPageState extends State<DivisionListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blueGrey.shade900,
         ),
+         drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
         body: Row(
           children: [
-            Sidebar(), // Your sidebar widget here
+             if (!isSmallScreen) Sidebar(), // Your sidebar widget here
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -335,7 +337,7 @@ class _DivisionListPageState extends State<DivisionListPage> {
                                 scrollDirection: Axis.horizontal,
                                 child: Container(
                                   width: MediaQuery.of(context).size.width *
-                                      0.75, // 3/4 width
+                                      0.9, //width
                                   child: DataTable(
                                     columnSpacing:
                                         20.0, // Adjust spacing as needed
@@ -351,7 +353,7 @@ class _DivisionListPageState extends State<DivisionListPage> {
                                           padding: const EdgeInsets.all(
                                               8.0), // Padding within header cells
                                           child: Text(
-                                            'Division ID',
+                                            'ID',
                                             style: GoogleFonts.poppins(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,

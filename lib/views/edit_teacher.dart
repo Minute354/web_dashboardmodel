@@ -39,6 +39,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
       appBar: AppBar(
         
@@ -46,10 +47,11 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
         backgroundColor: Colors.blueGrey.shade900,
         centerTitle: true,
       ),
+      drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
           // Sidebar on the left
-          Sidebar(),
+          if (!isSmallScreen) Sidebar(),
 
           // Edit Teacher Details Form on the right
           Expanded(
