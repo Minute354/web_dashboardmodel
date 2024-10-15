@@ -24,16 +24,18 @@ class _HolidayCalendarPageState extends State<HolidayCalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     final holidayController = Provider.of<HolidayController>(context);
 
     return Scaffold(
       appBar: AppBar(
       backgroundColor: Colors.blueGrey.shade900,
       ),
+       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Sidebar(),
+          if (!isSmallScreen) Sidebar(),
           Expanded(
             flex: 5,
             child: SingleChildScrollView(
@@ -42,13 +44,13 @@ class _HolidayCalendarPageState extends State<HolidayCalendarPage> {
                 children: [
                   Padding(
                     padding:
-                        const EdgeInsets.only(right: 20, left: 200, top: 50),
+                        const EdgeInsets.only(right: 10, left: 100, top: 25),
                     child: Card(
                       color: Colors.grey,
                       elevation: 10,
                       child: Container(
-                        height: MediaQuery.of(context).size.height - 500,
-                        margin: EdgeInsets.all(100),
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        margin: EdgeInsets.all(25),
                         child: SingleChildScrollView( // Add this for scrolling
                           child: TableCalendar(
                             focusedDay: _selectedDay,

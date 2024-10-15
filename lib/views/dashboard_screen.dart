@@ -6,7 +6,6 @@ import 'package:school_web_app/views/dashboardcard.dart';
 import 'package:school_web_app/views/payment_screen.dart';
 import 'package:school_web_app/views/setting_screen.dart';
 import 'package:school_web_app/views/sidebars.dart';
-import 'package:school_web_app/views/sidedrawer.dart';
 import 'package:school_web_app/views/student_list_screen.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -19,21 +18,22 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
+    // Determine if the screen is considered small
     bool isSmallScreen = MediaQuery.of(context).size.width < 800;
 
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(isSmallScreen),
-      drawer: isSmallScreen ? SidebarDrawer() : null,
+      drawer: isSmallScreen ? Sidebar() : null,
+      
       body: Column(
         children: [
-          
           Expanded(
             child: Row(
               children: [
                 if (!isSmallScreen) Sidebar(),
-                Expanded(child: _buildDashboardGrid(isSmallScreen)),
+                Expanded(child: _buildResponsiveContent(isSmallScreen)),
               ],
             ),
           ),
@@ -43,45 +43,41 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  /// Builds the AppBar with a profile dropdown and a menu icon for small screens
   AppBar _buildAppBar(bool isSmallScreen) {
     return AppBar(
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          color: Colors.blueGrey.shade900,
-        ),
-      ),
+      backgroundColor: Colors.blueGrey.shade900,
+      iconTheme: IconThemeData(color: Colors.white),
       elevation: 0,
       centerTitle: true,
+      title: Text(
+        'Dashboard',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: isSmallScreen ? 20 : 24,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       actions: [
         _buildProfileDropdown(),
-        if (isSmallScreen)
-          IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
+        
       ],
     );
   }
 
+  /// Builds the profile dropdown menu
   Widget _buildProfileDropdown() {
     return Container(
-      margin: const EdgeInsets.only(
-        right: 50.0,
-      ), // Adjust the right margin as needed
+      margin: const EdgeInsets.only(right: 16.0),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          icon:
-              const Icon(Icons.person_2_rounded, color: Colors.white, size: 28),
-          style: TextStyle(
+          icon: const Icon(Icons.person_2_rounded, color: Colors.white, size: 28),
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
-          dropdownColor: const Color.fromARGB(
-              255, 87, 86, 86), // Dropdown background color
-
+          dropdownColor: const Color.fromARGB(255, 87, 86, 86),
           items: <String>['Profile', 'Logout']
               .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
@@ -92,7 +88,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: Text(
                   value,
                   style: const TextStyle(
-                    color: Colors.white, // Dropdown item text color
+                    color: Colors.white,
                     fontSize: 16,
                   ),
                 ),
@@ -104,30 +100,58 @@ class _DashboardPageState extends State<DashboardPage> {
               _handleLogout();
             }
             if (newValue == 'Profile') {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => SettingsPage(),
-              ));
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => SettingsPage()),
+              );
             }
-            // Add other profile-related actions here as needed
           },
         ),
       ),
     );
   }
 
-  Widget _buildDashboardGrid(bool isSmallScreen) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: GridView.count(
-        crossAxisCount: MediaQuery.of(context).size.width > 1200 ? 6 : 3,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: isSmallScreen ? 1.0 : 1.1,
-        children: _buildDashboardCards(),
-      ),
+  /// Builds the responsive content using LayoutBuilder to adjust the grid layout
+  Widget _buildResponsiveContent(bool isSmallScreen) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Determine the number of columns based on screen width
+        int crossAxisCount;
+        double childAspectRatio;
+
+        if (constraints.maxWidth > 1200) {
+          crossAxisCount = 6;
+          childAspectRatio = 1.1;
+        } else if (constraints.maxWidth > 800) {
+          crossAxisCount = 4;
+          childAspectRatio = 1.1;
+        } else if (constraints.maxWidth > 600) {
+          crossAxisCount = 3;
+          childAspectRatio = 1.1;
+        } else {
+          crossAxisCount = 2;
+          childAspectRatio = 1.0;
+        }
+
+        return Padding(
+          padding: EdgeInsets.all(isSmallScreen ? 8.0 : 16.0),
+          child: GridView.builder(
+            itemCount: _buildDashboardCards().length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: childAspectRatio,
+            ),
+            itemBuilder: (context, index) {
+              return _buildDashboardCards()[index];
+            },
+          ),
+        );
+      },
     );
   }
 
+  /// Generates the list of dashboard cards
   List<Widget> _buildDashboardCards() {
     return [
       DashboardCard(
@@ -162,7 +186,6 @@ class _DashboardPageState extends State<DashboardPage> {
         label: 'Analytics',
         color: Colors.purpleAccent,
         onTap: () {
-          // Navigate to Analytics page
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => AnalyticsPage()));
         },
@@ -172,9 +195,8 @@ class _DashboardPageState extends State<DashboardPage> {
         label: 'Attendance',
         color: Colors.redAccent,
         onTap: () {
-          // Navigate to Attendance page
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => AttendanceScreen()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AttendanceScreen()));
         },
       ),
       DashboardCard(
@@ -183,25 +205,29 @@ class _DashboardPageState extends State<DashboardPage> {
         color: Colors.teal,
         onTap: () {
           // Navigate to Help page
+          // Implement navigation if you have a HelpPage
         },
       ),
     ];
   }
 
+  /// Builds the footer at the bottom of the screen
   Widget _buildFooter() {
     return Container(
       color: Colors.blueGrey.shade900,
-      padding: const EdgeInsets.all(8.0),
-      child: const Text(
-        '© 2024 School Management System',
-        style: TextStyle(color: Colors.white, fontSize: 14),
-        textAlign: TextAlign.center,
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: const Center(
+        child: Text(
+          '© 2024 School Management System',
+          style: TextStyle(color: Colors.white, fontSize: 14),
+        ),
       ),
     );
   }
 
+  /// Handles the logout action by navigating to the login screen
   void _handleLogout() {
-  Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
-}
-
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => true);
+  }
 }

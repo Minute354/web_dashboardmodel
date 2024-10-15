@@ -329,6 +329,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
@@ -336,9 +337,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
           'Payment Overview',
         ),
       ),
+      drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          Sidebar(),
+           if (!isSmallScreen) Sidebar(),
           Expanded(
             child: Column(
               children: [

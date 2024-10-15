@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:school_web_app/views/sidebars.dart'; 
+import 'package:school_web_app/views/sidebars.dart';
 import '../models/student_model.dart';
 import '../controllers/student_controller.dart';
 import 'package:provider/provider.dart';
@@ -57,16 +57,17 @@ class _EditStudentPageState extends State<EditStudentPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
       appBar: AppBar(
-       
         elevation: 0,
         backgroundColor: Colors.blueGrey.shade900,
         centerTitle: true,
       ),
+      drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          Sidebar(),
+          if (!isSmallScreen) Sidebar(),
           Expanded(
             child: Center(
               child: FractionallySizedBox(
@@ -79,7 +80,8 @@ class _EditStudentPageState extends State<EditStudentPage> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 40.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 30.0, horizontal: 40.0),
                       child: Form(
                         key: _formKey,
                         child: SingleChildScrollView(
@@ -105,7 +107,10 @@ class _EditStudentPageState extends State<EditStudentPage> {
                                       icon: Icons.person,
                                       initialValue: _firstName,
                                       onSave: (value) => _firstName = value!,
-                                      validator: (value) => value == null || value.isEmpty ? 'Please enter first name' : null,
+                                      validator: (value) =>
+                                          value == null || value.isEmpty
+                                              ? 'Please enter first name'
+                                              : null,
                                     ),
                                   ),
                                   const SizedBox(width: 20),
@@ -124,7 +129,10 @@ class _EditStudentPageState extends State<EditStudentPage> {
                                       icon: Icons.person_outline,
                                       initialValue: _lastName,
                                       onSave: (value) => _lastName = value!,
-                                      validator: (value) => value == null || value.isEmpty ? 'Please enter last name' : null,
+                                      validator: (value) =>
+                                          value == null || value.isEmpty
+                                              ? 'Please enter last name'
+                                              : null,
                                     ),
                                   ),
                                 ],
@@ -138,7 +146,10 @@ class _EditStudentPageState extends State<EditStudentPage> {
                                       icon: Icons.class_,
                                       initialValue: _studentClass,
                                       onSave: (value) => _studentClass = value!,
-                                      validator: (value) => value == null || value.isEmpty ? 'Please enter class' : null,
+                                      validator: (value) =>
+                                          value == null || value.isEmpty
+                                              ? 'Please enter class'
+                                              : null,
                                     ),
                                   ),
                                   const SizedBox(width: 20),
@@ -174,7 +185,10 @@ class _EditStudentPageState extends State<EditStudentPage> {
                                       icon: Icons.person,
                                       initialValue: _fatherName,
                                       onSave: (value) => _fatherName = value!,
-                                      validator: (value) => value == null || value.isEmpty ? 'Please enter father\'s name' : null,
+                                      validator: (value) =>
+                                          value == null || value.isEmpty
+                                              ? 'Please enter father\'s name'
+                                              : null,
                                     ),
                                   ),
                                   const SizedBox(width: 20),
@@ -184,7 +198,10 @@ class _EditStudentPageState extends State<EditStudentPage> {
                                       icon: Icons.person,
                                       initialValue: _motherName,
                                       onSave: (value) => _motherName = value!,
-                                      validator: (value) => value == null || value.isEmpty ? 'Please enter mother\'s name' : null,
+                                      validator: (value) =>
+                                          value == null || value.isEmpty
+                                              ? 'Please enter mother\'s name'
+                                              : null,
                                     ),
                                   ),
                                 ],
@@ -207,10 +224,13 @@ class _EditStudentPageState extends State<EditStudentPage> {
                                       icon: Icons.calendar_today,
                                       keyboardType: TextInputType.number,
                                       initialValue: _age.toString(),
-                                      onSave: (value) => _age = int.parse(value!),
+                                      onSave: (value) =>
+                                          _age = int.parse(value!),
                                       validator: (value) {
-                                        if (value == null || value.isEmpty) return 'Please enter age';
-                                        if (int.tryParse(value) == null) return 'Please enter a valid number';
+                                        if (value == null || value.isEmpty)
+                                          return 'Please enter age';
+                                        if (int.tryParse(value) == null)
+                                          return 'Please enter a valid number';
                                         return null;
                                       },
                                     ),
@@ -231,8 +251,10 @@ class _EditStudentPageState extends State<EditStudentPage> {
                                     child: SwitchListTile(
                                       title: const Text('Is Active'),
                                       value: _isActive,
-                                      onChanged: (value) => setState(() => _isActive = value),
-                                      controlAffinity: ListTileControlAffinity.leading,
+                                      onChanged: (value) =>
+                                          setState(() => _isActive = value),
+                                      controlAffinity:
+                                          ListTileControlAffinity.leading,
                                       activeColor: Colors.green,
                                       inactiveThumbColor: Colors.red,
                                       inactiveTrackColor: Colors.red[200],
@@ -312,7 +334,8 @@ class _EditStudentPageState extends State<EditStudentPage> {
       // Create an updated Student object
       Student updatedStudent = Student(
         id: widget.student.id,
-        name: '$_firstName ${_middleName.isNotEmpty ? _middleName + ' ' : ''}$_lastName',
+        name:
+            '$_firstName ${_middleName.isNotEmpty ? _middleName + ' ' : ''}$_lastName',
         parentName: '$_fatherName & $_motherName',
         studentClass: _studentClass,
         division: _division,
@@ -324,7 +347,8 @@ class _EditStudentPageState extends State<EditStudentPage> {
       );
 
       // Update the student using the controller
-      Provider.of<StudentController>(context, listen: false).updateStudent(widget.student.id, updatedStudent);
+      Provider.of<StudentController>(context, listen: false)
+          .updateStudent(widget.student.id, updatedStudent);
 
       // Navigate back or show a success message
       Navigator.pop(context);
