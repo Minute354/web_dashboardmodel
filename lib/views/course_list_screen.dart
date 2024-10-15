@@ -29,6 +29,10 @@ class _CourseListPageState extends State<CourseListPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          title: Text(
+            'Add New Course',
+            style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+          ),
           content: Form(
             key: _addFormKey, // Assign the GlobalKey to the Form
             child: Column(
@@ -96,12 +100,12 @@ class _CourseListPageState extends State<CourseListPage> {
                     },
                     icon: Icon(
                       Icons.add,
-                      color: Colors.blue,
+                      color: Colors.blueGrey.shade900,
                     ),
                     label: Text(
                       'Add Course',
                       style: GoogleFonts.poppins(
-                        color: Colors.blue,
+                        color: Colors.blueGrey.shade900,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

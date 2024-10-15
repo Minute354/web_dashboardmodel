@@ -110,12 +110,12 @@ class _DivisionListPageState extends State<DivisionListPage> {
                 },
                 icon: Icon(
                   Icons.add,
-                  color: Colors.blue,
+                  color: Colors.blueGrey.shade900,
                 ),
                 label: Text(
                   'Add Division',
                   style: GoogleFonts.poppins(
-                    color: Colors.blue,
+                    color: Colors.blueGrey.shade900,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
