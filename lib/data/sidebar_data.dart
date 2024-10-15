@@ -19,6 +19,7 @@ List<SidebarItem> sidebarItems = [
   SidebarItem(
     icon: Icons.dashboard,
     label: 'Dashboard',
+    // ignore: prefer_const_constructors
     page: DashboardPage(),
   ),
   SidebarItem(
@@ -54,11 +55,6 @@ List<SidebarItem> sidebarItems = [
     page: TeacherListPage(), // Placeholder, as Teacher has subItems
     subItems: [
       SidebarItem(
-        icon: Icons.subject,
-        label: 'Teacher Subject',
-        page: SubjectListPage(),
-      ),
-      SidebarItem(
         icon: Icons.woman_rounded,
         label: 'Add Teacher',
         page: TeacherListPage(),
@@ -91,7 +87,6 @@ List<SidebarItem> sidebarItems = [
         page: DashboardPage(),
       ),
     ],
-    
   ),
   SidebarItem(
     icon: Icons.library_add_check_outlined,
@@ -110,8 +105,8 @@ List<SidebarItem> sidebarItems = [
       ),
       SidebarItem(
         icon: Icons.grading_rounded,
-    label: 'permissions',
-    page: PermissionPage(),
+        label: 'permissions',
+        page: PermissionPage(),
       ),
       // SidebarItem(
       //   icon: Icons.move_down_outlined,
@@ -121,12 +116,10 @@ List<SidebarItem> sidebarItems = [
     ],
   ),
   SidebarItem(
-    icon: Icons.grading_rounded,
+    icon: Icons.my_library_books_outlined,
     label: 'Syllabus',
     page: SyllabusPage(),
   ),
- 
-  
   SidebarItem(
     icon: Icons.settings,
     label: 'Settings',

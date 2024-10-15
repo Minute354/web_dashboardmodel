@@ -166,7 +166,7 @@ class HolidayDetailsWidget extends StatelessWidget {
               'Date: ${holiday.date.day}-${holiday.date.month}-${holiday.date.year}',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.blueGrey.shade500,
+                color: Colors.blueGrey.shade900,
               ),
             ),
           ],

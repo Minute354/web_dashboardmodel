@@ -101,12 +101,12 @@ class _SubjectListPageState extends State<SubjectListPage> {
                     },
                     icon: Icon(
                       Icons.add,
-                      color: Colors.blue,
+                      color: Colors.blueGrey.shade900,
                     ),
                     label: Text(
                       'Add Subject',
                       style: GoogleFonts.poppins(
-                        color: Colors.blue,
+                        color: Colors.blueGrey.shade900,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -18,73 +18,77 @@ class _AddHolidayPageState extends State<AddHolidayPage> {
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              // Holiday name text field
-              TextFormField(
-                controller: _holidayTitleController,
-                decoration: InputDecoration(labelText: 'Holiday Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a holiday name';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16),
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            // Holiday name text field
+            TextFormField(
+              controller: _holidayTitleController,
+              decoration: InputDecoration(labelText: 'Holiday Name'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a holiday name';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16),
 
-              // Holiday type text field
-              TextFormField(
-                controller: _holidayTypeController,
-                decoration: InputDecoration(labelText: 'Holiday Type'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the holiday type';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16),
+            // Holiday type text field
+            TextFormField(
+              controller: _holidayTypeController,
+              decoration: InputDecoration(labelText: 'Holiday Type'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the holiday type';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16),
 
-              // Date picker for selecting holiday date
-              GestureDetector(
-                onTap: _pickDate,
-                child: AbsorbPointer(
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: _selectedDate == null
-                          ? 'Select Holiday Date'
-                          : 'Holiday Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}',
-                    ),
-                    validator: (value) {
-                      if (_selectedDate == null) {
-                        return 'Please select a holiday date';
-                      }
-                      return null;
-                    },
+            // Date picker for selecting holiday date
+            GestureDetector(
+              onTap: _pickDate,
+              child: AbsorbPointer(
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: _selectedDate == null
+                        ? 'Select Holiday Date'
+                        : 'Holiday Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}',
                   ),
+                  validator: (value) {
+                    if (_selectedDate == null) {
+                      return 'Please select a holiday date';
+                    }
+                    return null;
+                  },
                 ),
               ),
-              SizedBox(height: 16),
+            ),
+            SizedBox(height: 16),
 
-              // Add holiday button
-              ElevatedButton(
-                style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.white38)),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _addHoliday(context);
-                  }
-                },
-                child: Text('Add Holiday',style: GoogleFonts.poppins(color: Colors.blueAccent),),
+            // Add holiday button
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.white38)),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _addHoliday(context);
+                }
+              },
+              child: Text(
+                'Add Holiday',
+                style: GoogleFonts.poppins(color: Colors.blueGrey.shade900),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
   }
 
   // Method to pick a date
@@ -104,7 +108,8 @@ class _AddHolidayPageState extends State<AddHolidayPage> {
 
   // Method to add the holiday using the controller
   void _addHoliday(BuildContext context) {
-    final holidayController = Provider.of<HolidayController>(context, listen: false);
+    final holidayController =
+        Provider.of<HolidayController>(context, listen: false);
 
     holidayController.addHoliday(
       Holiday(

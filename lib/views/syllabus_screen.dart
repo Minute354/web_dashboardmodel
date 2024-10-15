@@ -136,7 +136,7 @@ class _SyllabusPageState extends State<SyllabusPage> {
             onPressed: _addSyllabus,
             child: Text(
               'Add Syllabus',
-              style: GoogleFonts.poppins(color: Colors.blueAccent),
+              style: GoogleFonts.poppins(color: Colors.blueGrey.shade900),
             ),
           ),
           TextButton(
@@ -230,7 +230,7 @@ class _SyllabusPageState extends State<SyllabusPage> {
             onPressed: _editSyllabus,
             child: Text(
               'Update Syllabus',
-              style: GoogleFonts.poppins(color: Colors.blueAccent),
+              style: GoogleFonts.poppins(color: Colors.blueGrey.shade900),
             ),
           ),
           TextButton(

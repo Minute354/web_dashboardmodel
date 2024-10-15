@@ -24,8 +24,7 @@ class Sidebar extends StatelessWidget {
             child: Column(
               children: [
                 const CircleAvatar(
-                  backgroundImage: AssetImage(
-                      "assets/student logo.png"),
+                  backgroundImage: AssetImage("assets/student logo.png"),
                   radius: 40,
                 ),
                 const SizedBox(height: 10),
@@ -102,6 +101,8 @@ class Sidebar extends StatelessWidget {
       onExpansionChanged: (bool expanded) {
         controller.setExpanded(item.label, expanded);
       },
+      iconColor: Colors.white, // Ensure arrow is white when collapsed
+      collapsedIconColor: Colors.grey, // Ensure arrow is white when expanded
       children: item.subItems!.map((subItem) {
         return _buildSidebarItem(
           icon: subItem.icon,
