@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for input formatters
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:school_web_app/views/dashboard_screen.dart';
 import 'package:school_web_app/views/sidebars.dart';
 import '../controllers/class_controller.dart';
 import '../models/class_model.dart';
@@ -371,6 +372,27 @@ Widget build(BuildContext context) {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(width: 100,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            DashboardPage();
+                          },
+                          child: Icon(Icons.arrow_back,color: Colors.blueGrey.shade900,),
+                          
+                          style: OutlinedButton.styleFrom(
+                             side: BorderSide(color:Colors.blueGrey.shade900, width: 3), 
+                          
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
