@@ -1,16 +1,23 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:school_web_app/views/dashboard_screen.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+
   @override
   LoginScreenState createState() => LoginScreenState();
 }
+
 
 class LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
@@ -19,29 +26,72 @@ class LoginScreenState extends State<LoginScreen>
   final _passwordController = TextEditingController();
   late AnimationController _controller;
 
+
   bool _isPasswordVisible = false; // Track visibility of password
+
 
   List<String> letters = [];
   int currentLetterIndex = 0;
 
-  Future<void> login(
-      {required String username, required String password}) async {
-         
-    const url = "http://localhost:3000/auth/login";
-    final body = {"email": username, "password": password};
 
-    try {
-      log('button pressed');
-      final response = await http.post(Uri.parse(url), body: body);
-      if (response.statusCode == 200) {
-        log("login success");
-      } else {
-        log("login failed ${response.statusCode}");
-      }
-    } catch (e) {
-      print(e);
+  // Check if token exists in SharedPreferences and navigate to home if logged in
+  Future<void> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    
+    if (token != null) {
+      // User is already logged in, navigate to home page or admin panel
+      Navigator.pushReplacementNamed(context, '/home');
     }
   }
+
+  // Save token to SharedPreferences
+  Future<void> _saveToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
+  // Login function
+  Future<void> login({
+    required String username,
+    required String password,
+  }) async {
+    const url = "http://localhost:3000/auth/login";
+    final body = {
+      "email": username,
+      "password": password,
+    };
+
+    try {
+      log('Login button pressed');
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        log("Login success");
+
+        // Assuming the token is returned in the response body as a JSON field
+        final responseData = jsonDecode(response.body);
+        String token = responseData['token'];
+
+        // Save token using SharedPreferences
+        await _saveToken(token);
+
+        // Navigate to home page or admin panel after successful login
+        Navigator.pushReplacementNamed(context,'/dashboard');
+      } else {
+        log("Login failed: ${response.statusCode}");
+        log("Response body: ${response.body}");
+      }
+    } catch (e) {
+      log("Error: $e");
+    }
+  }
+
+
 
   @override
   void initState() {
@@ -52,6 +102,7 @@ class LoginScreenState extends State<LoginScreen>
     );
     startLetterAnimation();
   }
+
 
   void startLetterAnimation() {
     Timer.periodic(const Duration(milliseconds: 100), (timer) {
@@ -66,6 +117,7 @@ class LoginScreenState extends State<LoginScreen>
     });
   }
 
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -74,33 +126,40 @@ class LoginScreenState extends State<LoginScreen>
     super.dispose();
   }
 
+
   // Validate email input
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter an email';
     }
 
+
     // Regex to disallow uppercase and require ending with @gmail.com
     String pattern = r"^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+\.[a-z]{2,}$";
     RegExp regex = RegExp(pattern);
+
 
     // Check if email matches regex pattern
     if (!regex.hasMatch(value)) {
       return 'Enter a valid email address with only lowercase letters';
     }
 
+
     // Additional validation: Ensure the email ends with '@gmail.com'
     if (!value.endsWith('.com')) {
       return 'Email must end with .com';
     }
+
 
     // Additional validation: Check for consecutive dots in the email
     if (value.contains('..')) {
       return 'Email contains consecutive dots, which is invalid';
     }
 
+
     return null;
   }
+
 
   // Validate password input
   String? _validatePassword(String? value) {
@@ -108,15 +167,14 @@ class LoginScreenState extends State<LoginScreen>
       return 'Please enter your password';
     }
 
+
     // Enhanced password rules
     if (value.length < 5) {
       return 'Password must be at least 5 characters long';
     }
-    if (!RegExp(r'[0-9]').hasMatch(value)) {
-      return 'Password must contain at least one digit';
-    }
     return null;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +192,7 @@ class LoginScreenState extends State<LoginScreen>
       ),
     );
   }
+
 
   // Common Form Widget
   Widget _buildLoginForm(double cardSize) {
@@ -228,12 +287,12 @@ class LoginScreenState extends State<LoginScreen>
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: ()async {
-                   
-                    
-                    if (_formKey.currentState!.validate()) {
-                      // Handle login logic here
-                      await login(username: _emailController.text, password: _passwordController.text);
+                  onPressed: () async {
+                     if (_formKey.currentState!.validate()) {
+                      await login(
+                        username: _emailController.text,
+                        password: _passwordController.text,
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -262,11 +321,13 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
+
   // Mobile View
   Widget _buildMobileView(BoxConstraints constraints) {
     const double textSize = 300.0;
     final double imageSize = MediaQuery.of(context).size.width * 0.5;
     final double cardSize = MediaQuery.of(context).size.width * 0.8;
+
 
     return Stack(
       children: [
@@ -278,8 +339,7 @@ class LoginScreenState extends State<LoginScreen>
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize,
-                    "assets/view-3d-young-school-student (1) (1).png"),
+                _buildImage(imageSize, "assets/3d-cartoon-back-school (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -288,6 +348,7 @@ class LoginScreenState extends State<LoginScreen>
       ],
     );
   }
+
 
   // Tablet View
   Widget _buildTabletView(BoxConstraints constraints) {
@@ -295,6 +356,7 @@ class LoginScreenState extends State<LoginScreen>
     final double imageSize = MediaQuery.of(context).size.width * 0.5;
     const double cardSize = 500;
 
+
     return Stack(
       children: [
         _buildBackground(),
@@ -305,8 +367,7 @@ class LoginScreenState extends State<LoginScreen>
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize,
-                    "assets/view-3d-young-school-student (1) (1).png"),
+                _buildImage(imageSize, "assets/3d-cartoon-back-school (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -316,11 +377,13 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
+
   // Desktop View
   Widget _buildDesktopView(BoxConstraints constraints) {
     const double textSize = 60.0;
     final double imageSize = MediaQuery.of(context).size.width * 1;
     const double cardSize = 500;
+
 
     return Stack(
       children: [
@@ -350,6 +413,7 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
+
   // Background Gradient
   Widget _buildBackground() {
     return Shimmer.fromColors(
@@ -371,6 +435,7 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
+
   Widget _buildAnimatedText(double textSize, double width) {
     return Container(
       width: width,
@@ -391,6 +456,7 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
+
   // Image Widget
   Widget _buildImage(double imageSize, String image) {
     return SizedBox(
@@ -403,3 +469,5 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 }
+
+
