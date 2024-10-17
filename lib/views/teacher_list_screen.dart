@@ -28,8 +28,7 @@ class TeacherListPage extends StatelessWidget {
       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-           if (!isSmallScreen) Sidebar(),
-            
+          if (!isSmallScreen) Sidebar(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -139,7 +138,7 @@ class TeacherListPage extends StatelessWidget {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Container(
-                                 width: MediaQuery.of(context).size.width * 0.8,
+                                width: MediaQuery.of(context).size.width * 0.8,
                                 child: DataTable(
                                   columnSpacing: 20.0,
                                   headingRowColor: WidgetStateProperty.all(
@@ -232,9 +231,10 @@ class TeacherListPage extends StatelessWidget {
                                               .toString())), // Serial Number
                                           DataCell(
                                             Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0,
-                                                  vertical: 12.0),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 12.0),
                                               child: Text(
                                                 teacher.firstName,
                                                 style: GoogleFonts.poppins(),
@@ -243,9 +243,10 @@ class TeacherListPage extends StatelessWidget {
                                           ),
                                           DataCell(
                                             Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0,
-                                                  vertical: 12.0),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 12.0),
                                               child: Text(
                                                 teacher.lastName,
                                                 style: GoogleFonts.poppins(),
@@ -254,9 +255,10 @@ class TeacherListPage extends StatelessWidget {
                                           ),
                                           DataCell(
                                             Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0,
-                                                  vertical: 12.0),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 12.0),
                                               child: Text(
                                                 teacher.subject,
                                                 style: GoogleFonts.poppins(),
@@ -265,9 +267,10 @@ class TeacherListPage extends StatelessWidget {
                                           ),
                                           DataCell(
                                             Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0,
-                                                  vertical: 12.0),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 12.0),
                                               child: Text(
                                                 teacher.email,
                                                 style: GoogleFonts.poppins(),
@@ -276,9 +279,10 @@ class TeacherListPage extends StatelessWidget {
                                           ),
                                           DataCell(
                                             Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0,
-                                                  vertical: 12.0),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 12.0),
                                               child: Text(
                                                 teacher.contactNo,
                                                 style: GoogleFonts.poppins(),
@@ -325,7 +329,8 @@ class TeacherListPage extends StatelessWidget {
                                                       MaterialPageRoute(
                                                         builder: (context) =>
                                                             EditTeacherPage(
-                                                                teacher: teacher),
+                                                                teacher:
+                                                                    teacher),
                                                       ),
                                                     );
                                                   },

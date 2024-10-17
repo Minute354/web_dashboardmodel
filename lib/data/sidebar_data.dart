@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:school_web_app/models/sidebar_model.dart';
 import 'package:school_web_app/views/attendance_screen.dart';
 import 'package:school_web_app/views/calender_page.dart';
+import 'package:school_web_app/views/class_timetable_screen.dart';
+import 'package:school_web_app/views/exam_timetable_screen.dart';
 import 'package:school_web_app/views/permissions.dart';
 import 'package:school_web_app/views/role_screen.dart';
 import 'package:school_web_app/views/syllabus_screen.dart';
@@ -92,6 +94,23 @@ List<SidebarItem> sidebarItems = [
     icon: Icons.library_add_check_outlined,
     label: 'Attendence',
     page: AttendanceScreen(),
+  ),
+  SidebarItem(
+    icon: Icons.text_fields_rounded,
+    label: 'Time Table',
+    page: TeacherListPage(), // Placeholder, as Teacher has subItems
+    subItems: [
+      SidebarItem(
+        icon: Icons.event_note_outlined,
+        label: 'Class Timetable',
+        page: TimeTableScreen(),
+      ),
+      SidebarItem(
+        icon: Icons.pending_actions_sharp,
+        label: 'Exam Timatable',
+        page: ExamTimetableScreen(),
+      ),
+    ],
   ),
   SidebarItem(
     icon: Icons.security_outlined,
