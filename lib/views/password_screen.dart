@@ -241,6 +241,7 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
+         automaticallyImplyLeading:isSmallScreen?true: false,
       ),
        drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(

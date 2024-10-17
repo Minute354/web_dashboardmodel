@@ -333,9 +333,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
-        title: Text(
-          'Payment Overview',
-        ),
+         automaticallyImplyLeading:isSmallScreen?true: false,
+        
       ),
       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(

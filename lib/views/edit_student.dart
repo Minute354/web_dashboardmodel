@@ -63,6 +63,7 @@ class _EditStudentPageState extends State<EditStudentPage> {
         elevation: 0,
         backgroundColor: Colors.blueGrey.shade900,
         centerTitle: true,
+        automaticallyImplyLeading:isSmallScreen?true: false,
       ),
       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(

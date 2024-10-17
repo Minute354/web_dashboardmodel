@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:school_web_app/controllers/course_controller.dart';
 import 'package:school_web_app/models/course_model.dart';
+import 'package:school_web_app/views/back_button.dart';
+import 'package:school_web_app/views/dashboard_screen.dart';
 import 'package:school_web_app/views/sidebars.dart';
 
 class CourseListPage extends StatefulWidget {
@@ -310,6 +312,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       backgroundColor: Colors.blueGrey.shade900,
+       automaticallyImplyLeading:isSmallScreen?true: false,
     ),
      drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
     body: Row(
@@ -321,6 +324,19 @@ Widget build(BuildContext context) {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                 Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      BackBtn(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => DashboardPage()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 // Header "Course"
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
