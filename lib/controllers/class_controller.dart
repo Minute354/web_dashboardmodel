@@ -4,26 +4,23 @@ import 'package:flutter/material.dart';
 import '../models/class_model.dart';
 
 class ClassController with ChangeNotifier {
-  final List<ClassModel> _classes = [];
+  List<ClassModel> _classes = [];
+  int _nextId = 1; // To assign unique IDs
 
   List<ClassModel> get classes => _classes;
 
   void addClass(String className) {
-    _classes.add(ClassModel(className: className));
+    _classes.add(ClassModel(id: _nextId++, className: className));
+    notifyListeners();
+  }
+
+  void updateClass(int index, String newClassName) {
+    _classes[index] = ClassModel(id: _classes[index].id, className: newClassName);
     notifyListeners();
   }
 
   void removeClass(int index) {
-    if (index >= 0 && index < _classes.length) {
-      _classes.removeAt(index);
-      notifyListeners();
-    }
-  }
-
-  void updateClass(int index, String newClassName) {
-    if (index >= 0 && index < _classes.length) {
-      _classes[index] = ClassModel(className: newClassName);
-      notifyListeners();
-    }
+    _classes.removeAt(index);
+    notifyListeners();
   }
 }
