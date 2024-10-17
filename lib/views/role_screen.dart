@@ -108,139 +108,139 @@ class _RoleScreenState extends State<RoleScreen> {
                   SizedBox(height: 20),
 
                   // Role Table View
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+                  Container(
+                    width: MediaQuery.of(context).size.width *0.8,
+                    child: Expanded(
                       child: SingleChildScrollView(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width *
-                              0.9, // Adjust width to 90% of the screen
-                          child: DataTable(
-                            headingRowColor: MaterialStateProperty.all(
-                                Colors.blueGrey.shade900),
-                            columns: [
-                              DataColumn(
-                                label: Container(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    'Status',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          headingRowColor: WidgetStateProperty.all(
+                              Colors.blueGrey.shade900),
+                              border: TableBorder.all(
+                                color: Colors.grey
+                              ),
+                          columns: [
+                            DataColumn(
+                              label: Container(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  'Status',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
-                              DataColumn(
-                                label: Container(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    'Actions',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: EdgeInsets.all(2),
+                                child: Text(
+                                  'Actions',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
-                              DataColumn(
-                                label: Container(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    'Code',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  'Code',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
-                              DataColumn(
-                                label: Container(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    'Role',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  'Role',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
-                              DataColumn(
-                                label: Container(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    'Created At',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  'Created At',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
-                            ],
-                            rows: roles.map((role) {
-                              return DataRow(cells: [
-                                DataCell(SizedBox(
-                                  width: 80,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: role['status'] == 'ACTIVE'
-                                          ? Colors.green.shade700
-                                          : Colors.red.shade700,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          // Toggle status
-                                          role['status'] =
-                                              role['status'] == 'ACTIVE'
-                                                  ? 'INACTIVE'
-                                                  : 'ACTIVE';
-                                        });
-                                      },
-                                      child: Text(
-                                        role['status'],
-                                        style: TextStyle(color: Colors.white),
-                                      ),
+                            ),
+                          ],
+                          rows: roles.map((role) {
+                            return DataRow(cells: [
+                              DataCell(SizedBox(
+                                width: 80,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: role['status'] == 'ACTIVE'
+                                        ? Colors.green.shade700
+                                        : Colors.red.shade700,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        // Toggle status
+                                        role['status'] =
+                                            role['status'] == 'ACTIVE'
+                                                ? 'INACTIVE'
+                                                : 'ACTIVE';
+                                      });
+                                    },
+                                    child: Text(
+                                      role['status'],
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ),
-                                )),
-                                DataCell(Row(
-                                  children: [
-                                    IconButton(
-                                      icon:
-                                          Icon(Icons.edit, color: Colors.blue),
-                                      onPressed: () {
-                                        setState(() {
-                                          editIndex = roles.indexOf(role);
-                                          roleController.text = role['role'];
-                                          selectedModuleType =
-                                              null; // Update based on your logic
-                                          isActive = role['status'] == 'ACTIVE';
-                                        });
-                                        _showAddRoleDialog();
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon:
-                                          Icon(Icons.delete, color: Colors.red),
-                                      onPressed: () {
-                                        _showDeleteConfirmation(role);
-                                      },
-                                    ),
-                                  ],
-                                )),
-                                DataCell(Text(role['code'])),
-                                DataCell(Text(role['role'])),
-                                DataCell(Text(role['createdAt'])),
-                              ]);
-                            }).toList(),
-                          ),
+                                ),
+                              )),
+                              DataCell(Row(
+                                children: [
+                                  IconButton(
+                                    icon:
+                                        Icon(Icons.edit, color: Colors.blue),
+                                    onPressed: () {
+                                      setState(() {
+                                        editIndex = roles.indexOf(role);
+                                        roleController.text = role['role'];
+                                        selectedModuleType =
+                                            null; // Update based on your logic
+                                        isActive = role['status'] == 'ACTIVE';
+                                      });
+                                      _showAddRoleDialog();
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon:
+                                        Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () {
+                                      _showDeleteConfirmation(role);
+                                    },
+                                  ),
+                                ],
+                              )),
+                              DataCell(Text(role['code'])),
+                              DataCell(Text(role['role'])),
+                              DataCell(Text(role['createdAt'])),
+                            ]);
+                          }).toList(),
                         ),
                       ),
                     ),

@@ -28,12 +28,14 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  another_flushbar: ^1.12.30
   cupertino_icons: ^1.0.8
   email_validator: ^3.0.0
   fl_chart: ^0.69.0
   flutter:
     sdk: flutter
   google_fonts: ^6.2.1
+  http: ^1.2.2
   image_picker: ^1.1.2
   path: ^1.9.0
   path_provider: ^2.1.4
@@ -43,6 +45,7 @@ dependencies:
   shimmer: ^3.0.0
   table_calendar: ^3.1.2
   turn_page_transition: ^0.4.0
+  flutter_secure_storage: ^9.2.2 # For securely storing tokens
   # uuid: ^4.5.1
 
 dev_dependencies:

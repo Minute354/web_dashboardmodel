@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:school_web_app/views/add_student_screen.dart';
 import 'package:school_web_app/views/analytics_screen.dart';
 import 'package:school_web_app/views/attendance_screen.dart';
+import 'package:school_web_app/views/class_timetable_screen.dart';
 import 'package:school_web_app/views/dashboardcard.dart';
+import 'package:school_web_app/views/exam_timetable_screen.dart';
 import 'package:school_web_app/views/payment_screen.dart';
 import 'package:school_web_app/views/setting_screen.dart';
 import 'package:school_web_app/views/sidebars.dart';
@@ -197,6 +199,24 @@ class _DashboardPageState extends State<DashboardPage> {
         onTap: () {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AttendanceScreen()));
+        },
+      ),
+       DashboardCard(
+        icon: Icons.event_note_outlined,
+        label: 'Class Timetable',
+        color: const Color.fromARGB(255, 5, 45, 206),
+        onTap: () {
+           Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => TimeTableScreen()));
+        },
+      ),
+      DashboardCard(
+        icon: Icons.pending_actions_sharp,
+        label: 'Exam Timetable',
+        color: const Color.fromARGB(255, 215, 9, 136),
+        onTap: () {
+           Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => ExamTimetableScreen()));
         },
       ),
       DashboardCard(

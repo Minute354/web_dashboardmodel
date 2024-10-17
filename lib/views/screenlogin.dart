@@ -60,8 +60,7 @@ class LoginScreenState extends State<LoginScreen>
     }
 
     // Regex to disallow uppercase and require ending with @gmail.com
-    String pattern =
-        r"^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+\.[a-z]{2,}$";
+    String pattern = r"^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+\.[a-z]{2,}$";
     RegExp regex = RegExp(pattern);
 
     // Check if email matches regex pattern
@@ -70,8 +69,8 @@ class LoginScreenState extends State<LoginScreen>
     }
 
     // Additional validation: Ensure the email ends with '@gmail.com'
-    if (!value.endsWith('@gmail.com')) {
-      return 'Email must end with @gmail.com';
+    if (!value.endsWith('.com')) {
+      return 'Email must end with .com';
     }
 
     // Additional validation: Check for consecutive dots in the email
@@ -89,20 +88,11 @@ class LoginScreenState extends State<LoginScreen>
     }
 
     // Enhanced password rules
-    if (value.length < 8) {
-      return 'Password must be at least 8 characters long';
-    }
-    if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!RegExp(r'[a-z]').hasMatch(value)) {
-      return 'Password must contain at least one lowercase letter';
+    if (value.length < 5) {
+      return 'Password must be at least 5 characters long';
     }
     if (!RegExp(r'[0-9]').hasMatch(value)) {
       return 'Password must contain at least one digit';
-    }
-    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-      return 'Password must contain at least one special character';
     }
 
     return null;
@@ -193,7 +183,8 @@ class LoginScreenState extends State<LoginScreen>
                       },
                     ),
                   ),
-                  obscureText: !_isPasswordVisible, // Toggle password visibility
+                  obscureText:
+                      !_isPasswordVisible, // Toggle password visibility
                   validator: _validatePassword, // Added password validation
                 ),
                 const SizedBox(height: 20),
