@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:school_web_app/views/student_list_screen.dart';
 import '../controllers/student_controller.dart';
 import '../models/student_model.dart';
 import 'sidebars.dart'; // Import your Sidebar widget
@@ -39,6 +40,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
         
         elevation: 0,
         backgroundColor: secondaryColor,
+         automaticallyImplyLeading:isSmallScreen?true: false,
         centerTitle: true,
       ),
        drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
@@ -244,37 +246,55 @@ class _AddStudentPageState extends State<AddStudentPage> {
                           SizedBox(height: 40), // Increased spacing before the Add Student button
                       
                           // Add Student Button
-                          Center(
-                            child: ElevatedButton.icon(
-                              icon: Icon(Icons.check, color: Colors.white),
-                              label: Text('Add Student', style: TextStyle(color: Colors.white)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton.icon(
+                                icon: Icon(Icons.check, color: Colors.white),
+                                label: Text('Add Student', style: TextStyle(color: Colors.white)),
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    Provider.of<StudentController>(context, listen: false).addStudent(
+                                      Student(
+                                        id: DateTime.now().millisecondsSinceEpoch,
+                                        name: '$_firstName $_middleName $_lastName',
+                                        studentClass: _studentClass,
+                                        division: _division,
+                                        parentName: '$_fathersName & $_mothersName',
+                                        place: _place,
+                                        age: _age,
+                                        gender: _gender,
+                                        address: _address,
+                                      ),
+                                    );
+                                    Navigator.of(context).pop(); // Go back after adding
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  backgroundColor: primaryColor, // Change button color
+                                ),
+                              ),
+                              SizedBox(width: 30,),
+                            ElevatedButton(
                               onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  Provider.of<StudentController>(context, listen: false).addStudent(
-                                    Student(
-                                      id: DateTime.now().millisecondsSinceEpoch,
-                                      name: '$_firstName $_middleName $_lastName',
-                                      studentClass: _studentClass,
-                                      division: _division,
-                                      parentName: '$_fathersName & $_mothersName',
-                                      place: _place,
-                                      age: _age,
-                                      gender: _gender,
-                                      address: _address,
-                                    ),
-                                  );
-                                  Navigator.of(context).pop(); // Go back after adding
-                                }
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>StudentListPage()));
                               },
+                              child: Text("cancel",style: TextStyle(color: Colors.white),),
                               style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 32, vertical: 12),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                backgroundColor: primaryColor, // Change button color
+                                backgroundColor: Colors.red,
                               ),
-                            ),
+                            )
+                            ],
                           ),
                         ],
                       ),

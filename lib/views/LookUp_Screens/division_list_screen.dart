@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:school_web_app/views/back_button.dart';
+import 'package:school_web_app/views/dashboard_screen.dart';
 
 // Import your Sidebar widget
 import 'package:school_web_app/views/sidebars.dart';
 
-import '../controllers/division_controller.dart';
-import '../models/division_model.dart';
+import '../../controllers/division_controller.dart';
+import '../../models/division_model.dart';
 
 // Custom InputFormatter to convert input to uppercase
 class UpperCaseTextFormatter extends TextInputFormatter {
@@ -287,6 +289,7 @@ class _DivisionListPageState extends State<DivisionListPage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blueGrey.shade900,
+         automaticallyImplyLeading:isSmallScreen?true: false,
         ),
          drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
         body: Row(
@@ -299,6 +302,19 @@ class _DivisionListPageState extends State<DivisionListPage> {
                   crossAxisAlignment:
                       CrossAxisAlignment.start, // Align children to the left
                   children: [
+                     Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      BackBtn(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => DashboardPage()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                     // Divisions title
                     Padding(
                       padding: const EdgeInsets.all(16.0),

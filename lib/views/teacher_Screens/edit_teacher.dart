@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/teacher_model.dart';
-import '../controllers/teacher_controller.dart';
+import '../../models/teacher_model.dart';
+import '../../controllers/teacher_controller.dart';
 import 'package:provider/provider.dart';
-import 'sidebars.dart';
+import '../sidebars.dart';
 
 class EditTeacherPage extends StatefulWidget {
   final Teacher teacher;
@@ -42,7 +42,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
     bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
       appBar: AppBar(
-        
+         automaticallyImplyLeading:isSmallScreen?true: false,
         elevation: 0,
         backgroundColor: Colors.blueGrey.shade900,
         centerTitle: true,

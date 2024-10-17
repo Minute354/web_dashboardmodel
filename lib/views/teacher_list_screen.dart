@@ -3,10 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:school_web_app/views/back_button.dart';
+import 'package:school_web_app/views/dashboard_screen.dart';
 import '../controllers/teacher_controller.dart';
 import '../models/teacher_model.dart';
-import 'add_teacher_screen.dart';
-import 'edit_teacher.dart';
+import 'teacher_Screens/add_teacher_screen.dart';
+import 'teacher_Screens/edit_teacher.dart';
 import 'sidebars.dart';
 
 class TeacherListPage extends StatelessWidget {
@@ -21,6 +23,7 @@ class TeacherListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
+         automaticallyImplyLeading:isSmallScreen?true: false,
       ),
       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
@@ -33,6 +36,19 @@ class TeacherListPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      BackBtn(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => DashboardPage()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(

@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,6 +23,25 @@ class LoginScreenState extends State<LoginScreen>
 
   List<String> letters = [];
   int currentLetterIndex = 0;
+
+  Future<void> login(
+      {required String username, required String password}) async {
+         
+    const url = "http://localhost:3000/auth/login";
+    final body = {"email": username, "password": password};
+
+    try {
+      log('button pressed');
+      final response = await http.post(Uri.parse(url), body: body);
+      if (response.statusCode == 200) {
+        log("login success");
+      } else {
+        log("login failed ${response.statusCode}");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void initState() {
@@ -60,8 +81,7 @@ class LoginScreenState extends State<LoginScreen>
     }
 
     // Regex to disallow uppercase and require ending with @gmail.com
-    String pattern =
-        r"^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+\.[a-z]{2,}$";
+    String pattern = r"^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+\.[a-z]{2,}$";
     RegExp regex = RegExp(pattern);
 
     // Check if email matches regex pattern
@@ -70,8 +90,8 @@ class LoginScreenState extends State<LoginScreen>
     }
 
     // Additional validation: Ensure the email ends with '@gmail.com'
-    if (!value.endsWith('@gmail.com')) {
-      return 'Email must end with @gmail.com';
+    if (!value.endsWith('.com')) {
+      return 'Email must end with .com';
     }
 
     // Additional validation: Check for consecutive dots in the email
@@ -89,22 +109,12 @@ class LoginScreenState extends State<LoginScreen>
     }
 
     // Enhanced password rules
-    if (value.length < 8) {
-      return 'Password must be at least 8 characters long';
-    }
-    if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!RegExp(r'[a-z]').hasMatch(value)) {
-      return 'Password must contain at least one lowercase letter';
+    if (value.length < 5) {
+      return 'Password must be at least 5 characters long';
     }
     if (!RegExp(r'[0-9]').hasMatch(value)) {
       return 'Password must contain at least one digit';
     }
-    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-      return 'Password must contain at least one special character';
-    }
-
     return null;
   }
 
@@ -193,7 +203,8 @@ class LoginScreenState extends State<LoginScreen>
                       },
                     ),
                   ),
-                  obscureText: !_isPasswordVisible, // Toggle password visibility
+                  obscureText:
+                      !_isPasswordVisible, // Toggle password visibility
                   validator: _validatePassword, // Added password validation
                 ),
                 const SizedBox(height: 20),
@@ -217,10 +228,12 @@ class LoginScreenState extends State<LoginScreen>
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: ()async {
+                   
+                    
                     if (_formKey.currentState!.validate()) {
                       // Handle login logic here
-                      Navigator.pushNamed(context, '/dashboard');
+                      await login(username: _emailController.text, password: _passwordController.text);
                     }
                   },
                   style: ElevatedButton.styleFrom(

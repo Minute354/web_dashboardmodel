@@ -28,7 +28,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
-        title: Text(''),
+         automaticallyImplyLeading:isSmallScreen?true: false,
         centerTitle: true,
       ),
       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
