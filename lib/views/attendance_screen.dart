@@ -101,6 +101,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
         centerTitle: true,
+         automaticallyImplyLeading:isSmallScreen?true: false,
       ),
       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(

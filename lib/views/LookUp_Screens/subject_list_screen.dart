@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:school_web_app/controllers/subject_controller.dart';
 import 'package:school_web_app/models/subject_model.dart';
+import 'package:school_web_app/views/back_button.dart';
+import 'package:school_web_app/views/dashboard_screen.dart';
 import 'package:school_web_app/views/sidebars.dart';
 
 class SubjectListPage extends StatefulWidget {
@@ -313,6 +315,7 @@ class _SubjectListPageState extends State<SubjectListPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
+         automaticallyImplyLeading:isSmallScreen?true: false,
       ),
        drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
@@ -324,6 +327,19 @@ class _SubjectListPageState extends State<SubjectListPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      BackBtn(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => DashboardPage()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                   // Header "Subject"
                   Padding(
                     padding: const EdgeInsets.all(16.0),

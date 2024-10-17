@@ -30,6 +30,7 @@ class _HolidayCalendarPageState extends State<HolidayCalendarPage> {
     return Scaffold(
       appBar: AppBar(
       backgroundColor: Colors.blueGrey.shade900,
+       automaticallyImplyLeading:isSmallScreen?true: false,
       ),
        drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(

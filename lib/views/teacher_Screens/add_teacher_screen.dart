@@ -2,9 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../controllers/teacher_controller.dart';
-import '../models/teacher_model.dart';
-import 'sidebars.dart';
+import 'package:school_web_app/views/back_button.dart';
+import 'package:school_web_app/views/dashboard_screen.dart';
+import 'package:school_web_app/views/teacher_list_screen.dart';
+import '../../controllers/teacher_controller.dart';
+import '../../models/teacher_model.dart';
+import '../sidebars.dart';
 import 'package:email_validator/email_validator.dart';
 
 class AddTeacherPage extends StatefulWidget {
@@ -31,11 +34,12 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
         elevation: 0,
         backgroundColor: secondaryColor,
         centerTitle: true,
+        automaticallyImplyLeading:isSmallScreen?true: false,
       ),
       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-         if (!isSmallScreen) Sidebar(), 
+          if (!isSmallScreen) Sidebar(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -52,6 +56,19 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                         Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      BackBtn(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => TeacherListPage()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                         Text(
                           'Enter Teacher Details',
                           style: TextStyle(
@@ -145,38 +162,56 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                           },
                         ),
                         SizedBox(height: 40),
-                        Center(
-                          child: ElevatedButton.icon(
-                            icon: Icon(Icons.check, color: Colors.white),
-                            label: Text('Add Teacher',
-                                style: TextStyle(color: Colors.white)),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();
-                                Provider.of<TeacherController>(context,
-                                        listen: false)
-                                    .addTeacher(
-                                  Teacher(
-                                    firstName: _firstName,
-                                    lastName: _lastName,
-                                    subject: _subject,
-                                    email: _email,
-                                    contactNo: _contactNo,
-                                  ),
-                                );
-                                Navigator.of(context)
-                                    .pop(); // Go back after adding
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 32, vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton.icon(
+                              icon: Icon(Icons.check, color: Colors.white),
+                              label: Text('Add Teacher',
+                                  style: TextStyle(color: Colors.white)),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  Provider.of<TeacherController>(context,
+                                          listen: false)
+                                      .addTeacher(
+                                    Teacher(
+                                      firstName: _firstName,
+                                      lastName: _lastName,
+                                      subject: _subject,
+                                      email: _email,
+                                      contactNo: _contactNo,
+                                    ),
+                                  );
+                                  Navigator.of(context)
+                                      .pop(); // Go back after adding
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 32, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                backgroundColor: primaryColor,
                               ),
-                              backgroundColor: primaryColor,
                             ),
-                          ),
+                            SizedBox(width: 30,),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>TeacherListPage()));
+                              },
+                              child: Text("cancel",style: TextStyle(color: Colors.white),),
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 32, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            )
+                          ],
                         ),
                       ],
                     ),

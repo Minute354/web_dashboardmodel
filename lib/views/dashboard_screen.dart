@@ -52,6 +52,7 @@ class _DashboardPageState extends State<DashboardPage> {
       iconTheme: IconThemeData(color: Colors.white),
       elevation: 0,
       centerTitle: true,
+       automaticallyImplyLeading:isSmallScreen?true: false,
       title: Text(
         'Dashboard',
         style: TextStyle(

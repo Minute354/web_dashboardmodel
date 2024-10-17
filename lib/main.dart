@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:school_web_app/controllers/auth_controller.dart';
 import 'package:school_web_app/controllers/calendar_holiday_controller.dart';
 import 'package:school_web_app/controllers/class_controller.dart';
 import 'package:school_web_app/controllers/course_controller.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => HolidayController()),
         ChangeNotifierProvider(create: (_) => StudentController()),
         ChangeNotifierProvider(create: (_) => ClassController()),

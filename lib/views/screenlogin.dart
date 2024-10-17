@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,6 +23,25 @@ class LoginScreenState extends State<LoginScreen>
 
   List<String> letters = [];
   int currentLetterIndex = 0;
+
+  Future<void> login(
+      {required String username, required String password}) async {
+         
+    const url = "http://localhost:3000/auth/login";
+    final body = {"email": username, "password": password};
+
+    try {
+      log('button pressed');
+      final response = await http.post(Uri.parse(url), body: body);
+      if (response.statusCode == 200) {
+        log("login success");
+      } else {
+        log("login failed ${response.statusCode}");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void initState() {
@@ -94,7 +115,6 @@ class LoginScreenState extends State<LoginScreen>
     if (!RegExp(r'[0-9]').hasMatch(value)) {
       return 'Password must contain at least one digit';
     }
-
     return null;
   }
 
@@ -208,10 +228,12 @@ class LoginScreenState extends State<LoginScreen>
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: ()async {
+                   
+                    
                     if (_formKey.currentState!.validate()) {
                       // Handle login logic here
-                      Navigator.pushNamed(context, '/dashboard');
+                      await login(username: _emailController.text, password: _passwordController.text);
                     }
                   },
                   style: ElevatedButton.styleFrom(
