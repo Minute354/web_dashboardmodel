@@ -9,6 +9,7 @@ import 'package:school_web_app/views/payment_screen.dart';
 import 'package:school_web_app/views/setting_screen.dart';
 import 'package:school_web_app/views/sidebars.dart';
 import 'package:school_web_app/views/student_list_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -100,7 +101,7 @@ class _DashboardPageState extends State<DashboardPage> {
           }).toList(),
           onChanged: (String? newValue) {
             if (newValue == 'Logout') {
-              _handleLogout();
+              _logout();
             }
             if (newValue == 'Profile') {
               Navigator.of(context).push(
@@ -247,8 +248,20 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   /// Handles the logout action by navigating to the login screen
-  void _handleLogout() {
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+  // Clear token from SharedPreferences on logout
+  Future<void> _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    
+    // Unfocus to avoid the TextField being unresponsive
+  FocusScope.of(context).unfocus();
+  
+  // Use pushNamedAndRemoveUntil to navigate to the LoginScreen
+  Navigator.pushNamedAndRemoveUntil(
+    context,
+    '/login',  // Make sure '/login' is registered in your MaterialApp's routes
+    (Route<dynamic> route) => false, // Remove all previous routes
+  );
+    
   }
 }
