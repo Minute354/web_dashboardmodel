@@ -252,6 +252,16 @@ class _DashboardPageState extends State<DashboardPage> {
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
-    Navigator.pushReplacementNamed(context, '/login'); // Navigate to login page
+    
+    // Unfocus to avoid the TextField being unresponsive
+  FocusScope.of(context).unfocus();
+  
+  // Use pushNamedAndRemoveUntil to navigate to the LoginScreen
+  Navigator.pushNamedAndRemoveUntil(
+    context,
+    '/login',  // Make sure '/login' is registered in your MaterialApp's routes
+    (Route<dynamic> route) => false, // Remove all previous routes
+  );
+    
   }
 }
