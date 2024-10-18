@@ -5,11 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:school_web_app/views/back_button.dart';
 import 'package:school_web_app/views/dashboard_screen.dart';
-import '../controllers/teacher_controller.dart';
-import '../models/teacher_model.dart';
-import 'teacher_Screens/add_teacher_screen.dart';
-import 'teacher_Screens/edit_teacher.dart';
-import 'sidebars.dart';
+import '../../controllers/teacher_controller.dart';
+import '../../models/teacher_model.dart';
+import 'add_teacher_screen.dart';
+import 'edit_teacher.dart';
+import '../sidebars.dart';
 
 class TeacherListPage extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();

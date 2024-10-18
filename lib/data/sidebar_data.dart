@@ -14,7 +14,7 @@ import '../views/LookUp_Screens/division_list_screen.dart';
 import '../views/LookUp_Screens/course_list_screen.dart';
 import '../views/LookUp_Screens/subject_list_screen.dart';
 import '../views/student_list_screen.dart';
-import '../views/teacher_list_screen.dart';
+import '../views/teacher_Screens/teacher_list_screen.dart';
 import '../views/setting_screen.dart';
 
 List<SidebarItem> sidebarItems = [

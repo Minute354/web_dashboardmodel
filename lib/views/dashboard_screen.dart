@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:school_web_app/views/add_student_screen.dart';
 import 'package:school_web_app/views/analytics_screen.dart';
@@ -262,6 +264,7 @@ class _DashboardPageState extends State<DashboardPage> {
     '/login',  // Make sure '/login' is registered in your MaterialApp's routes
     (Route<dynamic> route) => false, // Remove all previous routes
   );
+  log("logged out successfully");
     
   }
 }

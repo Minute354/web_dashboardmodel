@@ -70,7 +70,7 @@ class LoginScreenState extends State<LoginScreen>
   Future<void> _saveToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
-  }
+  }                                
 
   Future<void> login({
     required String username,
@@ -327,24 +327,19 @@ class LoginScreenState extends State<LoginScreen>
   }
 
   Widget _buildDesktopView(BoxConstraints constraints) {
-    const double textSize = 300.0;
-    final double imageSize = 600.0;
-    final double cardSize = 400.0;
+    const double textSize = 400.0;
+    const double imageSize = 700.0;
+    const double cardSize = 400.0;
+    const double textwidth = 250.0;
 
     return Stack(
       children: [
         _buildBackground(),
         Center(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildAnimatedText(textSize, cardSize),
-                  const SizedBox(height: 20),
-                ],
-              ),
+              _buildAnimatedText(textSize, textwidth),
               _buildImage(imageSize, "assets/3d-cartoon-back-school (1).png"),
               _buildLoginForm(cardSize),
             ],
@@ -374,12 +369,12 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
-  Widget _buildAnimatedText(double textSize, double cardSize) {
+  Widget _buildAnimatedText(double textSize, double textwidth) {
     return Shimmer.fromColors(
       baseColor: Colors.white,
       highlightColor: Colors.grey,
       child: SizedBox(
-        width: cardSize,
+        width: textwidth,
         child: Text(
           letters.join(),
           
