@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_web_app/views/back_button.dart';
 import 'package:school_web_app/views/dashboard_screen.dart';
-import 'package:school_web_app/views/teacher_list_screen.dart';
+import 'package:school_web_app/views/teacher_Screens/teacher_list_screen.dart';
 import '../../controllers/teacher_controller.dart';
 import '../../models/teacher_model.dart';
 import '../sidebars.dart';
