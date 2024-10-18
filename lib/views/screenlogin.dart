@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,30 +21,10 @@ class LoginScreenState extends State<LoginScreen>
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   late AnimationController _controller;
-
-  bool _isPasswordVisible = false; // Track visibility of password
+  bool _isPasswordVisible = false;
 
   List<String> letters = [];
   int currentLetterIndex = 0;
-
-  Future<void> login(
-      {required String username, required String password}) async {
-         
-    const url = "http://localhost:3000/auth/login";
-    final body = {"email": username, "password": password};
-
-    try {
-      log('button pressed');
-      final response = await http.post(Uri.parse(url), body: body);
-      if (response.statusCode == 200) {
-        log("login success");
-      } else {
-        log("login failed ${response.statusCode}");
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
 
   @override
   void initState() {
@@ -51,6 +34,7 @@ class LoginScreenState extends State<LoginScreen>
       vsync: this,
     );
     startLetterAnimation();
+    _checkLoginStatus();
   }
 
   void startLetterAnimation() {
@@ -74,27 +58,71 @@ class LoginScreenState extends State<LoginScreen>
     super.dispose();
   }
 
-  // Validate email input
+  Future<void> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    if (token != null) {
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    }
+  }
+
+  Future<void> _saveToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
+  Future<void> login({
+    required String username,
+    required String password,
+  }) async {
+    const url = "http://localhost:3000/auth/login";
+    final body = {
+      "email": username,
+      "password": password,
+    };
+
+    try {
+      log('Login button pressed');
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        log("Login success");
+
+        final responseData = jsonDecode(response.body);
+        String token = responseData['token'];
+
+        await _saveToken(token);
+        Navigator.pushReplacementNamed(context, '/dashboard');
+      } else {
+        log("Login failed: ${response.statusCode}");
+        log("Response body: ${response.body}");
+      }
+    } catch (e) {
+      log("Error: $e");
+    }
+  }
+
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter an email';
     }
 
-    // Regex to disallow uppercase and require ending with @gmail.com
     String pattern = r"^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+\.[a-z]{2,}$";
     RegExp regex = RegExp(pattern);
 
-    // Check if email matches regex pattern
     if (!regex.hasMatch(value)) {
       return 'Enter a valid email address with only lowercase letters';
     }
 
-    // Additional validation: Ensure the email ends with '@gmail.com'
     if (!value.endsWith('.com')) {
       return 'Email must end with .com';
     }
 
-    // Additional validation: Check for consecutive dots in the email
     if (value.contains('..')) {
       return 'Email contains consecutive dots, which is invalid';
     }
@@ -102,18 +130,13 @@ class LoginScreenState extends State<LoginScreen>
     return null;
   }
 
-  // Validate password input
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
     }
 
-    // Enhanced password rules
     if (value.length < 5) {
       return 'Password must be at least 5 characters long';
-    }
-    if (!RegExp(r'[0-9]').hasMatch(value)) {
-      return 'Password must contain at least one digit';
     }
     return null;
   }
@@ -135,7 +158,6 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
-  // Common Form Widget
   Widget _buildLoginForm(double cardSize) {
     return SizedBox(
       width: cardSize,
@@ -143,10 +165,10 @@ class LoginScreenState extends State<LoginScreen>
         elevation: 12,
         margin: const EdgeInsets.all(20),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(25),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 70, horizontal: 40),
+          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
           child: Form(
             key: _formKey,
             child: Column(
@@ -156,45 +178,44 @@ class LoginScreenState extends State<LoginScreen>
                   controller: _emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    labelStyle: TextStyle(color: Colors.indigo.shade700),
-                    prefixIcon: const Icon(Icons.email, color: Colors.indigo),
+                    labelStyle: TextStyle(color: Colors.blue.shade700),
+                    prefixIcon: const Icon(Icons.email, color: Colors.blue),
                     filled: true,
                     fillColor: Colors.grey.shade100,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide:
-                          const BorderSide(color: Colors.indigo, width: 2),
-                      borderRadius: BorderRadius.circular(12),
+                          const BorderSide(color: Colors.blue, width: 2),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  validator: _validateEmail, // Added email validation
+                  validator: _validateEmail,
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: _passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    labelStyle: TextStyle(color: Colors.indigo.shade700),
-                    prefixIcon: const Icon(Icons.lock, color: Colors.indigo),
+                    labelStyle: TextStyle(color: Colors.blue.shade700),
+                    prefixIcon: const Icon(Icons.lock, color: Colors.blue),
                     filled: true,
                     fillColor: Colors.grey.shade100,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide:
-                          const BorderSide(color: Colors.indigo, width: 2),
-                      borderRadius: BorderRadius.circular(12),
+                          const BorderSide(color: Colors.blue, width: 2),
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    // Eye icon to toggle password visibility
                     suffixIcon: IconButton(
                       icon: Icon(
                         _isPasswordVisible
                             ? Icons.visibility
                             : Icons.visibility_off,
-                        color: Colors.indigo,
+                        color: Colors.blue,
                       ),
                       onPressed: () {
                         setState(() {
@@ -203,9 +224,8 @@ class LoginScreenState extends State<LoginScreen>
                       },
                     ),
                   ),
-                  obscureText:
-                      !_isPasswordVisible, // Toggle password visibility
-                  validator: _validatePassword, // Added password validation
+                  obscureText: !_isPasswordVisible,
+                  validator: _validatePassword,
                 ),
                 const SizedBox(height: 20),
                 Align(
@@ -214,34 +234,29 @@ class LoginScreenState extends State<LoginScreen>
                     onPressed: () {
                       // Handle "Forgot Password?" logic
                     },
-                    child: FittedBox(
-                      fit: BoxFit.none,
-                      child: Text(
-                        'Forgot Password?',
-                        style: GoogleFonts.poppins(
-                            color: Colors.indigo, fontSize: 14),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                    child: Text(
+                      'Forgot Password?',
+                      style: GoogleFonts.poppins(
+                          color: Colors.blue, fontSize: 14),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: ()async {
-                   
-                    
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      // Handle login logic here
-                      await login(username: _emailController.text, password: _passwordController.text);
+                      await login(
+                        username: _emailController.text,
+                        password: _passwordController.text,
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     fixedSize: const Size(200, 50),
-                    backgroundColor: Colors.indigo,
+                    backgroundColor: Colors.blue.shade700,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     elevation: 10,
                   ),
@@ -250,7 +265,6 @@ class LoginScreenState extends State<LoginScreen>
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
@@ -262,7 +276,6 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
-  // Mobile View
   Widget _buildMobileView(BoxConstraints constraints) {
     const double textSize = 300.0;
     final double imageSize = MediaQuery.of(context).size.width * 0.5;
@@ -278,8 +291,7 @@ class LoginScreenState extends State<LoginScreen>
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize,
-                    "assets/view-3d-young-school-student (1) (1).png"),
+                _buildImage(imageSize, "assets/3d-cartoon-back-school (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -289,11 +301,10 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
-  // Tablet View
   Widget _buildTabletView(BoxConstraints constraints) {
     const double textSize = 50.0;
     final double imageSize = MediaQuery.of(context).size.width * 0.5;
-    const double cardSize = 500;
+    final double cardSize = MediaQuery.of(context).size.width * 0.5;
 
     return Stack(
       children: [
@@ -305,8 +316,7 @@ class LoginScreenState extends State<LoginScreen>
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize,
-                    "assets/view-3d-young-school-student (1) (1).png"),
+                _buildImage(imageSize, "assets/3d-cartoon-back-school (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -316,89 +326,71 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
-  // Desktop View
   Widget _buildDesktopView(BoxConstraints constraints) {
-    const double textSize = 60.0;
-    final double imageSize = MediaQuery.of(context).size.width * 1;
-    const double cardSize = 500;
+    const double textSize = 300.0;
+    final double imageSize = 600.0;
+    final double cardSize = 400.0;
 
     return Stack(
       children: [
         _buildBackground(),
         Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 200),
-              child: Row(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Flexible(child: _buildAnimatedText(textSize, cardSize)),
-                  Flexible(
-                      child: _buildImage(
-                          imageSize, "assets/3d-cartoon-back-school (1).png")),
-                  Flexible(
-                      child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          child: _buildLoginForm(cardSize))),
+                  _buildAnimatedText(textSize, cardSize),
+                  const SizedBox(height: 20),
                 ],
               ),
-            ),
+              _buildImage(imageSize, "assets/3d-cartoon-back-school (1).png"),
+              _buildLoginForm(cardSize),
+            ],
           ),
         ),
       ],
     );
   }
 
-  // Background Gradient
   Widget _buildBackground() {
-    return Shimmer.fromColors(
-      baseColor: const Color.fromARGB(255, 58, 102, 172),
-      highlightColor: const Color.fromARGB(255, 76, 111, 168),
-      period: Duration(milliseconds: 2000),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              const Color.fromARGB(255, 78, 91, 226),
-              const Color.fromARGB(255, 88, 134, 207)
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color.fromARGB(255, 143, 137, 137),Color.fromARGB(255, 91, 118, 133), ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
         ),
       ),
     );
   }
 
-  Widget _buildAnimatedText(double textSize, double width) {
-    return Container(
-      width: width,
-      alignment: Alignment.centerLeft,
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        alignment: Alignment.centerLeft,
+  Widget _buildImage(double size, String imagePath) {
+    return Image.asset(
+      imagePath,
+      width: size,
+      height: size,
+    );
+  }
+
+  Widget _buildAnimatedText(double textSize, double cardSize) {
+    return Shimmer.fromColors(
+      baseColor: Colors.white,
+      highlightColor: Colors.grey,
+      child: SizedBox(
+        width: cardSize,
         child: Text(
           letters.join(),
-          textAlign: TextAlign.left,
-          style: GoogleFonts.acme(
-            fontSize: textSize,
-            color: Colors.white,
+          
+          style: GoogleFonts.alata(
+            fontSize: textSize / 6,
             fontWeight: FontWeight.bold,
+            
+            letterSpacing: 1.2,
+            color: Colors.white,
           ),
         ),
-      ),
-    );
-  }
-
-  // Image Widget
-  Widget _buildImage(double imageSize, String image) {
-    return SizedBox(
-      width: imageSize.clamp(200.0, 600.0),
-      height: imageSize.clamp(200.0, 600.0),
-      child: Image.asset(
-        image,
-        fit: BoxFit.cover,
       ),
     );
   }
