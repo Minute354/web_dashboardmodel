@@ -249,6 +249,6 @@ class _DashboardPageState extends State<DashboardPage> {
   /// Handles the logout action by navigating to the login screen
   void _handleLogout() {
     Navigator.of(context)
-        .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => true);
+        .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:school_web_app/views/dashboard_screen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,22 +26,37 @@ class LoginScreenState extends State<LoginScreen>
   List<String> letters = [];
   int currentLetterIndex = 0;
 
-  Future<void> login(
-      {required String username, required String password}) async {
-         
+  Future<void> login({
+    required String username,
+    required String password,
+  }) async {
     const url = "http://localhost:3000/auth/login";
-    final body = {"email": username, "password": password};
+    final body = {
+      "email": username,
+      "password": password,
+    };
 
     try {
-      log('button pressed');
-      final response = await http.post(Uri.parse(url), body: body);
+      // Set headers to indicate JSON content
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body), // Encode body as JSON
+      );
+
       if (response.statusCode == 200) {
         log("login success");
+
+        // Navigate to the dashboard and replace the login screen
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => DashboardPage()),
+        );
       } else {
         log("login failed ${response.statusCode}");
+        log("Response body: ${response.body}"); // Log the response body for more details
       }
     } catch (e) {
-      print(e);
+      log("Error: $e");
     }
   }
 
@@ -68,9 +85,9 @@ class LoginScreenState extends State<LoginScreen>
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _controller.dispose();
+    _emailController.clear();  // Clear the email field
+    _passwordController.clear();  // Clear the password field
+    _controller.dispose();  // Dispose of the animation controller
     super.dispose();
   }
 
@@ -111,9 +128,6 @@ class LoginScreenState extends State<LoginScreen>
     // Enhanced password rules
     if (value.length < 5) {
       return 'Password must be at least 5 characters long';
-    }
-    if (!RegExp(r'[0-9]').hasMatch(value)) {
-      return 'Password must contain at least one digit';
     }
     return null;
   }
@@ -228,12 +242,13 @@ class LoginScreenState extends State<LoginScreen>
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: ()async {
-                   
-                    
-                    if (_formKey.currentState!.validate()) {
+                  onPressed: () async {
+                     if (_formKey.currentState!.validate()) {
                       // Handle login logic here
-                      await login(username: _emailController.text, password: _passwordController.text);
+                      await login(
+                        username: _emailController.text,
+                        password: _passwordController.text,
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -278,8 +293,7 @@ class LoginScreenState extends State<LoginScreen>
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize,
-                    "assets/view-3d-young-school-student (1) (1).png"),
+                _buildImage(imageSize, "assets\3d-cartoon-back-school (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -305,8 +319,7 @@ class LoginScreenState extends State<LoginScreen>
               children: [
                 _buildAnimatedText(textSize, cardSize),
                 const SizedBox(height: 20),
-                _buildImage(imageSize,
-                    "assets/view-3d-young-school-student (1) (1).png"),
+                _buildImage(imageSize, "assets\3d-cartoon-back-school (1).png"),
                 _buildLoginForm(cardSize),
               ],
             ),
@@ -318,31 +331,23 @@ class LoginScreenState extends State<LoginScreen>
 
   // Desktop View
   Widget _buildDesktopView(BoxConstraints constraints) {
-    const double textSize = 60.0;
-    final double imageSize = MediaQuery.of(context).size.width * 1;
-    const double cardSize = 500;
+    const double textSize = 50.0;
+    const double imageSize = 400;
+    const double cardSize = 600;
 
     return Stack(
       children: [
         _buildBackground(),
         Center(
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 200),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(child: _buildAnimatedText(textSize, cardSize)),
-                  Flexible(
-                      child: _buildImage(
-                          imageSize, "assets/3d-cartoon-back-school (1).png")),
-                  Flexible(
-                      child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          child: _buildLoginForm(cardSize))),
-                ],
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildAnimatedText(textSize, cardSize),
+                const SizedBox(height: 20),
+                _buildImage(imageSize, "assets\3d-cartoon-back-school (1).png"),
+                _buildLoginForm(cardSize),
+              ],
             ),
           ),
         ),
@@ -350,56 +355,38 @@ class LoginScreenState extends State<LoginScreen>
     );
   }
 
-  // Background Gradient
-  Widget _buildBackground() {
+  // Animated Text
+  Widget _buildAnimatedText(double textSize, double cardSize) {
     return Shimmer.fromColors(
-      baseColor: const Color.fromARGB(255, 58, 102, 172),
-      highlightColor: const Color.fromARGB(255, 76, 111, 168),
-      period: Duration(milliseconds: 2000),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              const Color.fromARGB(255, 78, 91, 226),
-              const Color.fromARGB(255, 88, 134, 207)
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+      baseColor: Colors.indigo,
+      highlightColor: Colors.blueAccent,
+      child: Text(
+        letters.join(""),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: textSize,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
 
-  Widget _buildAnimatedText(double textSize, double width) {
-    return Container(
-      width: width,
-      alignment: Alignment.centerLeft,
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        alignment: Alignment.centerLeft,
-        child: Text(
-          letters.join(),
-          textAlign: TextAlign.left,
-          style: GoogleFonts.acme(
-            fontSize: textSize,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+  // Background Image Widget
+  Widget _buildBackground() {
+    return Positioned.fill(
+      child: Image.asset(
+        "assets\3d-cartoon-back-school (1).png",
+        fit: BoxFit.cover,
       ),
     );
   }
 
   // Image Widget
-  Widget _buildImage(double imageSize, String image) {
-    return SizedBox(
-      width: imageSize.clamp(200.0, 600.0),
-      height: imageSize.clamp(200.0, 600.0),
-      child: Image.asset(
-        image,
-        fit: BoxFit.cover,
-      ),
+  Widget _buildImage(double imageSize, String imagePath) {
+    return Image.asset(
+      imagePath,
+      width: imageSize,
+      height: imageSize,
     );
   }
 }
