@@ -216,13 +216,15 @@ class _ExamTimetableScreenState extends State<ExamTimetableScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 800;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
       ),
+      drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
         children: [
-          Sidebar(),
+          if (!isSmallScreen) Sidebar(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),

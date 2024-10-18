@@ -52,9 +52,9 @@ class LoginScreenState extends State<LoginScreen>
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _controller.dispose();
+    _emailController.clear();  // Clear the email field
+    _passwordController.clear();  // Clear the password field
+    _controller.dispose();  // Dispose of the animation controller
     super.dispose();
   }
 
