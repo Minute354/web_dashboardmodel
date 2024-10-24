@@ -14,202 +14,12 @@ class _ExamTimetableScreenState extends State<ExamTimetableScreen> {
   final Map<String, Map<String, List<Exam>>> examData = {
     '10': {
       'A': [
-        Exam(
-            date: '2024-05-01',
-            subject: 'Mathematics',
-            time: '09:00 - 11:00',
-            venue: 'Room 101'),
-        Exam(
-            date: '2024-05-02',
-            subject: 'Physics',
-            time: '10:00 - 12:00',
-            venue: 'Room 102'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Biology',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Chemistry',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'English',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Hindi',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
+        Exam(date: '2024-05-01', subject: 'Mathematics', time: '09:00 - 11:00', venue: 'Room 101'),
+        Exam(date: '2024-05-02', subject: 'Physics', time: '10:00 - 12:00', venue: 'Room 102'),
       ],
-      'B': [
-        Exam(
-            date: '2024-05-03',
-            subject: 'Chemistry',
-            time: '09:00 - 11:00',
-            venue: 'Room 103'),
-        Exam(
-            date: '2024-05-04',
-            subject: 'Biology',
-            time: '10:00 - 12:00',
-            venue: 'Room 104'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Biology',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Chemistry',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'English',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Hindi',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-      ],
+      'B': [],
     },
-    '11': {
-      'A': [
-        Exam(
-            date: '2024-06-01',
-            subject: 'Advanced Mathematics',
-            time: '09:00 - 11:00',
-            venue: 'Room 201'),
-        Exam(
-            date: '2024-06-02',
-            subject: 'Physics',
-            time: '10:00 - 12:00',
-            venue: 'Room 202'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Biology',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Chemistry',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'English',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Hindi',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-      ],
-      'B': [
-        Exam(
-            date: '2024-06-03',
-            subject: 'Chemistry',
-            time: '09:00 - 11:00',
-            venue: 'Room 203'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Biology',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Biology',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Chemistry',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'English',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Hindi',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-      ],
-    },
-    '12': {
-      'A': [
-        Exam(
-            date: '2024-07-01',
-            subject: 'Mathematics',
-            time: '09:00 - 11:00',
-            venue: 'Room 301'),
-        Exam(
-            date: '2024-07-02',
-            subject: 'Physics',
-            time: '10:00 - 12:00',
-            venue: 'Room 302'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Biology',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Chemistry',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'English',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Hindi',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-      ],
-      'B': [
-        Exam(
-            date: '2024-07-03',
-            subject: 'Chemistry',
-            time: '09:00 - 11:00',
-            venue: 'Room 303'),
-        Exam(
-            date: '2024-07-04',
-            subject: 'Biology',
-            time: '10:00 - 12:00',
-            venue: 'Room 304'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Biology',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Chemistry',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'English',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-        Exam(
-            date: '2024-06-04',
-            subject: 'Hindi',
-            time: '10:00 - 12:00',
-            venue: 'Room 204'),
-      ],
-    },
+    // ... (other classes and divisions)
   };
 
   List<Exam> displayedExams = [];
@@ -230,53 +40,31 @@ class _ExamTimetableScreenState extends State<ExamTimetableScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: <Widget>[
-                  // Title Aligned to Center
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 60),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Exam Timetable',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Exam Timetable',
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 25,
-                  ),
+                  SizedBox(height: 25),
                   // Filters Section
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Class Dropdown with Reduced Width
+                      // Class Dropdown
                       SizedBox(
-                        width: MediaQuery.of(context).size.width *
-                            0.1, // 20% of screen width
+                        width: MediaQuery.of(context).size.width * 0.1,
                         child: DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            labelText: 'Select Class',
-                            border: OutlineInputBorder(),
-                          ),
+                          decoration: InputDecoration(labelText: 'Select Class', border: OutlineInputBorder()),
                           value: selectedClass,
                           items: [
-                            DropdownMenuItem(
-                              child: Text('Class 10'),
-                              value: '10',
-                            ),
-                            DropdownMenuItem(
-                              child: Text('Class 11'),
-                              value: '11',
-                            ),
-                            DropdownMenuItem(
-                              child: Text('Class 12'),
-                              value: '12',
-                            ),
+                            DropdownMenuItem(child: Text('Class 10'), value: '10'),
+                            DropdownMenuItem(child: Text('Class 11'), value: '11'),
+                            DropdownMenuItem(child: Text('Class 12'), value: '12'),
                           ],
                           onChanged: (value) {
                             setState(() {
@@ -288,34 +76,25 @@ class _ExamTimetableScreenState extends State<ExamTimetableScreen> {
                         ),
                       ),
                       SizedBox(width: 16.0),
-                      // Division Dropdown with Reduced Width
+                      // Division Dropdown
                       SizedBox(
-                        width: MediaQuery.of(context).size.width *
-                            0.1, // 20% of screen width
+                        width: MediaQuery.of(context).size.width * 0.1,
                         child: DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            labelText: 'Select Division',
-                            border: OutlineInputBorder(),
-                          ),
+                          decoration: InputDecoration(labelText: 'Select Division', border: OutlineInputBorder()),
                           value: selectedDivision,
                           items: selectedClass == null
                               ? []
-                              : examData[selectedClass!]!
-                                  .keys
-                                  .map(
-                                    (division) => DropdownMenuItem(
-                                      child: Text('Division $division'),
-                                      value: division,
-                                    ),
-                                  )
+                              : examData[selectedClass!]!.keys
+                                  .map((division) => DropdownMenuItem(
+                                        child: Text('Division $division'),
+                                        value: division,
+                                      ))
                                   .toList(),
                           onChanged: (value) {
                             setState(() {
                               selectedDivision = value;
-                              if (selectedClass != null &&
-                                  selectedDivision != null) {
-                                displayedExams = examData[selectedClass!]![
-                                    selectedDivision!]!;
+                              if (selectedClass != null && selectedDivision != null) {
+                                displayedExams = examData[selectedClass!]![selectedDivision!]!;
                               } else {
                                 displayedExams = [];
                               }
@@ -329,51 +108,42 @@ class _ExamTimetableScreenState extends State<ExamTimetableScreen> {
                   // Timetable Display
                   Expanded(
                     child: displayedExams.isNotEmpty
-                        ? SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: DataTable(
-                              columns: [
-                                DataColumn(
-                                  label: Text(
-                                    'Date',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  numeric: false,
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Subject',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Time',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Venue',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
-                              rows: displayedExams
-                                  .map(
-                                    (exam) => DataRow(cells: [
+                        ? Column(
+                            children: [
+                              // Data Table
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: DataTable(
+                                  columns: [
+                                    DataColumn(label: Text('Date', style: TextStyle(fontWeight: FontWeight.bold))),
+                                    DataColumn(label: Text('Subject', style: TextStyle(fontWeight: FontWeight.bold))),
+                                    DataColumn(label: Text('Time', style: TextStyle(fontWeight: FontWeight.bold))),
+                                    DataColumn(label: Text('Venue', style: TextStyle(fontWeight: FontWeight.bold))),
+                                    DataColumn(label: Text('Actions', style: TextStyle(fontWeight: FontWeight.bold))),
+                                  ],
+                                  rows: displayedExams.map((exam) {
+                                    return DataRow(cells: [
                                       DataCell(Text(exam.date)),
                                       DataCell(Text(exam.subject)),
                                       DataCell(Text(exam.time)),
                                       DataCell(Text(exam.venue)),
-                                    ]),
-                                  )
-                                  .toList(),
-                            ),
+                                      DataCell(
+                                        IconButton(
+                                          icon: Icon(Icons.edit),
+                                          onPressed: () => _editExam(exam),
+                                        ),
+                                      ),
+                                    ]);
+                                  }).toList(),
+                                ),
+                              ),
+                              // Add Exam Button
+                              SizedBox(height: 10), // Optional spacing
+                              ElevatedButton(
+                                onPressed: _addExam,
+                                child: Text('Add Exam'),
+                              ),
+                            ],
                           )
                         : Center(
                             child: Text(
@@ -400,9 +170,117 @@ class _ExamTimetableScreenState extends State<ExamTimetableScreen> {
       ),
     );
   }
+
+  void _addExam() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        String? date, subject, time, venue;
+        return AlertDialog(
+          title: Text('Add Exam'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
+                onChanged: (value) => date = value,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Subject'),
+                onChanged: (value) => subject = value,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Time'),
+                onChanged: (value) => time = value,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Venue'),
+                onChanged: (value) => venue = value,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (selectedClass != null && selectedDivision != null && date != null && subject != null && time != null && venue != null) {
+                  setState(() {
+                    examData[selectedClass!]![selectedDivision!]!.add(Exam(date: date!, subject: subject!, time: time!, venue: venue!));
+                    displayedExams = examData[selectedClass!]![selectedDivision!]!;
+                  });
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('Add'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _editExam(Exam exam) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        String? date = exam.date, subject = exam.subject, time = exam.time, venue = exam.venue;
+        return AlertDialog(
+          title: Text('Edit Exam'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: InputDecoration(labelText: 'Date (YYYY-MM-DD)'),
+                onChanged: (value) => date = value,
+                controller: TextEditingController(text: exam.date),
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Subject'),
+                onChanged: (value) => subject = value,
+                controller: TextEditingController(text: exam.subject),
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Time'),
+                onChanged: (value) => time = value,
+                controller: TextEditingController(text: exam.time),
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Venue'),
+                onChanged: (value) => venue = value,
+                controller: TextEditingController(text: exam.venue),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (selectedClass != null && selectedDivision != null && date != null && subject != null && time != null && venue != null) {
+                  setState(() {
+                    final index = examData[selectedClass!]![selectedDivision!]!.indexOf(exam);
+                    if (index != -1) {
+                      examData[selectedClass!]![selectedDivision!]![index] = Exam(date: date!, subject: subject!, time: time!, venue: venue!);
+                      displayedExams = examData[selectedClass!]![selectedDivision!]!;
+                    }
+                  });
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('Update'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
-// Exam Model
 class Exam {
   final String date;
   final String subject;

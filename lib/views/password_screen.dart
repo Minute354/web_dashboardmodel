@@ -62,8 +62,8 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
 
     // Here you can add the logic to change the password
     final profileController =
-        Provider.of<ProfileController>(context, listen: false);
-    profileController.changePassword(currentPassword, newPassword);
+        // Provider.of<ProfileController>(context, listen: false);
+    // profileController.changePassword(currentPassword, newPassword);
 
     // Reset fields
     _currentPasswordController.clear();

@@ -8,6 +8,7 @@ import 'package:school_web_app/views/exam_timetable_screen.dart';
 import 'package:school_web_app/views/permissions.dart';
 import 'package:school_web_app/views/role_screen.dart';
 import 'package:school_web_app/views/syllabus_screen.dart';
+import 'package:school_web_app/views/user_screen.dart';
 import '../views/dashboard_screen.dart';
 import '../views/LookUp_Screens/class_list_screen.dart';
 import '../views/LookUp_Screens/division_list_screen.dart';
@@ -23,6 +24,12 @@ List<SidebarItem> sidebarItems = [
     label: 'Dashboard',
     // ignore: prefer_const_constructors
     page: DashboardPage(),
+  ),
+  SidebarItem(
+    icon: Icons.supervised_user_circle_outlined,
+    label: 'User',
+    // ignore: prefer_const_constructors
+    page: UserListPage(),
   ),
   SidebarItem(
     icon: Icons.search,

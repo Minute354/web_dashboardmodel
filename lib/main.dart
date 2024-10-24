@@ -9,7 +9,10 @@ import 'package:school_web_app/controllers/sidebar_controller.dart';
 import 'package:school_web_app/controllers/subject_controller.dart';
 import 'package:school_web_app/controllers/syllabus_controller.dart';
 import 'package:school_web_app/controllers/teacher_controller.dart';
- import 'controllers/student_controller.dart';
+import 'package:school_web_app/controllers/user_controller.dart';
+import 'package:school_web_app/provider/timetable_provider.dart';
+import 'package:school_web_app/views/user_screen.dart';
+import 'controllers/student_controller.dart';
 import 'views/screenlogin.dart';
 import 'views/dashboard_screen.dart';
 
@@ -33,7 +36,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TeacherController()),
         ChangeNotifierProvider(create: (_) => SyllabusController()),
         ChangeNotifierProvider(create: (_) => SidebarController()),
+        ChangeNotifierProvider(create: (_) => TimetableController()),
         ChangeNotifierProvider(create: (_) => ProfileController()),
+        ChangeNotifierProvider(
+          create: (context) => UserController()..fetchUsers(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -43,13 +50,16 @@ class MyApp extends StatelessWidget {
         initialRoute: '/login',
         routes: {
           '/login': (context) => const LoginScreen(),
-          '/dashboard': (context) =>  DashboardPage(),
-          // '/students':(context)=> AddStudentPage(),
-          // '/classes':(context)=> ClassListPage(),
-          // '/divisions':(context)=> DivisionListPage(),
-          // '/courses':(context)=> CourseListPage(),
-          // '/subjects':(context)=> SubjectListPage(),
-          // '/settings':(context)=> SettingsPage(),
+          '/dashboard': (context) => DashboardPage(),
+          '/users': (context) => UserListPage(), // Add UserListPage route
+
+          // Uncomment these when necessary
+          // '/students':(context) => AddStudentPage(),
+          // '/classes':(context) => ClassListPage(),
+          // '/divisions':(context) => DivisionListPage(),
+          // '/courses':(context) => CourseListPage(),
+          // '/subjects':(context) => SubjectListPage(),
+          // '/settings':(context) => SettingsPage(),
         },
       ),
     );

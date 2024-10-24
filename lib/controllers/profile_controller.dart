@@ -1,56 +1,43 @@
-// lib/controllers/profile_controller.dart
-
+// controllers/profile_controller.dart
 import 'package:flutter/material.dart';
-import 'package:school_web_app/models/profile_model.dart';
+import 'package:school_web_app/services/profile_services.dart';
+import '../models/profile_model.dart';
 
-class ProfileController with ChangeNotifier {
-  UserProfile _userProfile;
+class ProfileController extends ChangeNotifier {
+  final ProfileService _profileService = ProfileService();
+  UserProfile? userProfile;
 
-  // Constructor initializes with default or existing user data
-  ProfileController()
-      : _userProfile = UserProfile(
-          firstName: 'Admin',
-          lastName: 'Only',
-          email: 'admin@gmail.com',
-          phone: '9207176654',
-          selectedDate: DateTime.now(),
-          selectedTime: TimeOfDay.now(),
-          profileImagePath: null,
-        );
-
-  // Getter to access the user profile
-  UserProfile get userProfile => _userProfile;
-
-  // Method to update profile information
-  void updateProfile({
-    String? firstName,
-    String? lastName,
-    String? email,
-    String? phone,
-    DateTime? selectedDate,
-    TimeOfDay? selectedTime,
-    String? profileImagePath,
-  }) {
-    _userProfile.update(
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      phone: phone,
-      selectedDate: selectedDate,
-      selectedTime: selectedTime,
-      profileImagePath: profileImagePath,
-    );
-    notifyListeners(); // Notify listeners to rebuild UI
+  Future<void> fetchUserProfile() async {
+    try {
+      userProfile = await _profileService.fetchUserProfile();
+      notifyListeners(); // Notify listeners of the change
+    } catch (e) {
+      // Handle any errors if necessary
+    }
   }
 
-  // Method to update only the profile image
-  void updateProfileImage(String imagePath) {
-    _userProfile.update(profileImagePath: imagePath);
-    notifyListeners();
+  Future<void> updateProfile({
+    required String firstName,
+    required String email,
+    required String phone,
+    required String id,
+    required Map<String, String> address,
+    required TimeOfDay selectedTime,
+    required DateTime selectedDate,
+  }) async {
+    try {
+      await _profileService.updateProfile(
+        firstName: firstName,
+        email: email,
+        phone: phone,
+        id: id,
+        address: address,
+        selectedTime: selectedTime,
+        selectedDate: selectedDate,
+      );
+      await fetchUserProfile(); // Refresh the user profile after updating
+    } catch (e) {
+      // Handle any errors if necessary
+    }
   }
-
-  void changePassword(String currentPassword, String newPassword) {}
-
-  // Optional: Methods to load/save profile from persistent storage
-  // For example, using SharedPreferences or a database
 }

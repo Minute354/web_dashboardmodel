@@ -1,78 +1,62 @@
-// lib/models/user_profile.dart
-
 import 'package:flutter/material.dart';
 
 class UserProfile {
   String firstName;
-  String lastName;
   String email;
   String phone;
-  DateTime? selectedDate;
+  String id;
+  Address? address;
   TimeOfDay? selectedTime;
-  String? profileImagePath; // Path to the profile image, if any
+  DateTime? selectedDate;
 
   UserProfile({
     required this.firstName,
-    required this.lastName,
     required this.email,
     required this.phone,
-    this.selectedDate,
+    required this.id,
+    this.address,
     this.selectedTime,
-    this.profileImagePath,
+    this.selectedDate,
   });
 
-  // Method to update profile fields
-  void update({
-    String? firstName,
-    String? lastName,
-    String? email,
-    String? phone,
-    DateTime? selectedDate,
-    TimeOfDay? selectedTime,
-    String? profileImagePath,
-  }) {
-    if (firstName != null) this.firstName = firstName;
-    if (lastName != null) this.lastName = lastName;
-    if (email != null) this.email = email;
-    if (phone != null) this.phone = phone;
-    if (selectedDate != null) this.selectedDate = selectedDate;
-    if (selectedTime != null) this.selectedTime = selectedTime;
-    if (profileImagePath != null) this.profileImagePath = profileImagePath;
-  }
-
-  // Convert UserProfile to Map (useful for persistence)
-  Map<String, dynamic> toMap() {
-    return {
-      'firstName': firstName,
-      'lastName': lastName,
-      'email': email,
-      'phone': phone,
-      'selectedDate': selectedDate?.toIso8601String(),
-      'selectedTime': selectedTime != null
-          ? '${selectedTime!.hour}:${selectedTime!.minute}'
-          : null,
-      'profileImagePath': profileImagePath,
-    };
-  }
-
-  // Factory constructor to create UserProfile from Map
-  factory UserProfile.fromMap(Map<String, dynamic> map) {
-    TimeOfDay? time;
-    if (map['selectedTime'] != null) {
-      List<String> parts = (map['selectedTime'] as String).split(':');
-      if (parts.length == 2) {
-        time = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
-      }
-    }
+  factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
-      firstName: map['firstName'] ?? '',
-      lastName: map['lastName'] ?? '',
-      email: map['email'] ?? '',
-      phone: map['phone'] ?? '',
-      selectedDate:
-          map['selectedDate'] != null ? DateTime.parse(map['selectedDate']) : null,
-      selectedTime: time,
-      profileImagePath: map['profileImagePath'],
+      firstName: json['firstName'],
+      email: json['email'],
+      phone: json['phone'],
+      id: json['id'],
+      address: Address.fromJson(json['address']),
+      selectedTime: TimeOfDay(
+          hour: json['selectedTime']['hour'], 
+          minute: json['selectedTime']['minute']
+      ),
+      selectedDate: DateTime.parse(json['selectedDate']),
+    );
+  }
+}
+
+class Address {
+  String street;
+  String city;
+  String state;
+  String district;
+  String zipCode;
+
+  Address({
+    required this.street,
+    required this.city,
+    required this.state,
+    required this.district,
+    required this.zipCode,
+  });
+
+  factory Address.fromJson(Map<String, dynamic> json) {
+    return Address(
+      street: json['street'],
+      city: json['city'],
+      state: json['state'],
+      district: json['district'],
+      zipCode: json['zipCode'],
     );
   }
 }

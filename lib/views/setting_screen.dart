@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:school_web_app/views/about_screen.dart';
 import 'package:school_web_app/views/password_screen.dart';
 import 'package:school_web_app/views/payment_screen.dart';
 import 'package:school_web_app/views/profile_screen.dart';
@@ -15,7 +16,7 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey.shade900,
-        automaticallyImplyLeading:isSmallScreen?true: false,
+        automaticallyImplyLeading: isSmallScreen ? true : false,
       ),
       drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
       body: Row(
@@ -26,7 +27,9 @@ class SettingsPage extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   // Circular Avatar Section
                   const CircleAvatar(
                     radius: 60,
@@ -49,13 +52,13 @@ class SettingsPage extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-                 SizedBox(height: 5),
+                  SizedBox(height: 5),
 
                   // List of Settings Options
                   Expanded(
-                    child: Center( // Center the entire list
+                    child: Center(
+                      // Center the entire list
                       child: Column(
-                       
                         children: [
                           _buildCenteredListTile(
                             context,
@@ -72,7 +75,8 @@ class SettingsPage extends StatelessWidget {
                             title: 'Security',
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => PasswordManagementPage()));
+                                  builder: (context) =>
+                                      PasswordManagementPage()));
                             },
                           ),
                           _buildCenteredListTile(
@@ -94,11 +98,25 @@ class SettingsPage extends StatelessWidget {
                           ),
                           _buildCenteredListTile(
                             context,
+                            icon: Icons.report_gmailerrorred,
+                            title: 'About',
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => AboutPage()));
+                              // Navigate to Feedback Page
+                            },
+                          ),
+                          _buildCenteredListTile(
+                            context,
                             icon: Icons.logout,
                             title: 'Log Out',
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => LoginScreen()));
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/login', // Make sure '/login' is registered in your MaterialApp's routes
+                                (Route<dynamic> route) =>
+                                    false, // Remove all previous routes
+                              );
                               // Implement log out functionality
                             },
                           ),
@@ -134,7 +152,8 @@ class SettingsPage extends StatelessWidget {
         child: AnimatedContainer(
           duration: Duration(milliseconds: 200), // Animation duration
           height: 40, // Reduced height for buttons
-          width: MediaQuery.of(context).size.width / 2, // Width set to half of the screen
+          width: MediaQuery.of(context).size.width /
+              2, // Width set to half of the screen
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade400), // Border color
             borderRadius: BorderRadius.circular(8), // Rounded corners

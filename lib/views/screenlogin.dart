@@ -52,9 +52,9 @@ class LoginScreenState extends State<LoginScreen>
 
   @override
   void dispose() {
-    _emailController.clear();  // Clear the email field
-    _passwordController.clear();  // Clear the password field
-    _controller.dispose();  // Dispose of the animation controller
+    _emailController.clear(); // Clear the email field
+    _passwordController.clear(); // Clear the password field
+    _controller.dispose(); // Dispose of the animation controller
     super.dispose();
   }
 
@@ -73,46 +73,52 @@ class LoginScreenState extends State<LoginScreen>
   }
 
   Future<void> login({
-    required String username,
-    required String password,
-  }) async {
-    const url = "http://localhost:3000/auth/login";
-    final body = {
-      "email": username,
-      "password": password,
-    };
+  required String username,
+  required String password,
+}) async {
+  const url = "http://localhost:3000/auth/login";
+  final body = {
+    "email": username,
+    "password": password,
+  };
 
-    try {
-      log('Login button pressed');
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(body),
-      );
+  try {
+    log('Login button pressed');
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(body),
+    );
 
-      if (response.statusCode == 200) {
-        log("Login success");
+    if (response.statusCode == 200) {
+      log("Login success");
 
-        final responseData = jsonDecode(response.body);
-        String token = responseData['token'];
+      final responseData = jsonDecode(response.body);
+      String token = responseData['token'];
 
-        await _saveToken(token);
-        Navigator.pushReplacementNamed(context, '/dashboard');
-      } else {
-        log("Login failed: ${response.statusCode}");
-        log("Response body: ${response.body}");
-      }
-    } catch (e) {
-      log("Error: $e");
+      await _saveToken(token);
+
+      // Dispose of resources once login is complete
+      dispose();
+
+      // Navigate to dashboard
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } else {
+      log("Login failed: ${response.statusCode}");
+      log("Response body: ${response.body}");
     }
+  } catch (e) {
+    log("Error: $e");
   }
+}
+
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter an email';
     }
 
-    String pattern = r"^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+\.[a-z]{2,}$";
+    String pattern = r"^[a-z0-9.!#$%&'*+/=?^_{|}~-]+@[a-z0-9-]+\.[a-z]{2,}$";
     RegExp regex = RegExp(pattern);
 
     if (!regex.hasMatch(value)) {
@@ -236,8 +242,8 @@ class LoginScreenState extends State<LoginScreen>
                     },
                     child: Text(
                       'Forgot Password?',
-                      style: GoogleFonts.poppins(
-                          color: Colors.blue, fontSize: 14),
+                      style:
+                          GoogleFonts.poppins(color: Colors.blue, fontSize: 14),
                     ),
                   ),
                 ),
@@ -336,13 +342,13 @@ class LoginScreenState extends State<LoginScreen>
         _buildBackground(),
         Center(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildAnimatedText(textSize, cardSize),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                 ],
               ),
               _buildImage(imageSize, "assets/3d-cartoon-back-school (1).png"),
@@ -358,7 +364,10 @@ class LoginScreenState extends State<LoginScreen>
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color.fromARGB(255, 143, 137, 137),Color.fromARGB(255, 91, 118, 133), ],
+          colors: [
+            Color.fromARGB(255, 143, 137, 137),
+            Color.fromARGB(255, 91, 118, 133),
+          ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -382,11 +391,9 @@ class LoginScreenState extends State<LoginScreen>
         width: cardSize,
         child: Text(
           letters.join(),
-          
           style: GoogleFonts.alata(
             fontSize: textSize / 6,
             fontWeight: FontWeight.bold,
-            
             letterSpacing: 1.2,
             color: Colors.white,
           ),
