@@ -402,32 +402,33 @@ class UserListPage extends StatelessWidget {
 
   // Show Delete Confirmation Dialog
   void _showDeleteConfirmationDialog(BuildContext context, User user) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Delete User'),
-          content: Text('Are you sure you want to delete this user?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Close the dialog
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () async {
-                // Delete user
-                await Provider.of<UserController>(context, listen: false)
-                    .deleteUser(user as String);
-                Navigator.of(context).pop();
-              },
-              child: Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Delete User'),
+        content: const Text('Are you sure you want to delete this user?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              // Close the dialog
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              // Delete user
+              await Provider.of<UserController>(context, listen: false)
+                  .deleteUser(user.id); // Pass the correct user ID for deletion
+              Navigator.of(context).pop(); // Close the dialog after deletion
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 }

@@ -43,6 +43,7 @@ class UserService {
 
       if (response.statusCode == 200) {
         log("Login successful");
+
         final responseData = jsonDecode(response.body);
         String token = responseData['token'];
 
@@ -53,7 +54,9 @@ class UserService {
         await prefs.setString('token', token);
         log("Token saved to SharedPreferences");
       } else {
-        _handleErrorResponse(response, "Failed to login");
+        log("Login failed: ${response.statusCode}");
+        log("Response body: ${response.body}");
+        throw Exception('Failed to login');
       }
     } catch (e) {
       log("Error during login: $e");
@@ -71,18 +74,25 @@ class UserService {
 
       if (response.statusCode == 200) {
         log("Users fetched successfully");
+
         final jsonResponse = jsonDecode(response.body);
         List<dynamic> data = jsonResponse['data'];
 
-        return data.map((user) => User.fromJson(user)).toList();
+        try {
+          return data.map((user) => User.fromJson(user)).toList();
+        } catch (e) {
+          log("Error parsing users: $e");
+          throw Exception("Error decoding user data");
+        }
       } else {
-        _handleErrorResponse(response, "Failed to fetch users");
+        log("Failed to fetch users: ${response.statusCode}");
+        log("Response body: ${response.body}"); // Log the response body for more details
+        throw Exception('Failed to load users');
       }
     } catch (e) {
       log("Error while fetching users: $e");
       throw Exception('Error while fetching users: $e');
     }
-    return []; // Return empty list if error occurs
   }
 
   // Add a new user
@@ -95,13 +105,14 @@ class UserService {
         headers: headers,
         body: jsonEncode(user.toJson()), // Use user.toJson() to include all fields
       );
-
       log('User data: ${user.toJson()}');
 
       if (response.statusCode == 201) {
         log("User added successfully");
       } else {
-        _handleErrorResponse(response, "Failed to add user");
+        log("Failed to add user: ${response.statusCode}");
+        log("Response body: ${response.body}"); // Log the response body for more details
+        throw Exception('Failed to add user');
       }
     } catch (e) {
       log("Error while adding user: $e");
@@ -123,7 +134,9 @@ class UserService {
       if (response.statusCode == 200) {
         log("User updated successfully");
       } else {
-        _handleErrorResponse(response, "Failed to update user");
+        log("Failed to update user: ${response.statusCode}");
+        log("Response body: ${response.body}"); // Log the response body for more details
+        throw Exception('Failed to update user');
       }
     } catch (e) {
       log("Error while updating user: $e");
@@ -141,23 +154,16 @@ class UserService {
         headers: headers,
       );
 
-      if (response.statusCode == 204 || response.statusCode == 200) {
+      if (response.statusCode == 204||response.statusCode == 200) {
         log("User deleted successfully");
       } else {
-        _handleErrorResponse(response, "Failed to delete user");
+        log("Failed to delete user: ${response.statusCode}");
+        log("Response body: ${response.body}"); // Log the response body for more details
+        throw Exception('Failed to delete user');
       }
     } catch (e) {
       log("Error while deleting user: $e");
       throw Exception('Error while deleting user: $e');
     }
-  }
-
-  // Helper function to handle error responses
-  void _handleErrorResponse(http.Response response, String defaultMessage) {
-    log("Error: ${response.statusCode}");
-    log("Response body: ${response.body}"); // Log the response body for more details
-
-    // Throw an exception with the default message or the response body if available
-    throw Exception('${defaultMessage}: ${response.body}');
   }
 }
