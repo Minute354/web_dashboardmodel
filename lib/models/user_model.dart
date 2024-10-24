@@ -35,14 +35,12 @@ class Address {
 }
 
 class PaymentAddress {
-  String gstNumber;
   String city;
   String state;
   String district;
   String zipCode;
 
   PaymentAddress({
-    required this.gstNumber,
     required this.city,
     required this.state,
     required this.district,
@@ -51,7 +49,6 @@ class PaymentAddress {
 
   factory PaymentAddress.fromJson(Map<String, dynamic> json) {
     return PaymentAddress(
-      gstNumber: json['gstNumber'] ?? '',
       city: json['city'] ?? '',
       state: json['state'] ?? '',
       district: json['district'] ?? '',
@@ -61,7 +58,6 @@ class PaymentAddress {
 
   Map<String, dynamic> toJson() {
     return {
-      'gstNumber': gstNumber,
       'city': city,
       'state': state,
       'district': district,
@@ -75,10 +71,13 @@ class User {
   String name;
   String email;
   String phone;
+  String password; // New field added for password
+  String confirmPassword; // Field for confirm password
+  String GSTNumber;
   Address address;
   PaymentAddress paymentAddress;
   String role;
-  String status;
+  bool status; // Ensure this is boolean
   bool isDeleted;
 
   User({
@@ -86,10 +85,13 @@ class User {
     required this.name,
     required this.email,
     required this.phone,
+    required this.password, // Include password in constructor
+    required this.confirmPassword,
+    required this.GSTNumber,
     required this.address,
     required this.paymentAddress,
     required this.role,
-    required this.status,
+    required this.status, // Ensure this is properly handled
     required this.isDeleted,
   });
 
@@ -99,17 +101,29 @@ class User {
       name: json['name'] ?? '',
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',
+      password: json['password'] ?? '', // Add password handling
+      confirmPassword: json['confirmPassword'] ?? '', // Add confirm password handling
+      GSTNumber: json['GSTNumber'] ?? '',
       address: json['address'] != null
           ? Address.fromJson(json['address'])
           : Address(
-              street: '', city: '', state: '', district: '', zipCode: ''),
+              street: '',
+              city: '',
+              state: '',
+              district: '',
+              zipCode: '',
+            ),
       paymentAddress: json['paymentAddress'] != null
           ? PaymentAddress.fromJson(json['paymentAddress'])
           : PaymentAddress(
-              gstNumber: '', city: '', state: '', district: '', zipCode: ''),
+              city: '',
+              state: '',
+              district: '',
+              zipCode: '',
+            ),
       role: json['role'] ?? '',
-      // Convert status to String in case it's a boolean
-      status: json['status'] != null ? json['status'].toString() : '',
+      // Check if status is boolean, else default to false
+      status: json['status'] is bool ? json['status'] : false,
       isDeleted: json['isDeleted'] ?? false,
     );
   }
@@ -120,6 +134,9 @@ class User {
       'name': name,
       'email': email,
       'phone': phone,
+      'password': password, // Include password in JSON output
+      'confirmPassword': confirmPassword, // Include confirm password in JSON output
+      'GSTNumber': GSTNumber,
       'address': address.toJson(),
       'paymentAddress': paymentAddress.toJson(),
       'role': role,

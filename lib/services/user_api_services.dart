@@ -5,8 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_model.dart';
 
 class UserService {
-  final String baseUrl =
-      'http://localhost:3000'; // Replace with your actual API endpoint
+  final String baseUrl = 'http://localhost:3000'; // Replace with your actual API endpoint
 
   // Common function to retrieve token from SharedPreferences
   Future<Map<String, String>> _getHeaders() async {
@@ -44,7 +43,6 @@ class UserService {
 
       if (response.statusCode == 200) {
         log("Login successful");
-
         final responseData = jsonDecode(response.body);
         String token = responseData['token'];
 
@@ -55,9 +53,7 @@ class UserService {
         await prefs.setString('token', token);
         log("Token saved to SharedPreferences");
       } else {
-        log("Login failed: ${response.statusCode}");
-        log("Response body: ${response.body}");
-        throw Exception('Failed to login');
+        _handleErrorResponse(response, "Failed to login");
       }
     } catch (e) {
       log("Error during login: $e");
@@ -65,66 +61,47 @@ class UserService {
     }
   }
 
-Future<List<User>> fetchUsers() async {
-  final url = '$baseUrl/user'; // Adjust the endpoint as needed
+  // Fetch users
+  Future<List<User>> fetchUsers() async {
+    final url = '$baseUrl/user'; // Adjust the endpoint as needed
 
-  try {
-    final headers = await _getHeaders();
-    final response = await http.get(Uri.parse(url), headers: headers);
+    try {
+      final headers = await _getHeaders();
+      final response = await http.get(Uri.parse(url), headers: headers);
 
-    // log("Response: ${response.body}");
+      if (response.statusCode == 200) {
+        log("Users fetched successfully");
+        final jsonResponse = jsonDecode(response.body);
+        List<dynamic> data = jsonResponse['data'];
 
-    if (response.statusCode == 200) {
-      log("Users fetched successfully");
-
-      // Parse the response
-      final jsonResponse = jsonDecode(response.body);
-
-      // log("Parsed JSON response: $jsonResponse");
-
-      // Assuming 'data' contains the user list
-      List<dynamic> data = jsonResponse['data'];
-
-      try {
-        // Map the data to User objects
         return data.map((user) => User.fromJson(user)).toList();
-      } catch (e) {
-        log("Error parsing users: $e");
-        throw Exception("Error decoding user data");
+      } else {
+        _handleErrorResponse(response, "Failed to fetch users");
       }
-    } else {
-      log("Failed to fetch users: ${response.statusCode}");
-      throw Exception('Failed to load users');
+    } catch (e) {
+      log("Error while fetching users: $e");
+      throw Exception('Error while fetching users: $e');
     }
-  } catch (e) {
-    log("Error while fetching users: $e");
-    throw Exception('Error while fetching users: $e');
+    return []; // Return empty list if error occurs
   }
-}
-
-
-
-
 
   // Add a new user
   Future<void> addUser(User user) async {
     final url = '$baseUrl/user'; // Replace with your actual API endpoint
     try {
-      // Get headers with token
       final headers = await _getHeaders();
-
       final response = await http.post(
         Uri.parse(url),
         headers: headers,
-        body: jsonEncode(
-            user.toJson()), // Use user.toJson() to include all fields
+        body: jsonEncode(user.toJson()), // Use user.toJson() to include all fields
       );
+
+      log('User data: ${user.toJson()}');
 
       if (response.statusCode == 201) {
         log("User added successfully");
       } else {
-        log("Failed to add user: ${response.statusCode}");
-        throw Exception('Failed to add user');
+        _handleErrorResponse(response, "Failed to add user");
       }
     } catch (e) {
       log("Error while adding user: $e");
@@ -134,24 +111,19 @@ Future<List<User>> fetchUsers() async {
 
   // Edit an existing user
   Future<void> editUser(User user) async {
-    final url =
-        '$baseUrl/user/${user.id}'; // Replace with your actual API endpoint
+    final url = '$baseUrl/user/${user.id}'; // Replace with your actual API endpoint
     try {
-      // Get headers with token
       final headers = await _getHeaders();
-
       final response = await http.put(
         Uri.parse(url),
         headers: headers,
-        body: jsonEncode(
-            user.toJson()), // Use user.toJson() to include all fields
+        body: jsonEncode(user.toJson()), // Use user.toJson() to include all fields
       );
 
       if (response.statusCode == 200) {
         log("User updated successfully");
       } else {
-        log("Failed to update user: ${response.statusCode}");
-        throw Exception('Failed to update user');
+        _handleErrorResponse(response, "Failed to update user");
       }
     } catch (e) {
       log("Error while updating user: $e");
@@ -161,26 +133,31 @@ Future<List<User>> fetchUsers() async {
 
   // Delete a user
   Future<void> deleteUser(String userId) async {
-    final url =
-        '$baseUrl/user/$userId'; // Replace with your actual API endpoint
+    final url = '$baseUrl/user/$userId'; // Replace with your actual API endpoint
     try {
-      // Get headers with token
       final headers = await _getHeaders();
-
       final response = await http.delete(
         Uri.parse(url),
         headers: headers,
       );
 
-      if (response.statusCode == 204) {
+      if (response.statusCode == 204 || response.statusCode == 200) {
         log("User deleted successfully");
       } else {
-        log("Failed to delete user: ${response.statusCode}");
-        throw Exception('Failed to delete user');
+        _handleErrorResponse(response, "Failed to delete user");
       }
     } catch (e) {
       log("Error while deleting user: $e");
       throw Exception('Error while deleting user: $e');
     }
+  }
+
+  // Helper function to handle error responses
+  void _handleErrorResponse(http.Response response, String defaultMessage) {
+    log("Error: ${response.statusCode}");
+    log("Response body: ${response.body}"); // Log the response body for more details
+
+    // Throw an exception with the default message or the response body if available
+    throw Exception('${defaultMessage}: ${response.body}');
   }
 }

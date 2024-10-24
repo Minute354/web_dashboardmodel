@@ -90,8 +90,7 @@ class UserListPage extends StatelessWidget {
                   Expanded(
                     child: Consumer<UserController>(
                       builder: (context, userController, child) {
-                        List<User> users = userController
-                            .users; // Ensure this list is populated by fetching data from your API.
+                        List<User> users = userController.users;
 
                         // Display loading state when no users are available
                         if (users.isEmpty) {
@@ -199,7 +198,7 @@ class UserListPage extends StatelessWidget {
                                                 '${user.address.street}, ${user.address.city}, ${user.address.state}'),
                                           ),
                                           DataCell(Text(
-                                              user.paymentAddress.gstNumber)),
+                                              user.GSTNumber)),
                                         ],
                                       );
                                     },
@@ -224,29 +223,207 @@ class UserListPage extends StatelessWidget {
   // Show Add/Edit User Dialog
   void _showAddEditUserDialog(BuildContext context, User? user) {
     final userController = Provider.of<UserController>(context, listen: false);
-    // Open dialog to add/edit user using userController.addUser/editUser
+    // Create controllers for input fields
+    final nameController = TextEditingController(text: user?.name);
+    final emailController = TextEditingController(text: user?.email);
+    final phoneController = TextEditingController(text: user?.phone);
+    final passwordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+    final gstNumberController = TextEditingController(text: user?.GSTNumber);
+
+    // Address controllers
+    final streetController = TextEditingController(text: user?.address.street);
+    final cityController = TextEditingController(text: user?.address.city);
+    final stateController = TextEditingController(text: user?.address.state);
+    final districtController =
+        TextEditingController(text: user?.address.district);
+    final zipCodeController =
+        TextEditingController(text: user?.address.zipCode);
+
+    // Payment Address controllers
+
+    final paymentCityController =
+        TextEditingController(text: user?.paymentAddress.city);
+    final paymentStateController =
+        TextEditingController(text: user?.paymentAddress.state);
+    final paymentDistrictController =
+        TextEditingController(text: user?.paymentAddress.district);
+    final paymentZipCodeController =
+        TextEditingController(text: user?.paymentAddress.zipCode);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(user == null ? 'Add User' : 'Edit User'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(labelText: 'Name'),
+                ),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(labelText: 'Email'),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                TextField(
+                  controller: phoneController,
+                  decoration: InputDecoration(labelText: 'Phone'),
+                  keyboardType: TextInputType.phone,
+                ),
+                // Password Fields
+                TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(labelText: 'Password'),
+                  obscureText: true,
+                ),
+                TextField(
+                  controller: confirmPasswordController,
+                  decoration: InputDecoration(labelText: 'Confirm Password'),
+                  obscureText: true,
+                ),
+                // Address Fields
+                Text('Address', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextField(
+                  controller: streetController,
+                  decoration: InputDecoration(labelText: 'Street'),
+                ),
+                TextField(
+                  controller: cityController,
+                  decoration: InputDecoration(labelText: 'City'),
+                ),
+                TextField(
+                  controller: stateController,
+                  decoration: InputDecoration(labelText: 'State'),
+                ),
+                TextField(
+                  controller: districtController,
+                  decoration: InputDecoration(labelText: 'District'),
+                ),
+                TextField(
+                  controller: zipCodeController,
+                  decoration: InputDecoration(labelText: 'Zip Code'),
+                ),
+                // Payment Address Fields
+                Text('Payment Address',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextField(
+                  controller: gstNumberController,
+                  decoration: InputDecoration(labelText: 'GST Number'),
+                ),
+                TextField(
+                  controller: paymentCityController,
+                  decoration: InputDecoration(labelText: 'City'),
+                ),
+                TextField(
+                  controller: paymentStateController,
+                  decoration: InputDecoration(labelText: 'State'),
+                ),
+                TextField(
+                  controller: paymentDistrictController,
+                  decoration: InputDecoration(labelText: 'District'),
+                ),
+                TextField(
+                  controller: paymentZipCodeController,
+                  decoration: InputDecoration(labelText: 'Zip Code'),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Validate Passwords
+                if (passwordController.text != confirmPasswordController.text) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Passwords do not match!')),
+                  );
+                  return; // Return early if passwords don't match
+                }
+
+                // Create User object
+                final newUser = User(
+                  id: user?.id ??
+                      DateTime.now().millisecondsSinceEpoch.toString(),
+                  name: nameController.text,
+                  email: emailController.text,
+                  phone: phoneController.text,
+                  GSTNumber: gstNumberController.text,
+
+                  address: Address(
+                    street: streetController.text,
+                    city: cityController.text,
+                    state: stateController.text,
+                    district: districtController.text,
+                    zipCode: zipCodeController.text,
+                  ),
+                  paymentAddress: PaymentAddress(
+                    city: paymentCityController.text,
+                    state: paymentStateController.text,
+                    district: paymentDistrictController.text,
+                    zipCode: paymentZipCodeController.text,
+                  ),
+                  password: passwordController.text,
+                  role: '',
+                  status: true,
+                  isDeleted: false,
+                  confirmPassword:
+                      passwordController.text, // Include password here
+                );
+
+                if (user == null) {
+                  // Add User
+                  await userController.addUser(newUser);
+                } else {
+                  // Edit User
+                  await userController.editUser(newUser);
+                }
+
+                // Close the dialog and refresh the user list
+                Navigator.of(context).pop();
+              },
+              child: Text(user == null ? 'Add' : 'Update'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // Show Delete Confirmation Dialog
   void _showDeleteConfirmationDialog(BuildContext context, User user) {
-    final userController = Provider.of<UserController>(context, listen: false);
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Delete User'),
           content: Text('Are you sure you want to delete this user?'),
-          actions: <Widget>[
+          actions: [
             TextButton(
-              child: Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: Text('Delete'),
               onPressed: () {
-                userController.deleteUser(user.id);
+                // Close the dialog
                 Navigator.of(context).pop();
               },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Delete user
+                await Provider.of<UserController>(context, listen: false)
+                    .deleteUser(user as String);
+                Navigator.of(context).pop();
+              },
+              child: Text('Delete'),
             ),
           ],
         );
