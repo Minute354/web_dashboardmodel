@@ -5,8 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:school_web_app/controllers/course_controller.dart';
 import 'package:school_web_app/models/course_model.dart';
-import 'package:school_web_app/screens/sidebars.dart';
-import 'dashboard_screen.dart';
+import 'package:school_web_app/views/back_button.dart';
+import 'package:school_web_app/views/dashboard_screen.dart';
+import 'package:school_web_app/views/sidebars.dart';
 
 class CourseListPage extends StatefulWidget {
   const CourseListPage({super.key});
@@ -23,7 +24,8 @@ class _CourseListPageState extends State<CourseListPage> {
   // Method to show the Add Course popup
   void _showAddCoursePopup(BuildContext context) {
     final TextEditingController courseNameController = TextEditingController();
-    final courseController = Provider.of<CourseController>(context, listen: false);
+    final courseController =
+        Provider.of<CourseController>(context, listen: false);
 
     showDialog(
       context: context,
@@ -51,7 +53,8 @@ class _CourseListPageState extends State<CourseListPage> {
                     }
                     // Check for duplicate course names
                     bool exists = courseController.courses.any((c) =>
-                        c.courseName.toLowerCase() == value.trim().toLowerCase());
+                        c.courseName.toLowerCase() ==
+                        value.trim().toLowerCase());
                     if (exists) {
                       return 'Course name already exists!';
                     }
@@ -94,18 +97,17 @@ class _CourseListPageState extends State<CourseListPage> {
                         courseNameController.clear(); // Clear the text field
                         Navigator.of(context).pop(); // Close the dialog
                         // Show SnackBar feedback
-                       
                       }
                       // If the form is invalid, the validator will display error messages
                     },
                     icon: Icon(
                       Icons.add,
-                      color: Colors.blue,
+                      color: Colors.blueGrey.shade900,
                     ),
                     label: Text(
                       'Add Course',
                       style: GoogleFonts.poppins(
-                        color: Colors.blue,
+                        color: Colors.blueGrey.shade900,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -126,10 +128,12 @@ class _CourseListPageState extends State<CourseListPage> {
   }
 
   // Method to show the Edit Course popup
-  void _showEditCoursePopup(BuildContext context, int index, CourseModel courseItem) {
+  void _showEditCoursePopup(
+      BuildContext context, int index, CourseModel courseItem) {
     final TextEditingController courseNameController =
         TextEditingController(text: courseItem.courseName);
-    final courseController = Provider.of<CourseController>(context, listen: false);
+    final courseController =
+        Provider.of<CourseController>(context, listen: false);
 
     showDialog(
       context: context,
@@ -157,7 +161,9 @@ class _CourseListPageState extends State<CourseListPage> {
                     }
                     // Check for duplicate course names excluding the current course
                     bool exists = courseController.courses.any((c) =>
-                        c.courseName.toLowerCase() == value.trim().toLowerCase() && c != courseItem);
+                        c.courseName.toLowerCase() ==
+                            value.trim().toLowerCase() &&
+                        c != courseItem);
                     if (exists) {
                       return 'Course name already exists!';
                     }
@@ -177,7 +183,8 @@ class _CourseListPageState extends State<CourseListPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -194,11 +201,11 @@ class _CourseListPageState extends State<CourseListPage> {
                   onPressed: () {
                     if (_editFormKey.currentState!.validate()) {
                       // If the form is valid, update the course
-                      String updatedCourseName = courseNameController.text.trim();
+                      String updatedCourseName =
+                          courseNameController.text.trim();
                       courseController.updateCourse(index, updatedCourseName);
                       Navigator.of(context).pop(); // Close the dialog
                       // Show SnackBar feedback
-                      
                     }
                     // If the form is invalid, the validator will display error messages
                   },
@@ -215,7 +222,8 @@ class _CourseListPageState extends State<CourseListPage> {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -230,8 +238,10 @@ class _CourseListPageState extends State<CourseListPage> {
   }
 
   // New method to show the Delete Confirmation dialog
-  void _showDeleteConfirmationDialog(BuildContext context, int index, CourseModel courseItem) {
-    final courseController = Provider.of<CourseController>(context, listen: false);
+  void _showDeleteConfirmationDialog(
+      BuildContext context, int index, CourseModel courseItem) {
+    final courseController =
+        Provider.of<CourseController>(context, listen: false);
 
     showDialog(
       context: context,
@@ -239,7 +249,8 @@ class _CourseListPageState extends State<CourseListPage> {
         return AlertDialog(
           title: Text(
             'Delete Course',
-            style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.red),
+            style: GoogleFonts.poppins(
+                fontWeight: FontWeight.bold, color: Colors.red),
           ),
           content: Text(
             'Are you sure you want to delete the course "${courseItem.courseName}"?',
@@ -269,11 +280,9 @@ class _CourseListPageState extends State<CourseListPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    String deletedCourseName = courseItem.courseName;
                     courseController.deleteCourse(index);
                     Navigator.of(context).pop(); // Close the dialog
                     // Show SnackBar feedback
-                    
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,
@@ -296,177 +305,192 @@ class _CourseListPageState extends State<CourseListPage> {
       },
     );
   }
+@override
+Widget build(BuildContext context) {
+  final isSmallScreen = MediaQuery.of(context).size.width < 800; // Check if it's mobile
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Course List', // Updated title for clarity
-          style: GoogleFonts.poppins(),
-        ),
-        backgroundColor: Colors.blueGrey.shade900,
-      ),
-      body: Row(
-        children: [
-          Sidebar(), // Sidebar remains intact
-          Expanded(
-            child: Padding(
-              // Added padding for the entire content area
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Align children to the left
-                children: [
-                  // Header "Course"
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Course',
-                      style: GoogleFonts.poppins(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: Colors.blueGrey.shade900,
+       automaticallyImplyLeading:isSmallScreen?true: false,
+    ),
+     drawer: isSmallScreen ? Drawer(child: Sidebar()) : null,
+    body: Row(
+      children: [
+        if (!isSmallScreen) Sidebar(), // Only show Sidebar on larger screens
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                 Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      BackBtn(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => DashboardPage()),
+                          );
+                        },
                       ),
+                    ],
+                  ),
+                // Header "Course"
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(
+                    'Course',
+                    style: GoogleFonts.poppins(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  // Add Course button aligned to the right
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      _showAddCoursePopup(context);
-                    },
-                    icon: Icon(Icons.add),
-                    label: Text('Add Course'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueGrey.shade900,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                    ),
+                ),
+                // Add Course button aligned to the right
+                ElevatedButton.icon(
+                  onPressed: () {
+                    _showAddCoursePopup(context);
+                  },
+                  icon: Icon(Icons.add),
+                  label: Text('Add Course'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueGrey.shade900,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
-                  SizedBox(height: 16),
-                  // Expanded DataTable wrapped in a Container
-                  Expanded(
-                    child: Consumer<CourseController>(
-                      builder: (context, courseController, child) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
+                ),
+                SizedBox(height: 16),
+                // Expanded DataTable wrapped in a Container
+                Expanded(
+                  child: Consumer<CourseController>(
+                    builder: (context, courseController, child) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
                           child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Container(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.75,
-                                child: DataTable(
-                                  columnSpacing: 20.0, // Adjust spacing as needed
-                                  headingRowColor: MaterialStateProperty.all(Colors.blueGrey.shade900),
-                                  columns: [
-                                    DataColumn(
-                                      label: Text(
-                                        'Sl. No.',
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
+                            scrollDirection: Axis.horizontal,
+                            child: Container(
+                               width: MediaQuery.of(context).size.width *
+                                      0.9, //width
+                              child: DataTable(
+                                columnSpacing: 20.0,
+                                headingRowColor: MaterialStateProperty.all(Colors.blueGrey.shade900),
+                                border: TableBorder.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                                columns: [
+                                  DataColumn(
+                                    label: Text(
+                                      'Sl. No.',
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
                                       ),
                                     ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Course Name',
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Course Name',
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
                                       ),
                                     ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Actions',
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Actions',
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
                                       ),
                                     ),
-                                  ],
-                                  rows: courseController.courses.isEmpty
-                                      ? [
-                                          DataRow(cells: [
-                                            DataCell(Container()),
-                                            DataCell(
-                                              Center(
-                                                child: Text(
-                                                  'No Records Yet.',
-                                                  style: GoogleFonts.poppins(fontSize: 18),
-                                                ),
+                                  ),
+                                ],
+                                rows: courseController.courses.isEmpty
+                                    ? [
+                                        DataRow(cells: [
+                                          DataCell(Container()),
+                                          DataCell(
+                                            Center(
+                                              child: Text(
+                                                'No Records Yet.',
+                                                style: GoogleFonts.poppins(fontSize: 18),
                                               ),
                                             ),
-                                            DataCell(Container()),
-                                          ])
-                                        ]
-                                      : List<DataRow>.generate(
-                                          courseController.courses.length,
-                                          (index) {
-                                            final courseItem = courseController.courses[index];
-                                            return DataRow(
-                                              cells: [
-                                                DataCell(
-                                                  Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                                                    child: Text((index + 1).toString()),
-                                                  ),
+                                          ),
+                                          DataCell(Container()),
+                                        ]),
+                                      ]
+                                    : List<DataRow>.generate(
+                                        courseController.courses.length,
+                                        (index) {
+                                          final courseItem = courseController.courses[index];
+                                          return DataRow(
+                                            cells: [
+                                              DataCell(
+                                                Container(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+                                                  child: Text((index + 1).toString()),
                                                 ),
-                                                DataCell(
-                                                  Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                                                    child: Text(courseItem.courseName),
-                                                  ),
+                                              ),
+                                              DataCell(
+                                                Container(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+                                                  child: Text(courseItem.courseName),
                                                 ),
-                                                DataCell(
-                                                  Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                                                    child: Row(
-                                                      children: [
-                                                        IconButton(
-                                                          icon: Icon(
-                                                            Icons.edit,
-                                                            color: Colors.blueAccent,
-                                                          ),
-                                                          onPressed: () {
-                                                            _showEditCoursePopup(context, index, courseController.courses[index]);
-                                                          },
+                                              ),
+                                              DataCell(
+                                                Container(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      IconButton(
+                                                        icon: Icon(
+                                                          Icons.edit,
+                                                          color: Colors.blueAccent,
                                                         ),
-                                                        IconButton(
-                                                          icon: Icon(
-                                                            Icons.delete,
-                                                            color: Colors.redAccent,
-                                                          ),
-                                                          onPressed: () {
-                                                            _showDeleteConfirmationDialog(context, index, courseController.courses[index]);
-                                                          },
+                                                        onPressed: () {
+                                                          _showEditCoursePopup(context, index, courseItem);
+                                                        },
+                                                      ),
+                                                      IconButton(
+                                                        icon: Icon(
+                                                          Icons.delete,
+                                                          color: Colors.redAccent,
                                                         ),
-                                                      ],
-                                                    ),
+                                                        onPressed: () {
+                                                          _showDeleteConfirmationDialog(context, index, courseItem);
+                                                        },
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
                               ),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 }

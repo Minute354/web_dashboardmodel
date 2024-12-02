@@ -3,5 +3,9 @@
 class DivisionModel {
   final String divisionName;
 
-  DivisionModel({required this.divisionName});
+  DivisionModel({
+    required this.divisionName,
+  });
+
+  get id => null;
 }
