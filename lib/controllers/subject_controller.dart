@@ -12,6 +12,7 @@ class SubjectController extends ChangeNotifier {
   // Method to add a new subject
   void addSubject(String subjectName) {
     _subjects.add(SubjectModel(subjectName: subjectName));
+  
     notifyListeners(); // Notify listeners to rebuild the UI
   }
 

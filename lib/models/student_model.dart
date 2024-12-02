@@ -11,6 +11,8 @@ class Student {
   final String gender;
   bool isActive;
 
+  var lastName;
+
   Student({
     required this.id,
     required this.name,
@@ -24,4 +26,8 @@ class Student {
     this.isActive = true, 
     
   });
+
+  get firstName => null;
+
+  get className => null;
 }

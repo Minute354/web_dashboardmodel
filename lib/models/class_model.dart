@@ -1,9 +1,11 @@
 // lib/models/class_model.dart
 
-import 'package:flutter/material.dart';
-
 class ClassModel {
+  final int id;
   final String className;
 
-  ClassModel({required this.className});
+  ClassModel({
+    required this.id,
+    required this.className,
+  });
 }
